@@ -1,13 +1,13 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Plus, Filter, Clock, DollarSign, FileText, ChevronDown, ChevronUp, Send, CheckCircle, X, Star } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Plus, FileText, ChevronDown, ChevronUp, Send, X, Star, ExternalLink, Clock, DollarSign } from "lucide-react";
 import { useBriefs } from "@/hooks/useBriefs";
 import { useProposals } from "@/hooks/useProposals";
 import { useCreators } from "@/hooks/useCreators";
 import { useSession } from "@/hooks/useSession";
-import { Brief, Proposal } from "@/types";
+import { Brief, Proposal, CreatorProfile } from "@/types";
 import { toast } from "sonner";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
@@ -20,11 +20,163 @@ const STATUS_STYLES: Record<string, string> = {
 };
 
 const PROPOSAL_STATUS_STYLES: Record<string, string> = {
-  Pending: "bg-amber-500/10 text-amber-300",
-  Shortlisted: "bg-blue-500/10 text-blue-300",
-  Accepted: "bg-green-500/10 text-green-300",
-  Rejected: "bg-red-500/10 text-red-400",
+  Pending: "bg-amber-500/10 text-amber-300 border border-amber-500/20",
+  Shortlisted: "bg-blue-500/10 text-blue-300 border border-blue-500/20",
+  Accepted: "bg-green-500/10 text-green-300 border border-green-500/20",
+  Rejected: "bg-red-500/10 text-red-400 border border-red-500/20",
 };
+
+function ProposalCard({
+  proposal, creator, onShortlist, onAccept, onReject
+}: {
+  proposal: Proposal;
+  creator: CreatorProfile;
+  onShortlist: () => void;
+  onAccept: () => void;
+  onReject: () => void;
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="border border-white/8 rounded-2xl overflow-hidden"
+      style={{ background: "rgba(255,255,255,0.03)" }}
+    >
+      {/* Top row — always visible */}
+      <div
+        className="flex items-center gap-3 p-4 cursor-pointer hover:bg-white/3 transition-all"
+        onClick={() => setExpanded(!expanded)}
+      >
+        <img src={creator.avatarUrl} alt={creator.name} className="w-12 h-12 rounded-xl object-cover flex-shrink-0" />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+            <span className="font-semibold text-sm">{creator.name}</span>
+            <span className={`text-xs px-2 py-0.5 rounded-full ${PROPOSAL_STATUS_STYLES[proposal.status]}`}>
+              {proposal.status}
+            </span>
+            <span className="text-xs text-muted-foreground">{creator.handle}</span>
+          </div>
+          <p className={`text-xs text-muted-foreground ${expanded ? "" : "line-clamp-1"}`}>
+            {proposal.message}
+          </p>
+        </div>
+        <div className="text-right flex-shrink-0 mr-2">
+          <div className="text-sm font-bold text-green-400">{formatCurrency(proposal.price)}</div>
+          <div className="text-xs text-muted-foreground">{proposal.timelineDays} days</div>
+        </div>
+        <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform flex-shrink-0 ${expanded ? "rotate-180" : ""}`} />
+      </div>
+
+      {/* Expanded details */}
+      <AnimatePresence>
+        {expanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="border-t border-white/5"
+          >
+            <div className="p-4 space-y-4">
+              {/* Full proposal message */}
+              <div className="p-3 bg-white/3 border border-white/5 rounded-xl">
+                <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider mb-2">Full Proposal</p>
+                <p className="text-sm text-foreground leading-relaxed">{proposal.message}</p>
+              </div>
+
+              {/* Creator quick stats */}
+              <div className="grid grid-cols-4 gap-3">
+                <div className="text-center p-2 bg-white/3 rounded-lg">
+                  <div className="text-sm font-bold text-amber-400">{creator.stats.avgRating}★</div>
+                  <div className="text-xs text-muted-foreground">Rating</div>
+                </div>
+                <div className="text-center p-2 bg-white/3 rounded-lg">
+                  <div className="text-sm font-bold text-violet-300">{creator.stats.projectsCompleted}</div>
+                  <div className="text-xs text-muted-foreground">Projects</div>
+                </div>
+                <div className="text-center p-2 bg-white/3 rounded-lg">
+                  <div className="text-sm font-bold text-green-400">{creator.stats.repeatClientRate}%</div>
+                  <div className="text-xs text-muted-foreground">Repeat</div>
+                </div>
+                <div className="text-center p-2 bg-white/3 rounded-lg">
+                  <div className="text-xs font-bold text-cyan-400">{creator.stats.responseTime}</div>
+                  <div className="text-xs text-muted-foreground">Response</div>
+                </div>
+              </div>
+
+              {/* Tools */}
+              <div>
+                <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider mb-2">Creator Tools</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {creator.verifiedTools.map((t) => (
+                    <span key={t.name} className="text-xs px-2 py-0.5 bg-violet-500/10 text-violet-300 border border-violet-500/20 rounded-lg">
+                      {t.verified ? "✓ " : ""}{t.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* View profile + action buttons */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <Link
+                  href={`/creators/${creator.id}`}
+                  className="flex items-center gap-1.5 text-xs px-3 py-2 glass border border-white/10 rounded-lg hover:bg-white/5 transition-all"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <ExternalLink className="w-3 h-3" /> View Full Profile
+                </Link>
+
+                {proposal.status === "Pending" && (
+                  <>
+                    <button onClick={(e) => { e.stopPropagation(); onShortlist(); }}
+                      className="text-xs px-4 py-2 bg-blue-500/10 border border-blue-500/20 text-blue-300 rounded-lg hover:bg-blue-500/20 transition-all font-medium">
+                      Shortlist
+                    </button>
+                    <button onClick={(e) => { e.stopPropagation(); onAccept(); }}
+                      className="text-xs px-4 py-2 bg-green-500/15 border border-green-500/30 text-green-300 rounded-lg hover:bg-green-500/25 transition-all font-semibold">
+                      ✓ Accept & Hire
+                    </button>
+                    <button onClick={(e) => { e.stopPropagation(); onReject(); }}
+                      className="text-xs px-3 py-2 text-muted-foreground hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all">
+                      Reject
+                    </button>
+                  </>
+                )}
+
+                {proposal.status === "Shortlisted" && (
+                  <>
+                    <button onClick={(e) => { e.stopPropagation(); onAccept(); }}
+                      className="text-xs px-4 py-2 bg-green-500/15 border border-green-500/30 text-green-300 rounded-lg hover:bg-green-500/25 transition-all font-semibold">
+                      ✓ Accept & Hire
+                    </button>
+                    <button onClick={(e) => { e.stopPropagation(); onReject(); }}
+                      className="text-xs px-3 py-2 text-muted-foreground hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all">
+                      Reject
+                    </button>
+                  </>
+                )}
+
+                {proposal.status === "Accepted" && (
+                  <span className="text-xs px-3 py-2 bg-green-500/10 text-green-400 rounded-lg border border-green-500/20 font-medium">
+                    ✓ Hired — Engagement Active
+                  </span>
+                )}
+
+                {proposal.status === "Rejected" && (
+                  <span className="text-xs px-3 py-2 bg-red-500/10 text-red-400 rounded-lg border border-red-500/20">
+                    Rejected
+                  </span>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
 
 function BrandView() {
   const { briefs } = useBriefs();
@@ -94,48 +246,22 @@ function BrandView() {
 
                 {/* Proposals */}
                 {isExpanded && briefProposals.length > 0 && (
-                  <div className="border-t border-white/5 p-5 space-y-3">
-                    <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Proposals</h4>
+                  <div className="border-t border-white/5 p-5 space-y-4">
+                    <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                      {briefProposals.length} Proposal{briefProposals.length > 1 ? "s" : ""}
+                    </h4>
                     {briefProposals.map((proposal) => {
                       const creator = creators.find((c) => c.id === proposal.creatorId);
                       if (!creator) return null;
                       return (
-                        <div key={proposal.id} className="flex items-center gap-3 p-3 bg-white/3 rounded-xl border border-white/5">
-                          <img src={creator.avatarUrl} alt={creator.name} className="w-10 h-10 rounded-lg object-cover" />
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium text-sm">{creator.name}</span>
-                              <span className={`text-xs px-1.5 py-0.5 rounded-full ${PROPOSAL_STATUS_STYLES[proposal.status]}`}>{proposal.status}</span>
-                            </div>
-                            <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{proposal.message}</p>
-                            <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
-                              <span className="font-semibold text-foreground">{formatCurrency(proposal.price)}</span>
-                              <span>{proposal.timelineDays} days</span>
-                            </div>
-                          </div>
-                          {proposal.status === "Pending" && (
-                            <div className="flex gap-2 flex-shrink-0">
-                              <button onClick={() => { updateProposalStatus(proposal.id, "Shortlisted"); toast.success("Shortlisted!"); }}
-                                className="text-xs px-2 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-300 rounded-lg hover:bg-blue-500/20 transition-all">
-                                Shortlist
-                              </button>
-                              <button onClick={() => { updateProposalStatus(proposal.id, "Accepted"); toast.success("Accepted! Engagement started."); }}
-                                className="text-xs px-2 py-1 bg-green-500/10 border border-green-500/20 text-green-300 rounded-lg hover:bg-green-500/20 transition-all">
-                                Accept
-                              </button>
-                              <button onClick={() => { updateProposalStatus(proposal.id, "Rejected"); toast.error("Proposal rejected."); }}
-                                className="text-xs px-2 py-1 text-muted-foreground hover:text-red-400 transition-colors">
-                                <X className="w-3.5 h-3.5" />
-                              </button>
-                            </div>
-                          )}
-                          {(proposal.status === "Shortlisted") && (
-                            <button onClick={() => { updateProposalStatus(proposal.id, "Accepted"); toast.success("Accepted! Engagement started."); }}
-                              className="text-xs px-3 py-1.5 bg-green-500/10 border border-green-500/20 text-green-300 rounded-lg hover:bg-green-500/20 transition-all flex-shrink-0">
-                              Accept
-                            </button>
-                          )}
-                        </div>
+                        <ProposalCard
+                          key={proposal.id}
+                          proposal={proposal}
+                          creator={creator}
+                          onShortlist={() => { updateProposalStatus(proposal.id, "Shortlisted"); toast.success(`${creator.name} shortlisted!`); }}
+                          onAccept={() => { updateProposalStatus(proposal.id, "Accepted"); toast.success(`${creator.name} accepted! Engagement started.`); }}
+                          onReject={() => { updateProposalStatus(proposal.id, "Rejected"); toast.error("Proposal rejected."); }}
+                        />
                       );
                     })}
                   </div>

@@ -117,30 +117,21 @@ export default function NewBriefPage() {
       const data = await res.json();
       if (data.brief) {
         const b = data.brief;
-        setForm((prev) => ({
-          ...prev,
-          campaignTitle: b.campaignTitle || prev.campaignTitle,
-          objective: b.objective || prev.objective,
-          contentType: b.contentType || prev.contentType,
-          style: b.style || prev.style,
-          aspectRatios: b.aspectRatios || prev.aspectRatios,
-          durationSeconds: b.durationSeconds || prev.durationSeconds,
-          resolution: b.resolution || prev.resolution,
-          quantity: b.quantity || prev.quantity,
-          toolsPreferred: b.toolsPreferred || prev.toolsPreferred,
-          budgetMin: b.budgetMin || prev.budgetMin,
-          budgetMax: b.budgetMax || prev.budgetMax,
-          deadline: b.deadline || prev.deadline,
-          negativeKeywords: b.negativeKeywords || prev.negativeKeywords,
-          generatedByAI: true,
-          rawIdea: idea,
-          commercialUse: b.commercialUse || prev.commercialUse,
-        }));
+        // Animate field-by-field with small delays for "streaming" feel
+        toast.success(data.source === "gemini" ? "✨ Brief generated with Gemini AI" : "✨ Brief generated with smart AI");
         setMode("manual");
-        toast.success(data.source === "gemini" ? "Brief generated with Gemini AI ✨" : "Brief generated with smart suggestions");
+        // Fill fields progressively
+        setTimeout(() => setForm((prev) => ({ ...prev, campaignTitle: b.campaignTitle || prev.campaignTitle, generatedByAI: true, rawIdea: idea })), 100);
+        setTimeout(() => setForm((prev) => ({ ...prev, objective: b.objective || prev.objective })), 300);
+        setTimeout(() => setForm((prev) => ({ ...prev, contentType: b.contentType || prev.contentType, style: b.style || prev.style })), 500);
+        setTimeout(() => setForm((prev) => ({ ...prev, aspectRatios: b.aspectRatios || prev.aspectRatios, durationSeconds: b.durationSeconds || prev.durationSeconds })), 700);
+        setTimeout(() => setForm((prev) => ({ ...prev, toolsPreferred: b.toolsPreferred || prev.toolsPreferred })), 900);
+        setTimeout(() => setForm((prev) => ({ ...prev, budgetMin: b.budgetMin || prev.budgetMin, budgetMax: b.budgetMax || prev.budgetMax, deadline: b.deadline || prev.deadline })), 1100);
+        setTimeout(() => setForm((prev) => ({ ...prev, negativeKeywords: b.negativeKeywords || prev.negativeKeywords, resolution: b.resolution || prev.resolution, quantity: b.quantity || prev.quantity, commercialUse: b.commercialUse || prev.commercialUse })), 1300);
       }
     } catch {
       toast.error("Generation failed, please fill manually");
+      setMode("manual");
     } finally {
       setGenerating(false);
     }
@@ -331,12 +322,19 @@ export default function NewBriefPage() {
                 <button
                   onClick={handleGenerate}
                   disabled={generating || !idea.trim()}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl font-semibold hover:from-violet-500 hover:to-violet-400 transition-all disabled:opacity-50 shadow-lg shadow-violet-500/25"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-violet-600 via-purple-600 to-cyan-600 text-white rounded-xl font-semibold hover:opacity-90 transition-all disabled:opacity-50 shadow-lg shadow-violet-500/25 relative overflow-hidden"
                 >
                   {generating ? (
-                    <><Loader2 className="w-4 h-4 animate-spin" /> Generating brief...</>
+                    <>
+                      <div className="absolute inset-0 bg-gradient-to-r from-violet-600 via-cyan-500 to-violet-600 animate-pulse" />
+                      <Loader2 className="w-4 h-4 animate-spin relative z-10" />
+                      <span className="relative z-10">AI is thinking...</span>
+                    </>
                   ) : (
-                    <><Sparkles className="w-4 h-4" /> Generate Brief with AI</>
+                    <>
+                      <Sparkles className="w-4 h-4" />
+                      Generate Brief with Gemini AI
+                    </>
                   )}
                 </button>
 

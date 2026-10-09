@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 const CREDS = [
   { role: "Brand", email: "brand@cinegen.demo", password: "Demo@123", desc: "Post briefs, discover creators, manage campaigns", color: "violet" },
-  { role: "Creator", email: "creator@cinegen.demo", password: "Demo@123", desc: "Browse briefs, submit proposals, manage profile", color: "cyan" },
+  { role: "Creator (Aryan)", email: "creator@cinegen.demo", password: "Demo@123", desc: "Browse briefs, submit proposals, manage profile", color: "cyan" },
 ];
 
 function CopyButton({ text }: { text: string }) {
@@ -40,11 +40,11 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 400)); // simulate auth
+    await new Promise((r) => setTimeout(r, 300));
     const ok = login(email, password);
     if (ok) {
-      toast.success("Welcome back!");
-      router.push("/dashboard");
+      toast.success("Welcome to CineGen!");
+      setTimeout(() => router.push("/dashboard"), 100);
     } else {
       setError("Invalid credentials. Use the demo credentials below.");
     }
@@ -53,8 +53,8 @@ export default function LoginPage() {
 
   const handleOneClick = (role: "brand" | "creator") => {
     loginAsRole(role);
-    toast.success(`Logged in as ${role === "brand" ? "Brand (Arjun Mehta)" : "Creator (Aryan Kapoor)"}`);
-    router.push("/dashboard");
+    toast.success(`Logged in as ${role === "brand" ? "Brand — Arjun Mehta" : "Creator — Aryan Kapoor"}`);
+    setTimeout(() => router.push("/dashboard"), 100);
   };
 
   return (
@@ -223,23 +223,38 @@ export default function LoginPage() {
 
             {/* Feature list */}
             <div className="glass border border-white/5 rounded-2xl p-5">
-              <h3 className="font-semibold text-sm mb-4 text-muted-foreground uppercase tracking-wider">What you can explore</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
+              <h3 className="font-semibold text-sm mb-4 text-muted-foreground uppercase tracking-wider">All 18 creator accounts</h3>
+              <p className="text-xs text-muted-foreground mb-3">All use password: <code className="bg-white/5 px-1.5 py-0.5 rounded text-foreground">Demo@123</code></p>
+              <div className="grid grid-cols-1 gap-1 max-h-48 overflow-y-auto pr-1">
                 {[
-                  "18 AI creators with full portfolios & workflow timelines",
-                  "Creator search with 7+ filter types",
-                  "AI Brief Builder powered by Gemini",
-                  "Match scoring after posting a brief",
-                  "Role switcher in navbar — swap Brand/Creator instantly",
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-2">
-                    <div className="w-4 h-4 rounded-full bg-violet-500/20 flex items-center justify-center mt-0.5 flex-shrink-0">
-                      <div className="w-1.5 h-1.5 rounded-full bg-violet-400" />
+                  { name: "Aryan Kapoor", email: "aryan@cinegen.demo" },
+                  { name: "Priya Nair", email: "priya@cinegen.demo" },
+                  { name: "Rahul Sharma", email: "rahul@cinegen.demo" },
+                  { name: "Zara Ahmed", email: "zara@cinegen.demo" },
+                  { name: "Marcus Chen", email: "marcus@cinegen.demo" },
+                  { name: "Anjali Desai", email: "anjali@cinegen.demo" },
+                  { name: "Vikram Rajan", email: "vikram@cinegen.demo" },
+                  { name: "Lena Volkov", email: "lena@cinegen.demo" },
+                  { name: "Dev Patel", email: "dev@cinegen.demo" },
+                  { name: "Yuna Kim", email: "yuna@cinegen.demo" },
+                  { name: "Rohan Mathur", email: "rohan@cinegen.demo" },
+                  { name: "Aisha Okafor", email: "aisha@cinegen.demo" },
+                  { name: "Sameer Joshi", email: "sameer@cinegen.demo" },
+                  { name: "Carlos Rivera", email: "carlos@cinegen.demo" },
+                  { name: "Meera Iyer", email: "meera@cinegen.demo" },
+                  { name: "Tanvir Sheikh", email: "tanvir@cinegen.demo" },
+                  { name: "Natasha Pinto", email: "natasha@cinegen.demo" },
+                  { name: "Ishaan Verma", email: "ishaan@cinegen.demo" },
+                ].map((c) => (
+                  <div key={c.email} className="flex items-center justify-between py-1 px-2 rounded hover:bg-white/5 transition-colors">
+                    <span className="text-xs text-foreground font-medium">{c.name}</span>
+                    <div className="flex items-center gap-1">
+                      <code className="text-xs text-muted-foreground">{c.email}</code>
+                      <CopyButton text={c.email} />
                     </div>
-                    {item}
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           </motion.div>
         </div>

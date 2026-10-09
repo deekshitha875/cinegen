@@ -1,10 +1,10 @@
 "use client";
-import { use, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Star, MapPin, Clock, CheckCircle, Shield, Eye, X, ArrowLeft,
-  BadgeCheck, Sparkles, Play, ExternalLink, ChevronRight, Zap, ChevronDown
+  Star, CheckCircle, Shield, X,
+  ArrowLeft, Zap, Play, Eye
 } from "lucide-react";
 import { useCreator } from "@/hooks/useCreators";
 import { useSession } from "@/hooks/useSession";
@@ -85,26 +85,34 @@ function PortfolioModal({ item, onClose }: { item: PortfolioItem; onClose: () =>
 
           <div className="p-6 space-y-6">
             {/* Media preview */}
-            <div className={`relative rounded-xl overflow-hidden bg-black/40 ${
+            <div className={`relative rounded-xl overflow-hidden bg-black ${
               item.aspectRatio === "9:16" ? "max-w-xs mx-auto" : ""
-            }`} style={{
-              aspectRatio: item.aspectRatio.replace(":", "/"),
-              maxHeight: "300px",
-            }}>
-              <img src={item.thumbnailUrl} alt={item.title} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-12 h-12 rounded-full bg-black/50 border border-white/20 flex items-center justify-center">
-                  <Play className="w-5 h-5 text-white ml-0.5" />
-                </div>
-              </div>
-              {item.seedLogged && (
-                <div className="absolute top-3 left-3 flex items-center gap-1 text-xs px-2 py-0.5 bg-green-500/20 border border-green-500/30 text-green-400 rounded-full">
-                  <CheckCircle className="w-3 h-3" /> Seed Logged
+            }`} style={{ aspectRatio: item.aspectRatio.replace(":", "/"), maxHeight: "300px" }}>
+              {item.mediaType === "video" ? (
+                <video
+                  controls
+                  autoPlay={false}
+                  className="w-full h-full object-cover"
+                  poster={item.thumbnailUrl}
+                  preload="metadata"
+                >
+                  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
+                </video>
+              ) : item.mediaType === "animation" ? (
+                <>
+                  <img src={item.thumbnailUrl} alt={item.title} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-3">
+                    <span className="text-xs px-2 py-0.5 bg-violet-600/80 text-white rounded-full backdrop-blur-sm font-medium">✨ Animation Preview</span>
+                  </div>
+                </>
+              ) : (
+                <img src={item.thumbnailUrl} alt={item.title} className="w-full h-full object-cover" />
+              )}
+              {item.seedLogged && item.mediaType !== "video" && (
+                <div className="absolute top-2 left-2 flex items-center gap-1 text-xs px-2 py-0.5 bg-green-500/20 border border-green-500/30 text-green-400 rounded-full backdrop-blur-sm">
+                  <CheckCircle className="w-3 h-3" /> AI Logged
                 </div>
               )}
-              <div className="absolute top-3 right-3 text-xs px-2 py-0.5 bg-black/50 text-white/80 rounded-full">
-                {item.mediaType}
-              </div>
             </div>
 
             {/* Description */}
@@ -173,8 +181,8 @@ function PortfolioModal({ item, onClose }: { item: PortfolioItem; onClose: () =>
   );
 }
 
-export default function CreatorProfilePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function CreatorProfilePage({ params }: { params: { id: string } }) {
+  const { id } = params;
   const creator = useCreator(id);
   const { session } = useSession();
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
@@ -201,7 +209,7 @@ export default function CreatorProfilePage({ params }: { params: Promise<{ id: s
 
       {/* Cover */}
       <div className="relative h-48 sm:h-64 rounded-2xl overflow-hidden mb-0">
-        <img src={creator.coverUrl} alt="" className="w-full h-full object-cover" />
+        <img src={creator.coverUrl} alt="" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display='none'; }} />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
         <div className={`absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r ${badge.color} text-white text-xs font-semibold`}>
           {badge.icon} {badge.text}
@@ -269,23 +277,22 @@ export default function CreatorProfilePage({ params }: { params: Promise<{ id: s
                   onClick={() => setSelectedItem(item)}
                   className="break-inside-avoid glass rounded-xl border border-white/5 hover:border-violet-500/30 transition-all cursor-pointer overflow-hidden group"
                 >
-                  <div className="relative overflow-hidden" style={{
+                  <div className="relative overflow-hidden rounded-t-xl" style={{
                     aspectRatio: item.aspectRatio === "9:16" ? "9/16" : item.aspectRatio === "4:5" ? "4/5" : "16/9",
-                    maxHeight: "240px",
+                    maxHeight: "220px",
                   }}>
-                    <img src={item.thumbnailUrl} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <img
+                      src={item.thumbnailUrl}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
                       <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
                         <Eye className="w-4 h-4 text-white" />
                       </div>
                     </div>
-                    {item.seedLogged && (
-                      <div className="absolute top-2 left-2 flex items-center gap-1 text-xs px-1.5 py-0.5 bg-green-500/20 border border-green-500/30 text-green-400 rounded-full">
-                        <CheckCircle className="w-2.5 h-2.5" /> AI Logged
-                      </div>
-                    )}
-                    <div className="absolute top-2 right-2 text-xs px-1.5 py-0.5 bg-black/50 text-white/80 rounded-full">
-                      {item.aspectRatio}
+                    <div className="absolute top-2 right-2 text-xs px-1.5 py-0.5 bg-black/60 text-white/80 rounded-full capitalize">
+                      {item.mediaType}
                     </div>
                   </div>
                   <div className="p-3">

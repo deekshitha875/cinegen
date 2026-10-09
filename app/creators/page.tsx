@@ -197,15 +197,9 @@ export default function CreatorsPage() {
 
       <div className="flex gap-6">
         {/* Sidebar Filters */}
-        <AnimatePresence>
-          {filtersOpen && (
-            <motion.aside
-              initial={{ opacity: 0, x: -20, width: 0 }}
-              animate={{ opacity: 1, x: 0, width: 280 }}
-              exit={{ opacity: 0, x: -20, width: 0 }}
-              className="flex-shrink-0 overflow-hidden"
-            >
-              <div className="w-64 glass rounded-2xl border border-white/5 p-5 space-y-6">
+        {filtersOpen && (
+          <aside className="hidden md:block w-64 flex-shrink-0">
+            <div className="sticky top-24 glass rounded-2xl border border-white/5 p-5 space-y-6 max-h-[80vh] overflow-y-auto">
                 {/* Tools */}
                 <div>
                   <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">AI Tools</h3>
@@ -312,9 +306,8 @@ export default function CreatorsPage() {
                   Reset all filters
                 </button>
               </div>
-            </motion.aside>
+            </aside>
           )}
-        </AnimatePresence>
 
         {/* Results */}
         <div className="flex-1">

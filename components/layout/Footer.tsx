@@ -50,17 +50,22 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-foreground mb-3">For Judges</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>Brand: <span className="text-foreground font-mono text-xs">brand@cinegen.demo</span></li>
-              <li>Creator: <span className="text-foreground font-mono text-xs">creator@cinegen.demo</span></li>
-              <li>Password: <span className="text-foreground font-mono text-xs">Demo@123</span></li>
-              <li>
-                <Link href="/login" className="text-violet-400 hover:text-violet-300 transition-colors">
-                  → Try Demo
-                </Link>
-              </li>
-            </ul>
+            <h3 className="text-sm font-semibold text-foreground mb-3">🎯 Judge Access</h3>
+            <div className="space-y-3">
+              <div className="p-3 bg-violet-500/10 border border-violet-500/20 rounded-xl">
+                <div className="text-xs text-violet-400 font-semibold mb-1">Brand Account</div>
+                <div className="font-mono text-xs text-foreground">brand@cinegen.demo</div>
+                <div className="font-mono text-xs text-muted-foreground">Demo@123</div>
+              </div>
+              <div className="p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-xl">
+                <div className="text-xs text-cyan-400 font-semibold mb-1">Creator Account</div>
+                <div className="font-mono text-xs text-foreground">creator@cinegen.demo</div>
+                <div className="font-mono text-xs text-muted-foreground">Demo@123</div>
+              </div>
+              <Link href="/login" className="block w-full text-center py-2 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-lg text-xs font-semibold hover:opacity-90 transition-all">
+                → 1-Click Demo Login
+              </Link>
+            </div>
           </div>
         </div>
 
