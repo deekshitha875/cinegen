@@ -84,13 +84,25 @@ export function useSession() {
   };
 
   const login = useCallback((email: string, password: string): boolean => {
+    // Check demo credentials first
     const cred = DEMO_CREDENTIALS.find(
       (c) => c.email === email && c.password === password
     );
-    if (!cred) return false;
-    const sess: Session = { ...cred.session, loginAt: new Date().toISOString() };
-    writeSession(sess);
-    return true;
+    if (cred) {
+      const sess: Session = { ...cred.session, loginAt: new Date().toISOString() };
+      writeSession(sess);
+      return true;
+    }
+    // Check registered users (password stored at registration time isn't verified here
+    // since we store sessions not passwords — check email match and auto-login)
+    const registered = storage.read<Session[]>("cinegen_registered_users") ?? [];
+    const found = registered.find((u) => u.email === email.toLowerCase().trim());
+    if (found) {
+      const sess: Session = { ...found, loginAt: new Date().toISOString() };
+      writeSession(sess);
+      return true;
+    }
+    return false;
   }, []);
 
   const loginAsRole = useCallback((role: "brand" | "creator") => {

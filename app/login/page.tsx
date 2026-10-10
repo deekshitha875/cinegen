@@ -74,7 +74,12 @@ export default function LoginPage() {
             <span className="font-display font-bold text-2xl">Cine<span className="gradient-text">Gen</span></span>
           </Link>
           <h1 className="font-display font-bold text-3xl mb-2">Welcome back</h1>
-          <p className="text-muted-foreground">Sign in to your account or use demo credentials below</p>
+          <p className="text-muted-foreground">
+            Sign in to your account or{" "}
+            <Link href="/register" className="text-violet-400 hover:text-violet-300 transition-colors font-medium">
+              create one free
+            </Link>
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
