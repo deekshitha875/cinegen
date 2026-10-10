@@ -80,7 +80,8 @@ export default function RegisterPage() {
     setLoading(false);
     setDone(true);
     toast.success(`Welcome to CineGen, ${name.trim()}!`);
-    setTimeout(() => router.push("/dashboard"), 1200);
+    // Creators go to onboarding to fill their profile, brands go to dashboard
+    setTimeout(() => router.push(role === "creator" ? "/onboarding" : "/dashboard"), 1200);
   };
 
   if (done) {
@@ -95,7 +96,9 @@ export default function RegisterPage() {
             <CheckCircle className="w-10 h-10 text-white" />
           </div>
           <h1 className="font-display font-bold text-3xl mb-2">You're in!</h1>
-          <p className="text-muted-foreground">Taking you to your dashboard...</p>
+          <p className="text-muted-foreground">
+            {role === "creator" ? "Setting up your creator profile..." : "Taking you to your dashboard..."}
+          </p>
         </motion.div>
       </div>
     );
