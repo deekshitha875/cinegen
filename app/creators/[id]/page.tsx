@@ -95,8 +95,10 @@ function PortfolioModal({ item, onClose }: { item: PortfolioItem; onClose: () =>
                   className="w-full h-full object-cover"
                   poster={item.thumbnailUrl}
                   preload="metadata"
+                  key={item.mediaUrl}
                 >
-                  <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
+                  <source src={item.mediaUrl} type="video/mp4" />
+                  Your browser does not support the video tag.
                 </video>
               ) : item.mediaType === "animation" ? (
                 <>
