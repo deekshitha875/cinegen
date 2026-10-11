@@ -236,7 +236,12 @@ function CreatorDashboard() {
 
       {/* Matching Briefs */}
       <div>
-        <h2 className="font-display font-semibold text-xl mb-4">Open Briefs for You</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="font-display font-semibold text-xl">🔔 New Briefs Matching Your Profile</h2>
+          <span className="text-xs px-2 py-1 bg-violet-500/20 text-violet-300 rounded-full border border-violet-500/30 animate-pulse">
+            {openBriefs.length} new
+          </span>
+        </div>
         <div className="space-y-3">
           {openBriefs.slice(0, 3).map((brief, i) => (
             <motion.div key={brief.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}

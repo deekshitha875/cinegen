@@ -35,6 +35,8 @@ export function Navbar() {
     { href: "/creators", label: "Discover", icon: Search },
     { href: "/briefs", label: "Briefs", icon: FileText },
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/estimator", label: "Estimator", icon: Zap },
+    { href: "/leaderboard", label: "Leaderboard", icon: Plus },
   ];
 
   return (

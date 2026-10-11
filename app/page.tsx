@@ -324,6 +324,18 @@ export default function HomePage() {
               >
                 Browse Creators <ArrowRight className="w-4 h-4" />
               </Link>
+              <Link
+                href="/estimator"
+                className="flex items-center gap-2 px-8 py-4 glass border border-green-500/20 text-green-300 rounded-xl font-semibold text-base hover:bg-green-500/5 transition-all"
+              >
+                💰 Budget Estimator
+              </Link>
+              <Link
+                href="/risk-scanner"
+                className="flex items-center gap-2 px-8 py-4 glass border border-red-500/20 text-red-300 rounded-xl font-semibold text-base hover:bg-red-500/5 transition-all"
+              >
+                🛡️ Risk Scanner
+              </Link>
             </div>
           </div>
         </div>

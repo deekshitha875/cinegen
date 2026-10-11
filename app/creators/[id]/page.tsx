@@ -10,6 +10,7 @@ import { useCreator } from "@/hooks/useCreators";
 import { useSession } from "@/hooks/useSession";
 import { PortfolioItem, WorkflowStep } from "@/types";
 import { toast } from "sonner";
+import { StyleDNA } from "@/components/creators/StyleDNA";
 
 const BADGE_CONFIG = {
   Studio: { color: "from-violet-500 to-violet-600", text: "Studio Verified", icon: "★" },
@@ -452,6 +453,9 @@ export default function CreatorProfilePage({ params }: { params: { id: string } 
               ))}
             </div>
           </div>
+
+          {/* Style DNA */}
+          <StyleDNA creator={creator} />
 
           {/* Languages */}
           <div className="glass rounded-2xl border border-white/5 p-5">
