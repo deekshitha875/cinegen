@@ -39,11 +39,11 @@ export default function LoginPage() {
   // If already logged in, redirect immediately
   useEffect(() => {
     if (session) {
-      router.replace("/dashboard");
+      window.location.href = "/dashboard";
     }
   }, [session, router]);
 
-  // Show nothing while checking session to avoid flash
+  // Show spinner while redirecting
   if (session) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -63,7 +63,7 @@ export default function LoginPage() {
     const ok = login(email, password);
     if (ok) {
       toast.success("Welcome to CineGen!");
-      router.push("/dashboard");
+      window.location.href = "/dashboard";
     } else {
       setError("Invalid credentials. Use the demo credentials below.");
     }
@@ -73,7 +73,7 @@ export default function LoginPage() {
   const handleOneClick = (role: "brand" | "creator") => {
     loginAsRole(role);
     toast.success(`Logged in as ${role === "brand" ? "Brand — Arjun Mehta" : "Creator — Aryan Kapoor"}`);
-    router.push("/dashboard");
+    window.location.href = "/dashboard";
   };
 
   return (
