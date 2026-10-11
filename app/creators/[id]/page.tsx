@@ -89,14 +89,35 @@ function PortfolioModal({ item, onClose }: { item: PortfolioItem; onClose: () =>
               item.aspectRatio === "9:16" ? "max-w-xs mx-auto" : ""
             }`}>
               {item.mediaType === "video" ? (
-                <div className="relative w-full" style={{ paddingBottom: item.aspectRatio === "9:16" ? "177.78%" : "56.25%" }}>
-                  <iframe
-                    className="absolute inset-0 w-full h-full rounded-xl"
-                    src={`https://www.youtube.com/embed/${item.mediaUrl}?rel=0&modestbranding=1`}
-                    title={item.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
+                <div className="relative w-full rounded-xl overflow-hidden bg-black" style={{ paddingBottom: item.aspectRatio === "9:16" ? "177.78%" : "56.25%" }}>
+                  <div className="absolute inset-0">
+                    <img
+                      src={item.thumbnailUrl}
+                      alt={item.title}
+                      className="w-full h-full object-cover opacity-75"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    {/* Play button */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-16 h-16 rounded-full bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center shadow-2xl">
+                        <Play className="w-7 h-7 text-white fill-white ml-1" />
+                      </div>
+                    </div>
+                    {/* Badges */}
+                    <div className="absolute top-3 left-3 flex items-center gap-1.5 text-xs px-2.5 py-1 bg-violet-600/80 text-white rounded-full backdrop-blur-sm font-medium">
+                      ✨ AI-Generated
+                    </div>
+                    {item.seedLogged && (
+                      <div className="absolute top-3 right-3 flex items-center gap-1 text-xs px-2 py-0.5 bg-green-500/20 border border-green-500/30 text-green-400 rounded-full backdrop-blur-sm">
+                        <CheckCircle className="w-3 h-3" /> Workflow Logged
+                      </div>
+                    )}
+                    {/* Bottom label */}
+                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                      <span className="text-xs text-white/70">{item.aspectRatio} · {item.contentType}</span>
+                      <span className="text-xs text-white/50">{item.year}</span>
+                    </div>
+                  </div>
                 </div>
               ) : item.mediaType === "animation" ? (
                 <div className="relative" style={{ aspectRatio: item.aspectRatio.replace(":", "/"), maxHeight: "300px" }}>
@@ -290,12 +311,19 @@ export default function CreatorProfilePage({ params }: { params: { id: string } 
                     />
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
                       <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                        <Eye className="w-4 h-4 text-white" />
+                        {item.mediaType === "video" ? <Play className="w-4 h-4 text-white fill-white ml-0.5" /> : <Eye className="w-4 h-4 text-white" />}
                       </div>
                     </div>
                     <div className="absolute top-2 right-2 text-xs px-1.5 py-0.5 bg-black/60 text-white/80 rounded-full capitalize">
-                      {item.mediaType}
+                      {item.mediaType === "video" ? "▶ video" : item.mediaType}
                     </div>
+                    {item.mediaType === "video" && (
+                      <div className="absolute inset-0 flex items-center justify-center opacity-100 group-hover:opacity-0 transition-opacity">
+                        <div className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+                          <Play className="w-4 h-4 text-white fill-white ml-0.5" />
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="p-3">
                     <h3 className="font-medium text-sm mb-1">{item.title}</h3>
