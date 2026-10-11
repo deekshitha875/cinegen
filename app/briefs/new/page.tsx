@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { seedCreators } from "@/lib/seed/creators";
 import { computeMatchScore } from "@/lib/matchScore";
+import { BriefIntelligence } from "@/components/briefs/BriefIntelligence";
 
 const CONTENT_TYPES: ContentType[] = ["Short-form Video", "Long-form Video", "Animation", "Motion Graphics", "Image Campaign", "Social Media Pack", "Brand Film"];
 const ASPECT_RATIOS: AspectRatio[] = ["16:9", "9:16", "1:1", "4:5", "2.39:1"];
@@ -279,7 +280,6 @@ export default function NewBriefPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-          {/* AI Builder */}
           <AnimatePresence mode="wait">
             {mode === "ai" && (
               <motion.div key="ai" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
@@ -558,10 +558,13 @@ export default function NewBriefPage() {
           </AnimatePresence>
         </div>
 
-        {/* Preview */}
+        {/* Sidebar */}
         <div className="hidden lg:block">
-          <div className="sticky top-24">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Live Preview</h3>
+          <div className="sticky top-24 space-y-4">
+            {/* Brief Intelligence */}
+            <BriefIntelligence form={form} />
+
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Live Preview</h3>
             <div className="glass rounded-2xl border border-white/5 p-5 space-y-3">
               {form.generatedByAI && (
                 <div className="flex items-center gap-1.5 text-xs px-2 py-1 bg-violet-500/10 border border-violet-500/20 text-violet-300 rounded-lg w-fit">

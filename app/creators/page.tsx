@@ -2,6 +2,7 @@
 import { useState, useMemo, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, SlidersHorizontal, X, Star, ChevronDown, CheckCircle } from "lucide-react";
+import Link from "next/link";
 import { useCreators } from "@/hooks/useCreators";
 import { CreatorCard } from "@/components/creators/CreatorCard";
 import { CreatorCardSkeleton } from "@/components/creators/CreatorCardSkeleton";
@@ -141,6 +142,12 @@ export default function CreatorsPage() {
       <div className="mb-8">
         <h1 className="font-display font-bold text-3xl mb-2">Discover AI Creators</h1>
         <p className="text-muted-foreground">Find the perfect AI filmmaker, animator, or generative artist for your campaign</p>
+        <Link
+          href="/compare"
+          className="inline-flex items-center gap-2 mt-3 px-4 py-2 glass border border-violet-500/20 text-violet-300 rounded-xl text-sm font-medium hover:bg-violet-500/10 transition-all"
+        >
+          <span>⚖️</span> Compare Creators Side-by-Side
+        </Link>
       </div>
 
       {/* Search bar */}
