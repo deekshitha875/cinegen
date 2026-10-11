@@ -93,7 +93,8 @@ export function Navbar() {
                     initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
-                    className="absolute top-full left-0 mt-2 w-56 glass border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50"
+                    className="absolute top-full left-0 mt-2 w-56 rounded-xl shadow-2xl overflow-hidden z-50 border border-white/10"
+                    style={{ background: "rgba(10,10,15,0.97)", backdropFilter: "blur(20px)" }}
                   >
                     {toolLinks.map((tool) => (
                       <Link key={tool.href} href={tool.href}
