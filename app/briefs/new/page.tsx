@@ -180,7 +180,7 @@ export default function NewBriefPage() {
               <CheckCircle className="w-8 h-8 text-white" />
             </div>
             <h1 className="font-display font-bold text-3xl mb-2">Brief Published!</h1>
-            <p className="text-muted-foreground">Your brief is live. Here are your top creator matches.</p>
+            <p className="text-muted-foreground">Your brief is live. Here are your top creator matches with explainable scores.</p>
           </div>
 
           <div className="space-y-3">
@@ -196,11 +196,30 @@ export default function NewBriefPage() {
                 <img src={match.creator.avatarUrl} alt={match.creator.name} className="w-12 h-12 rounded-xl object-cover" />
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold">{match.creator.name}</div>
-                  <p className="text-xs text-muted-foreground line-clamp-1">{match.reasons.join(" · ")}</p>
+                  {/* Explainable match breakdown */}
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {match.reasons.slice(0, 3).map((r, ri) => (
+                      <span key={ri} className="text-xs px-2 py-0.5 bg-violet-500/10 border border-violet-500/20 text-violet-300 rounded-full">{r}</span>
+                    ))}
+                  </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="text-right">
-                    <div className="text-2xl font-display font-bold gradient-text">{match.score}%</div>
+                    {/* Visual score ring */}
+                    <div className="relative w-14 h-14">
+                      <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
+                        <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="3" />
+                        <circle cx="18" cy="18" r="15.9" fill="none"
+                          stroke={match.score >= 80 ? "#8b5cf6" : match.score >= 60 ? "#06b6d4" : "#f59e0b"}
+                          strokeWidth="3"
+                          strokeDasharray={`${match.score} 100`}
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-xs font-bold">{match.score}%</span>
+                      </div>
+                    </div>
                     <div className="text-xs text-muted-foreground">match</div>
                   </div>
                   <Link

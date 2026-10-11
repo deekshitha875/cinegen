@@ -369,24 +369,51 @@ export default function CreatorProfilePage({ params }: { params: { id: string } 
           <div className="glass rounded-2xl border border-white/5 p-5">
             <h3 className="font-semibold text-sm mb-4 flex items-center gap-2">
               <Shield className="w-4 h-4 text-violet-400" />
-              Verification
+              Verification & Evidence
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {[
-                { key: "toolsVerified", label: "Tools Verified", desc: "Tool usage confirmed via API logs or portfolio evidence" },
-                { key: "workflowVerified", label: "Workflow Verified", desc: "Full production pipeline reviewed and validated" },
-                { key: "pastWorkVerified", label: "Past Work Verified", desc: "Client references and work history confirmed" },
+                {
+                  key: "toolsVerified",
+                  label: "Tools Verified",
+                  desc: "Tool usage confirmed via API logs or portfolio evidence",
+                  evidence: ["ComfyUI node graph exported", "Runway API usage logs", "Midjourney job IDs on file"],
+                },
+                {
+                  key: "workflowVerified",
+                  label: "Workflow Verified",
+                  desc: "Full production pipeline reviewed and validated",
+                  evidence: ["Step-by-step process screenshots", "Intermediate render passes", "Prompt seed manifests"],
+                },
+                {
+                  key: "pastWorkVerified",
+                  label: "Past Work Verified",
+                  desc: "Client references and work history confirmed",
+                  evidence: ["2 client references confirmed", "Invoice history reviewed", "Portfolio authenticity checked"],
+                },
               ].map((v) => {
                 const verified = creator.verification[v.key as keyof typeof creator.verification] as boolean;
                 return (
-                  <div key={v.key} className="flex items-start gap-3">
-                    <div className={`w-5 h-5 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0 ${verified ? "bg-green-500/20" : "bg-white/10"}`}>
-                      {verified ? <CheckCircle className="w-3.5 h-3.5 text-green-400" /> : <X className="w-3 h-3 text-muted-foreground" />}
+                  <div key={v.key} className={`p-3 rounded-xl border ${verified ? "bg-green-500/5 border-green-500/20" : "bg-white/3 border-white/5"}`}>
+                    <div className="flex items-start gap-3 mb-2">
+                      <div className={`w-5 h-5 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0 ${verified ? "bg-green-500/20" : "bg-white/10"}`}>
+                        {verified ? <CheckCircle className="w-3.5 h-3.5 text-green-400" /> : <X className="w-3 h-3 text-muted-foreground" />}
+                      </div>
+                      <div className="flex-1">
+                        <div className={`text-sm font-medium ${verified ? "text-foreground" : "text-muted-foreground"}`}>{v.label}</div>
+                        <div className="text-xs text-muted-foreground">{v.desc}</div>
+                      </div>
                     </div>
-                    <div>
-                      <div className={`text-sm font-medium ${verified ? "text-foreground" : "text-muted-foreground"}`}>{v.label}</div>
-                      <div className="text-xs text-muted-foreground">{v.desc}</div>
-                    </div>
+                    {verified && (
+                      <div className="ml-8 space-y-1">
+                        {v.evidence.map((e, ei) => (
+                          <div key={ei} className="flex items-center gap-1.5 text-xs text-green-400/80">
+                            <div className="w-1 h-1 rounded-full bg-green-400/60" />
+                            {e}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 );
               })}
