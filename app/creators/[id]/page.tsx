@@ -90,29 +90,13 @@ function PortfolioModal({ item, onClose }: { item: PortfolioItem; onClose: () =>
             }`}>
               {item.mediaType === "video" ? (
                 <div className="relative w-full" style={{ paddingBottom: item.aspectRatio === "9:16" ? "177.78%" : "56.25%" }}>
-                  <div className="absolute inset-0 rounded-xl overflow-hidden bg-black">
-                    <img
-                      src={item.thumbnailUrl}
-                      alt={item.title}
-                      className="w-full h-full object-cover opacity-80"
-                    />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/40">
-                      <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                        <Play className="w-7 h-7 text-white fill-white ml-1" />
-                      </div>
-                      <p className="text-xs text-white/60 px-4 text-center">
-                        AI-generated content — production workflow shown below
-                      </p>
-                    </div>
-                    <div className="absolute top-2 left-2 flex items-center gap-1 text-xs px-2 py-0.5 bg-black/60 text-white/80 rounded-full">
-                      ▶ Video Preview
-                    </div>
-                    {item.seedLogged && (
-                      <div className="absolute top-2 right-2 flex items-center gap-1 text-xs px-2 py-0.5 bg-green-500/20 border border-green-500/30 text-green-400 rounded-full backdrop-blur-sm">
-                        <CheckCircle className="w-3 h-3" /> AI Logged
-                      </div>
-                    )}
-                  </div>
+                  <iframe
+                    className="absolute inset-0 w-full h-full rounded-xl"
+                    src={`https://www.youtube.com/embed/${item.mediaUrl}?rel=0&modestbranding=1`}
+                    title={item.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
                 </div>
               ) : item.mediaType === "animation" ? (
                 <div className="relative" style={{ aspectRatio: item.aspectRatio.replace(":", "/"), maxHeight: "300px" }}>
