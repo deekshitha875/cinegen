@@ -295,6 +295,32 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Features Strip */}
+      <section className="py-12 border-y border-white/5 bg-white/[0.01]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-xs text-muted-foreground uppercase tracking-widest mb-8 font-medium">Everything you need to hire AI creators</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { emoji: "🧠", label: "Brief Intelligence", desc: "AI audits your brief in real-time", href: "/briefs/new" },
+              { emoji: "⚖️", label: "Creator Compare", desc: "Side-by-side creator analysis", href: "/compare" },
+              { emoji: "💰", label: "Budget Estimator", desc: "Instant AI production cost estimate", href: "/estimator" },
+              { emoji: "🛡️", label: "Risk Scanner", desc: "IP & licensing compliance check", href: "/risk-scanner" },
+              { emoji: "🏆", label: "Leaderboard", desc: "Top-ranked AI creators", href: "/leaderboard" },
+              { emoji: "🧬", label: "Style DNA", desc: "Radar chart of creator aesthetics", href: "/creators" },
+              { emoji: "🎯", label: "Match Scoring", desc: "Explainable % match engine", href: "/briefs/new" },
+              { emoji: "✅", label: "Verification Evidence", desc: "Audited proof of AI production", href: "/creators" },
+            ].map((f) => (
+              <Link key={f.label} href={f.href}
+                className="glass rounded-xl border border-white/5 hover:border-violet-500/20 p-4 transition-all group">
+                <div className="text-2xl mb-2">{f.emoji}</div>
+                <div className="font-semibold text-sm group-hover:text-violet-300 transition-colors">{f.label}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{f.desc}</div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="glass rounded-3xl border border-violet-500/20 p-12 relative overflow-hidden">

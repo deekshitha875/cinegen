@@ -39,6 +39,10 @@ export function Footer() {
                 { label: "Post a Brief", href: "/briefs/new" },
                 { label: "Browse Briefs", href: "/briefs" },
                 { label: "Dashboard", href: "/dashboard" },
+                { label: "Compare Creators", href: "/compare" },
+                { label: "Creator Leaderboard", href: "/leaderboard" },
+                { label: "Budget Estimator", href: "/estimator" },
+                { label: "Risk Scanner", href: "/risk-scanner" },
               ].map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
