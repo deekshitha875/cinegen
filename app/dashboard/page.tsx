@@ -63,6 +63,27 @@ function BrandDashboard() {
         <p className="text-muted-foreground">Welcome back, {session?.name}</p>
       </div>
 
+      {/* Primary action */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-600/30 to-cyan-600/20 border border-violet-500/30 p-6">
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-600/10 to-transparent pointer-events-none" />
+        <div className="relative flex items-center justify-between gap-4">
+          <div>
+            <h2 className="font-display font-bold text-xl mb-1">Ready to find your next AI creator?</h2>
+            <p className="text-sm text-muted-foreground">Post a brief and get matched with top creators in minutes.</p>
+          </div>
+          <div className="flex gap-3 flex-shrink-0">
+            <Link href="/briefs/new"
+              className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl text-sm font-semibold hover:from-violet-500 hover:to-violet-400 transition-all shadow-lg shadow-violet-500/25 whitespace-nowrap">
+              <Plus className="w-4 h-4" /> Post a Brief
+            </Link>
+            <Link href="/estimator"
+              className="flex items-center gap-2 px-5 py-2.5 glass border border-white/10 text-sm font-medium rounded-xl hover:bg-white/5 transition-all whitespace-nowrap">
+              💰 Estimate Budget
+            </Link>
+          </div>
+        </div>
+      </div>
+
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, i) => (

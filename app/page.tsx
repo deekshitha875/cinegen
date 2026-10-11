@@ -64,10 +64,18 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Hero */}
       <section className="relative overflow-hidden pt-20 pb-32">
-        {/* Background orbs */}
+        {/* Cinematic background */}
         <div className="absolute inset-0 pointer-events-none">
+          <img
+            src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=80&auto=format&fit=crop"
+            alt=""
+            className="w-full h-full object-cover opacity-[0.07]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-background" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/80" />
           <div className="absolute top-20 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl" />
           <div className="absolute top-40 right-1/4 w-64 h-64 bg-cyan-500/15 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-32 bg-gradient-to-t from-background to-transparent" />
         </div>
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

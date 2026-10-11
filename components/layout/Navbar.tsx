@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Film, Menu, X, LogOut, LayoutDashboard, FileText, Search, Zap, Plus } from "lucide-react";
+import { Film, Menu, X, LogOut, LayoutDashboard, FileText, Search, Zap, Plus, ChevronDown, Trophy, Shield, Calculator, GitCompare } from "lucide-react";
 import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
 
@@ -13,8 +13,8 @@ export function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(false);
 
-  // Wait for client mount so localStorage session is available
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -35,8 +35,13 @@ export function Navbar() {
     { href: "/creators", label: "Discover", icon: Search },
     { href: "/briefs", label: "Briefs", icon: FileText },
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/estimator", label: "Estimator", icon: Zap },
-    { href: "/leaderboard", label: "Leaderboard", icon: Plus },
+  ];
+
+  const toolLinks = [
+    { href: "/estimator", label: "Budget Estimator", icon: Calculator, desc: "Instant AI cost estimate" },
+    { href: "/risk-scanner", label: "Risk Scanner", icon: Shield, desc: "IP & licensing check" },
+    { href: "/compare", label: "Compare Creators", icon: Search, desc: "Side-by-side analysis" },
+    { href: "/leaderboard", label: "Leaderboard", icon: Trophy, desc: "Top-ranked creators" },
   ];
 
   return (
@@ -68,6 +73,43 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Tools dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setToolsOpen(!toolsOpen)}
+                onBlur={() => setTimeout(() => setToolsOpen(false), 150)}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                  toolsOpen ? "bg-violet-500/20 text-violet-300" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                }`}>
+                <Zap className="w-4 h-4" />
+                Tools
+                <ChevronDown className={`w-3 h-3 transition-transform ${toolsOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              <AnimatePresence>
+                {toolsOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    className="absolute top-full left-0 mt-2 w-56 glass border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50"
+                  >
+                    {toolLinks.map((tool) => (
+                      <Link key={tool.href} href={tool.href}
+                        onClick={() => setToolsOpen(false)}
+                        className="flex items-start gap-3 px-4 py-3 hover:bg-white/5 transition-colors group">
+                        <tool.icon className="w-4 h-4 text-violet-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <div className="text-sm font-medium group-hover:text-violet-300 transition-colors">{tool.label}</div>
+                          <div className="text-xs text-muted-foreground">{tool.desc}</div>
+                        </div>
+                      </Link>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
           {/* Right side — only render after mount */}
