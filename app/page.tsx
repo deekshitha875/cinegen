@@ -1,37 +1,38 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   ArrowRight, Sparkles, Play, Search, FileText, Handshake,
-  Star, CheckCircle2, Zap, TrendingUp, Users, Briefcase, Film
+  Star, CheckCircle2, Zap, TrendingUp, Users, Briefcase, Film, X
 } from "lucide-react";
 
 const STATS = [
-  { label: "AI Creators", value: "2,400+", icon: Users },
-  { label: "Brands Served", value: "850+", icon: Briefcase },
-  { label: "Projects Completed", value: "12,000+", icon: CheckCircle2 },
-  { label: "Avg. Rating", value: "4.8★", icon: Star },
+  { label: "Verified AI Creators", value: "18", icon: Users },
+  { label: "Active Briefs", value: "4", icon: Briefcase },
+  { label: "AI Tools Covered", value: "15+", icon: Zap },
+  { label: "Avg. Creator Rating", value: "4.8★", icon: Star },
 ];
 
 const HOW_IT_WORKS = [
   {
     step: "01",
     title: "Discover AI Creators",
-    desc: "Search and filter 2,400+ verified AI filmmakers, animators, and generative artists by tools, specialization, and style.",
+    desc: "Search and filter 18 verified AI filmmakers, animators, and generative artists by tools, specialization, rate, and style.",
     icon: Search,
     color: "from-violet-500 to-violet-600",
   },
   {
     step: "02",
     title: "Post Your Brief",
-    desc: "Use our AI-powered brief builder to transform a rough idea into a complete structured brief in seconds. Or build manually with our guided form.",
+    desc: "Use our AI-powered brief builder to transform a rough idea into a complete structured brief in seconds. Brief Intelligence audits it in real-time.",
     icon: FileText,
     color: "from-cyan-500 to-cyan-600",
   },
   {
     step: "03",
-    title: "Hire & Deliver",
-    desc: "Review proposals from matched creators, hire the right fit, and manage the entire engagement from brief to final delivery.",
+    title: "Match & Hire",
+    desc: "Get explainable % match scores, compare creators side-by-side, review proposals, and manage the engagement from brief to delivery.",
     icon: Handshake,
     color: "from-violet-500 to-cyan-500",
   },
@@ -60,8 +61,32 @@ const AVAIL_COLOR: Record<string, string> = {
 };
 
 export default function HomePage() {
+  const [bannerDismissed, setBannerDismissed] = useState(false);
+
   return (
     <div className="min-h-screen">
+
+      {/* Judge Welcome Banner */}
+      {!bannerDismissed && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gradient-to-r from-violet-600/90 to-cyan-600/90 text-white px-4 py-2.5 text-center text-sm font-medium relative z-50"
+        >
+          <span>🎯 Hackathon Demo — </span>
+          <Link href="/login" className="underline underline-offset-2 hover:no-underline font-semibold">
+            Click here for instant 1-click access
+          </Link>
+          <span> · Brand & Creator accounts ready · No signup needed</span>
+          <button
+            onClick={() => setBannerDismissed(true)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-white/20 rounded transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </motion.div>
+      )}
+
       {/* Hero */}
       <section className="relative overflow-hidden pt-20 pb-32">
         {/* Cinematic background */}
@@ -82,7 +107,7 @@ export default function HomePage() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm font-medium mb-8">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>AI-Native Creative Marketplace</span>
+            <span>AI-Native Creative Marketplace · Kampus.VC Hackathon</span>
           </div>
 
           {/* Headline */}
@@ -95,35 +120,28 @@ export default function HomePage() {
 
           {/* Subtitle */}
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            CineGen connects brands and agencies with verified AI filmmakers, animators, and generative artists. Post a brief, discover talent, and go from idea to content in days — not months.
+            CineGen connects brands with verified AI filmmakers, animators, and generative artists. Discover talent, build briefs with AI, get explainable match scores — all in one place.
           </p>
 
-          {/* CTAs */}
+          {/* CTAs — max 2 */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <Link
-              href="/creators"
-              className="flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl font-semibold text-base hover:from-violet-500 hover:to-violet-400 transition-all shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 hover:-translate-y-0.5"
-            >
-              <Search className="w-4 h-4" />
-              Discover Creators
-            </Link>
-            <Link
-              href="/briefs/new"
-              className="flex items-center gap-2 px-6 py-3.5 glass border border-white/10 text-foreground rounded-xl font-semibold text-base hover:bg-white/5 transition-all hover:-translate-y-0.5"
-            >
-              <Zap className="w-4 h-4 text-cyan-400" />
-              AI Brief Builder
-            </Link>
-            <Link
               href="/login"
-              className="flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-cyan-600/20 to-cyan-500/20 border border-cyan-500/30 text-cyan-300 rounded-xl font-semibold text-base hover:from-cyan-600/30 hover:to-cyan-500/30 transition-all hover:-translate-y-0.5"
+              className="flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl font-semibold text-base hover:from-violet-500 hover:to-violet-400 transition-all shadow-lg shadow-violet-500/30 hover:-translate-y-0.5"
             >
               <Play className="w-4 h-4" />
-              Judges: Try Demo
+              Try Demo — Instant Access
+            </Link>
+            <Link
+              href="/creators"
+              className="flex items-center gap-2 px-8 py-4 glass border border-white/10 text-foreground rounded-xl font-semibold text-base hover:bg-white/5 transition-all hover:-translate-y-0.5"
+            >
+              <Search className="w-4 h-4" />
+              Browse Creators
             </Link>
           </div>
 
-          {/* Avatar row */}
+          {/* Creator avatars — no fake claim */}
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
             <div className="flex -space-x-2">
               {FEATURED_CREATORS.slice(0, 5).map((c) => (
@@ -135,12 +153,12 @@ export default function HomePage() {
                 />
               ))}
             </div>
-            <span>Trusted by 850+ brands worldwide</span>
+            <span>18 verified AI creators ready to hire</span>
           </div>
         </div>
       </section>
 
-      {/* Stats Strip */}
+      {/* Stats Strip — real numbers */}
       <section className="py-8 border-y border-white/5 bg-white/[0.02]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -168,7 +186,6 @@ export default function HomePage() {
             From idea to delivered content — in three steps.
           </p>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {HOW_IT_WORKS.map((step, i) => (
             <motion.div
@@ -198,11 +215,8 @@ export default function HomePage() {
               <h2 className="font-display font-bold text-3xl mb-2">Featured Creators</h2>
               <p className="text-muted-foreground">Handpicked AI creators available for your next campaign</p>
             </div>
-            <Link
-              href="/creators"
-              className="hidden sm:flex items-center gap-1.5 text-sm text-violet-400 hover:text-violet-300 transition-colors font-medium"
-            >
-              View all <ArrowRight className="w-4 h-4" />
+            <Link href="/creators" className="hidden sm:flex items-center gap-1.5 text-sm text-violet-400 hover:text-violet-300 transition-colors font-medium">
+              View all 18 <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
@@ -217,48 +231,32 @@ export default function HomePage() {
               >
                 <Link href={`/creators/${creator.id}`}>
                   <div className="glass rounded-2xl overflow-hidden border border-white/5 hover:border-violet-500/30 transition-all group hover:-translate-y-1 cursor-pointer h-full">
-                    {/* Cover */}
                     <div className="relative h-28 overflow-hidden">
-                      <img
-                        src={creator.cover}
-                        alt=""
-                        className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
-                      />
+                      <img src={creator.cover} alt="" className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                       <div className={`absolute top-3 right-3 text-xs px-2 py-0.5 rounded-full font-medium ${BADGE_STYLES[creator.badge]}`}>
                         {creator.badge === "Studio" && "★ "}{creator.badge}
                       </div>
                     </div>
-
                     <div className="p-4">
                       <div className="flex items-start gap-3 -mt-8 mb-3 relative z-10">
-                        <img
-                          src={creator.avatar}
-                          alt={creator.name}
-                          className="w-12 h-12 rounded-xl border-2 border-background object-cover shadow-xl"
-                        />
+                        <img src={creator.avatar} alt={creator.name} className="w-12 h-12 rounded-xl border-2 border-background object-cover shadow-xl" />
                         <div className="mt-5">
                           <div className="font-semibold text-sm">{creator.name}</div>
                           <div className="text-xs text-muted-foreground">{creator.handle}</div>
                         </div>
                       </div>
-
                       <p className="text-xs text-muted-foreground line-clamp-2 mb-3">{creator.headline}</p>
-
                       <div className="flex flex-wrap gap-1 mb-3">
                         {creator.tools.map((t) => (
                           <span key={t} className="text-xs px-1.5 py-0.5 bg-white/5 rounded text-muted-foreground">{t}</span>
                         ))}
                       </div>
-
                       <div className="flex items-center justify-between text-xs text-muted-foreground">
                         <span className="flex items-center gap-1 text-amber-400 font-medium">
-                          <Star className="w-3 h-3 fill-amber-400" />
-                          {creator.rating}
+                          <Star className="w-3 h-3 fill-amber-400" />{creator.rating}
                         </span>
-                        <span className={`font-medium ${AVAIL_COLOR[creator.availability]}`}>
-                          ● {creator.availability}
-                        </span>
+                        <span className={`font-medium ${AVAIL_COLOR[creator.availability]}`}>● {creator.availability}</span>
                         <span className="text-foreground font-semibold">${creator.rate}/hr</span>
                       </div>
                     </div>
@@ -269,37 +267,10 @@ export default function HomePage() {
           </div>
 
           <div className="text-center mt-8">
-            <Link
-              href="/creators"
-              className="inline-flex items-center gap-2 px-6 py-3 glass border border-white/10 rounded-xl text-sm font-medium hover:bg-white/5 transition-all"
-            >
+            <Link href="/creators" className="inline-flex items-center gap-2 px-6 py-3 glass border border-white/10 rounded-xl text-sm font-medium hover:bg-white/5 transition-all">
               View all 18 creators <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* Value props */}
-      <section className="py-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { icon: Film, title: "AI-Native Portfolios", desc: "Every creator shows the full production workflow — tools, prompts, and steps used to create each piece.", color: "text-violet-400" },
-            { icon: CheckCircle2, title: "Verified Trust Signals", desc: "3-tier verification: tools verified, workflow verified, and past work confirmed by our team.", color: "text-cyan-400" },
-            { icon: Zap, title: "AI Brief Builder", desc: "Turn a rough idea into a complete structured brief in seconds. Powered by Gemini 2.0.", color: "text-amber-400" },
-          ].map((item, i) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 * i }}
-              className="glass rounded-2xl border border-white/5 p-6 hover:border-violet-500/20 transition-all"
-            >
-              <item.icon className={`w-8 h-8 ${item.color} mb-4`} />
-              <h3 className="font-display font-semibold text-lg mb-2">{item.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-            </motion.div>
-          ))}
         </div>
       </section>
 
@@ -329,7 +300,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section — clean, 2 buttons only */}
       <section className="py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="glass rounded-3xl border border-violet-500/20 p-12 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-violet-600/10 to-cyan-500/5 pointer-events-none" />
@@ -342,7 +313,7 @@ export default function HomePage() {
               Your next campaign starts here
             </h2>
             <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
-              Join 850+ brands using CineGen to discover AI creators and produce world-class content at a fraction of traditional costs.
+              Discover 18 verified AI creators, build structured briefs with Gemini AI, and get explainable match scores — all without leaving the platform.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
@@ -350,25 +321,13 @@ export default function HomePage() {
                 className="flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-violet-600 to-cyan-600 text-white rounded-xl font-semibold text-base hover:opacity-90 transition-all shadow-xl shadow-violet-500/30"
               >
                 <Sparkles className="w-5 h-5" />
-                Start for Free
+                Try the Demo
               </Link>
               <Link
                 href="/creators"
                 className="flex items-center gap-2 px-8 py-4 glass border border-white/10 rounded-xl font-semibold text-base hover:bg-white/5 transition-all"
               >
                 Browse Creators <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/estimator"
-                className="flex items-center gap-2 px-8 py-4 glass border border-green-500/20 text-green-300 rounded-xl font-semibold text-base hover:bg-green-500/5 transition-all"
-              >
-                💰 Budget Estimator
-              </Link>
-              <Link
-                href="/risk-scanner"
-                className="flex items-center gap-2 px-8 py-4 glass border border-red-500/20 text-red-300 rounded-xl font-semibold text-base hover:bg-red-500/5 transition-all"
-              >
-                🛡️ Risk Scanner
               </Link>
             </div>
           </div>
