@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Plus, FileText, Users, CheckCircle, Briefcase, Star, TrendingUp, ArrowRight, Clock, Zap, Search } from "lucide-react";
 import { useSession } from "@/hooks/useSession";
@@ -8,6 +9,7 @@ import { useProposals } from "@/hooks/useProposals";
 import { useCreators } from "@/hooks/useCreators";
 import { EngagementStage } from "@/types";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { toast } from "sonner";
 
 const STAGES: EngagementStage[] = ["Discovery", "Brief", "Proposals", "Hired", "Delivered"];
 
@@ -41,12 +43,11 @@ function BrandDashboard() {
   const { briefs } = useBriefs();
   const { proposals } = useProposals();
   const creators = useCreators();
+  const [delivered, setDelivered] = useState<string[]>([]);
 
   const myBriefs = briefs.filter((b) => b.brandId === "brand-001");
   const totalProposals = proposals.filter((p) => myBriefs.some((b) => b.id === p.briefId));
-  // Show accepted proposals — use seed data directly so dashboard is never empty
   const acceptedProposals = totalProposals.filter((p) => p.status === "Accepted" || p.status === "Shortlisted");
-  // Always show at least the seed accepted proposal for demo
   const displayEngagements = acceptedProposals.length > 0 ? acceptedProposals : proposals.slice(0, 2);
 
   const stats = [
@@ -104,7 +105,9 @@ function BrandDashboard() {
             const brief = briefs.find((b) => b.id === proposal.briefId) || myBriefs[0];
             const creator = creators.find((c) => c.id === proposal.creatorId);
             if (!brief || !creator) return null;
-            const stage = proposal.status === "Accepted" ? "Hired" :
+            const isDelivered = delivered.includes(proposal.id);
+            const stage = isDelivered ? "Delivered" :
+                          proposal.status === "Accepted" ? "Hired" :
                           proposal.status === "Shortlisted" ? "Proposals" : "Proposals";
             return (
               <motion.div key={proposal.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
@@ -117,13 +120,27 @@ function BrandDashboard() {
                       <div className="text-xs text-muted-foreground">{brief.campaignTitle}</div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-sm font-bold text-green-400">{formatCurrency(proposal.price)}</div>
-                    <div className={`text-xs px-2 py-0.5 rounded-full mt-1 ${
-                      proposal.status === "Accepted" ? "bg-green-500/10 text-green-400" :
-                      proposal.status === "Shortlisted" ? "bg-blue-500/10 text-blue-400" :
-                      "bg-amber-500/10 text-amber-400"
-                    }`}>{proposal.status}</div>
+                  <div className="flex items-center gap-3">
+                    <div className="text-right">
+                      <div className="text-sm font-bold text-green-400">{formatCurrency(proposal.price)}</div>
+                      <div className={`text-xs px-2 py-0.5 rounded-full mt-1 ${
+                        isDelivered ? "bg-green-500/20 text-green-300" :
+                        proposal.status === "Accepted" ? "bg-green-500/10 text-green-400" :
+                        proposal.status === "Shortlisted" ? "bg-blue-500/10 text-blue-400" :
+                        "bg-amber-500/10 text-amber-400"
+                      }`}>{isDelivered ? "✅ Delivered" : proposal.status}</div>
+                    </div>
+                    {proposal.status === "Accepted" && !isDelivered && (
+                      <button
+                        onClick={() => {
+                          setDelivered((prev) => [...prev, proposal.id]);
+                          toast.success(`${creator.name} marked delivery complete!`);
+                        }}
+                        className="px-3 py-1.5 bg-green-500/20 border border-green-500/30 text-green-300 rounded-lg text-xs font-medium hover:bg-green-500/30 transition-all whitespace-nowrap"
+                      >
+                        ✓ Mark Delivered
+                      </button>
+                    )}
                   </div>
                 </div>
                 <EngagementStepper currentStage={stage as any} />
