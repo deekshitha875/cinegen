@@ -33,15 +33,27 @@ export default function LoginPage() {
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login, loginAsRole, session } = useSession();
+  const { login, loginAsRole, session, loading: sessionLoading } = useSession();
   const router = useRouter();
 
-  // If already logged in, redirect to dashboard
+  // If already logged in, redirect immediately
   useEffect(() => {
     if (session) {
       router.replace("/dashboard");
     }
   }, [session, router]);
+
+  // Show nothing while checking session to avoid flash
+  if (session) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+          <p className="text-sm text-muted-foreground">Redirecting to dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,7 +63,7 @@ export default function LoginPage() {
     const ok = login(email, password);
     if (ok) {
       toast.success("Welcome to CineGen!");
-      setTimeout(() => router.push("/dashboard"), 100);
+      router.push("/dashboard");
     } else {
       setError("Invalid credentials. Use the demo credentials below.");
     }
@@ -61,7 +73,7 @@ export default function LoginPage() {
   const handleOneClick = (role: "brand" | "creator") => {
     loginAsRole(role);
     toast.success(`Logged in as ${role === "brand" ? "Brand — Arjun Mehta" : "Creator — Aryan Kapoor"}`);
-    setTimeout(() => router.push("/dashboard"), 100);
+    router.push("/dashboard");
   };
 
   return (
