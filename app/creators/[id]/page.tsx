@@ -87,28 +87,28 @@ function PortfolioModal({ item, onClose }: { item: PortfolioItem; onClose: () =>
             {/* Media preview */}
             <div className={`relative rounded-xl overflow-hidden bg-black ${
               item.aspectRatio === "9:16" ? "max-w-xs mx-auto" : ""
-            }`} style={{ aspectRatio: item.aspectRatio.replace(":", "/"), maxHeight: "300px" }}>
+            }`}>
               {item.mediaType === "video" ? (
-                <video
-                  controls
-                  autoPlay={false}
-                  className="w-full h-full object-cover"
-                  poster={item.thumbnailUrl}
-                  preload="metadata"
-                  key={item.mediaUrl}
-                >
-                  <source src={item.mediaUrl} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
+                <div className="relative w-full" style={{ paddingBottom: item.aspectRatio === "9:16" ? "177.78%" : "56.25%" }}>
+                  <iframe
+                    className="absolute inset-0 w-full h-full rounded-xl"
+                    src={`https://www.youtube.com/embed/${item.mediaUrl}?rel=0&modestbranding=1`}
+                    title={item.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
               ) : item.mediaType === "animation" ? (
-                <>
+                <div className="relative" style={{ aspectRatio: item.aspectRatio.replace(":", "/"), maxHeight: "300px" }}>
                   <img src={item.thumbnailUrl} alt={item.title} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-3">
                     <span className="text-xs px-2 py-0.5 bg-violet-600/80 text-white rounded-full backdrop-blur-sm font-medium">✨ Animation Preview</span>
                   </div>
-                </>
+                </div>
               ) : (
-                <img src={item.thumbnailUrl} alt={item.title} className="w-full h-full object-cover" />
+                <div style={{ aspectRatio: item.aspectRatio.replace(":", "/"), maxHeight: "300px" }}>
+                  <img src={item.thumbnailUrl} alt={item.title} className="w-full h-full object-cover" />
+                </div>
               )}
               {item.seedLogged && item.mediaType !== "video" && (
                 <div className="absolute top-2 left-2 flex items-center gap-1 text-xs px-2 py-0.5 bg-green-500/20 border border-green-500/30 text-green-400 rounded-full backdrop-blur-sm">
