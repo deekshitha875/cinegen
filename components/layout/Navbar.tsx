@@ -3,12 +3,15 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Film, Menu, X, LogOut, LayoutDashboard, FileText, Search, Zap, Plus, ChevronDown, Trophy, Shield, Calculator, GitCompare } from "lucide-react";
+import { Film, Menu, X, LogOut, LayoutDashboard, FileText, Search, Zap, Plus, ChevronDown, Trophy, Shield, Calculator } from "lucide-react";
 import { useSession } from "@/hooks/useSession";
+import { useAuth } from "@/lib/auth-context";
+import { signOut } from "@/lib/auth";
 import { toast } from "sonner";
 
 export function Navbar() {
   const { session, logout, switchRole } = useSession();
+  const { user: supabaseUser } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -19,10 +22,19 @@ export function Navbar() {
     setMounted(true);
   }, []);
 
-  const handleLogout = () => {
+  // Use Supabase user if available, fall back to localStorage session
+  const activeUser = supabaseUser
+    ? { name: supabaseUser.name, role: supabaseUser.role, email: supabaseUser.email }
+    : session
+    ? { name: session.name, role: session.role, email: session.email }
+    : null;
+
+  const handleLogout = async () => {
+    // Sign out from both Supabase and localStorage
+    try { await signOut(); } catch {}
     logout();
     toast.success("Logged out");
-    router.push("/");
+    window.location.href = "/";
     setMobileOpen(false);
   };
 
@@ -116,48 +128,39 @@ export function Navbar() {
           {/* Right side — only render after mount */}
           <div className="hidden md:flex items-center gap-3">
             {!mounted ? (
-              // Placeholder while mounting
               <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
-            ) : session ? (
+            ) : activeUser ? (
               <>
-                {/* Demo Role Switcher */}
-                <div className="flex items-center gap-1 bg-violet-500/10 border border-violet-500/20 rounded-lg px-2 py-1">
-                  <Zap className="w-3 h-3 text-violet-400" />
-                  <span className="text-xs text-violet-400 font-medium mr-1">Demo</span>
-                  <button
-                    onClick={() => handleSwitchRole("brand")}
-                    className={`text-xs px-2 py-0.5 rounded transition-all font-medium ${
-                      session.role === "brand"
-                        ? "bg-violet-500 text-white"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}>
-                    Brand
-                  </button>
-                  <button
-                    onClick={() => handleSwitchRole("creator")}
-                    className={`text-xs px-2 py-0.5 rounded transition-all font-medium ${
-                      session.role === "creator"
-                        ? "bg-cyan-500 text-white"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}>
-                    Creator
-                  </button>
-                </div>
+                {/* Demo Role Switcher — only show for localStorage demo users */}
+                {session && !supabaseUser && (
+                  <div className="flex items-center gap-1 bg-violet-500/10 border border-violet-500/20 rounded-lg px-2 py-1">
+                    <Zap className="w-3 h-3 text-violet-400" />
+                    <span className="text-xs text-violet-400 font-medium mr-1">Demo</span>
+                    <button onClick={() => handleSwitchRole("brand")}
+                      className={`text-xs px-2 py-0.5 rounded transition-all font-medium ${session.role === "brand" ? "bg-violet-500 text-white" : "text-muted-foreground hover:text-foreground"}`}>
+                      Brand
+                    </button>
+                    <button onClick={() => handleSwitchRole("creator")}
+                      className={`text-xs px-2 py-0.5 rounded transition-all font-medium ${session.role === "creator" ? "bg-cyan-500 text-white" : "text-muted-foreground hover:text-foreground"}`}>
+                      Creator
+                    </button>
+                  </div>
+                )}
 
                 {/* User info */}
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center text-white text-sm font-bold shadow-lg flex-shrink-0">
-                    {session.name.charAt(0)}
+                    {activeUser.name.charAt(0)}
                   </div>
                   <div className="leading-tight">
-                    <div className="text-sm font-semibold text-foreground">{session.name}</div>
-                    <div className={`text-xs font-medium ${session.role === "brand" ? "text-violet-400" : "text-cyan-400"}`}>
-                      {session.role === "brand" ? "Brand" : "Creator"}
+                    <div className="text-sm font-semibold text-foreground">{activeUser.name}</div>
+                    <div className={`text-xs font-medium ${activeUser.role === "brand" ? "text-violet-400" : "text-cyan-400"}`}>
+                      {activeUser.role === "brand" ? "Brand" : "Creator"}
                     </div>
                   </div>
                 </div>
 
-                {session.role === "brand" && (
+                {activeUser.role === "brand" && (
                   <Link href="/briefs/new"
                     className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-lg text-sm font-semibold hover:from-violet-500 hover:to-violet-400 transition-all shadow-lg shadow-violet-500/25">
                     <Plus className="w-3.5 h-3.5" /> Post Brief
