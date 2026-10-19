@@ -2,45 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
-  --background: 240 10% 4%;
-  --foreground: 0 0% 95%;
-  --card: 240 8% 7%;
-  --card-foreground: 0 0% 95%;
-  --primary: 263 70% 60%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 240 6% 12%;
-  --secondary-foreground: 0 0% 90%;
-  --muted: 240 6% 14%;
-  --muted-foreground: 240 5% 55%;
-  --accent: 189 94% 43%;
-  --accent-foreground: 240 10% 4%;
-  --border: 240 6% 16%;
-  --input: 240 6% 14%;
-  --ring: 263 70% 60%;
-  --radius: 0.75rem;
-  --font-inter: "Inter", sans-serif;
-  --font-syne: "Syne", sans-serif;
-}
-
-.light {
-  --background: 0 0% 98%;
-  --foreground: 240 10% 10%;
+  /* Warm editorial cream palette */
+  --background: 36 33% 97%;
+  --foreground: 24 15% 12%;
   --card: 0 0% 100%;
-  --card-foreground: 240 10% 10%;
-  --primary: 263 70% 50%;
+  --card-foreground: 24 15% 12%;
+  --primary: 82 60% 42%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 240 5% 92%;
-  --secondary-foreground: 240 10% 20%;
-  --muted: 240 5% 94%;
-  --muted-foreground: 240 5% 45%;
-  --accent: 189 94% 38%;
+  --secondary: 36 20% 93%;
+  --secondary-foreground: 24 15% 20%;
+  --muted: 36 15% 91%;
+  --muted-foreground: 24 8% 45%;
+  --accent: 82 60% 42%;
   --accent-foreground: 0 0% 100%;
-  --border: 240 5% 84%;
-  --input: 240 5% 92%;
-  --ring: 263 70% 50%;
+  --border: 36 15% 85%;
+  --input: 36 15% 91%;
+  --ring: 82 60% 42%;
+  --radius: 0.75rem;
+  --font-inter: "Space Grotesk", sans-serif;
+  --font-syne: "Playfair Display", serif;
+
+  /* Brand colors */
+  --lime: #8fb832;
+  --lime-light: #a8d44a;
+  --cream: #f8f5f0;
+  --cream-dark: #ede9e2;
+  --dark-green: #1a2e1a;
+  --text-primary: #1a1a16;
+  --text-secondary: #6b6a62;
 }
 
 * {
@@ -49,78 +41,135 @@
 }
 
 body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
+  background-color: var(--cream);
+  color: var(--text-primary);
   font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Grain overlay */
-.grain::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-  z-index: 9999;
-}
-
-/* Glass card */
+/* Card style */
 .glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid var(--cream-dark);
 }
 
-.light .glass {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+/* Editorial card */
+.card-editorial {
+  background: #ffffff;
+  border: 1px solid var(--cream-dark);
+  border-radius: 12px;
 }
 
-/* Gradient text */
+/* Dark card */
+.card-dark {
+  background: var(--dark-green);
+  color: #ffffff;
+  border-radius: 12px;
+}
+
+/* Gradient text - lime */
 .gradient-text {
-  background: linear-gradient(135deg, #8b5cf6, #22d3ee);
+  background: linear-gradient(135deg, #8fb832, #5a8a1a);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+/* Editorial heading */
+.heading-editorial {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* Lime button */
+.btn-lime {
+  background: var(--lime);
+  color: #1a2e1a;
+  font-weight: 600;
+  border-radius: 100px;
+  transition: all 0.2s ease;
+}
+.btn-lime:hover {
+  background: var(--lime-light);
+  transform: translateY(-1px);
+}
+
+/* Dark button */
+.btn-dark {
+  background: var(--dark-green);
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 100px;
+  transition: all 0.2s ease;
+}
+.btn-dark:hover {
+  background: #243824;
+  transform: translateY(-1px);
+}
+
+/* Outline button */
+.btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1.5px solid var(--text-primary);
+  font-weight: 600;
+  border-radius: 100px;
+  transition: all 0.2s ease;
+}
+.btn-outline:hover {
+  background: var(--text-primary);
+  color: white;
+}
+
+/* Section label */
+.section-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
 /* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: hsl(var(--background));
-}
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--border));
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground));
-}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--cream-dark); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #c5bfb5; }
 
 /* Focus ring */
 :focus-visible {
-  outline: 2px solid hsl(var(--ring));
+  outline: 2px solid var(--lime);
   outline-offset: 2px;
 }
 
-/* Animations */
+/* Skeleton */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
-
 .skeleton {
-  background: linear-gradient(90deg, hsl(var(--muted)) 25%, hsl(var(--border)) 50%, hsl(var(--muted)) 75%);
+  background: linear-gradient(90deg, var(--cream-dark) 25%, #e8e3db 50%, var(--cream-dark) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
+}
+
+/* Input style */
+.input-editorial {
+  background: white;
+  border: 1.5px solid var(--cream-dark);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+  color: var(--text-primary);
+}
+.input-editorial:focus {
+  outline: none;
+  border-color: var(--lime);
+}
+.input-editorial::placeholder {
+  color: #a8a49d;
 }

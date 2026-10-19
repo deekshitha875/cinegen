@@ -2,332 +2,256 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import {
-  ArrowRight, Sparkles, Play, Search, FileText, Handshake,
-  Star, CheckCircle2, Zap, TrendingUp, Users, Briefcase, Film, X
-} from "lucide-react";
-
-const STATS = [
-  { label: "Verified AI Creators", value: "18", icon: Users },
-  { label: "Active Briefs", value: "4", icon: Briefcase },
-  { label: "AI Tools Covered", value: "15+", icon: Zap },
-  { label: "Avg. Creator Rating", value: "4.8★", icon: Star },
-];
-
-const HOW_IT_WORKS = [
-  {
-    step: "01",
-    title: "Discover AI Creators",
-    desc: "Search and filter 18 verified AI filmmakers, animators, and generative artists by tools, specialization, rate, and style.",
-    icon: Search,
-    color: "from-violet-500 to-violet-600",
-  },
-  {
-    step: "02",
-    title: "Post Your Brief",
-    desc: "Use our AI-powered brief builder to transform a rough idea into a complete structured brief in seconds. Brief Intelligence audits it in real-time.",
-    icon: FileText,
-    color: "from-cyan-500 to-cyan-600",
-  },
-  {
-    step: "03",
-    title: "Match & Hire",
-    desc: "Get explainable % match scores, compare creators side-by-side, review proposals, and manage the engagement from brief to delivery.",
-    icon: Handshake,
-    color: "from-violet-500 to-cyan-500",
-  },
-];
+import { ArrowRight, ArrowUpRight, Star, CheckCircle } from "lucide-react";
 
 const FEATURED_CREATORS = [
-  { name: "Aryan Kapoor", handle: "@aryanvisuals", headline: "AI Filmmaker & Cinematic Visual Storyteller", badge: "Studio", rate: 95, rating: 4.9, tools: ["Runway", "Kling", "Midjourney"], avatar: "https://picsum.photos/seed/aryan/200/200", cover: "https://picsum.photos/seed/aryancover/800/300", id: "creator-001", availability: "Available" },
-  { name: "Marcus Chen", handle: "@marcusaivfx", headline: "AI VFX Director | Epic Sci-Fi & Fantasy Visuals", badge: "Studio", rate: 150, rating: 5.0, tools: ["Sora", "Runway", "ComfyUI"], avatar: "https://picsum.photos/seed/marcus/200/200", cover: "https://picsum.photos/seed/marcuscover/800/300", id: "creator-005", availability: "Limited" },
-  { name: "Lena Volkov", handle: "@lenamusicals", headline: "Music Video Director | Ethereal AI Aesthetics", badge: "Studio", rate: 130, rating: 4.9, tools: ["Higgsfield", "Runway", "Kling"], avatar: "https://picsum.photos/seed/lena/200/200", cover: "https://picsum.photos/seed/lenacover/800/300", id: "creator-008", availability: "Available" },
-  { name: "Aisha Okafor", handle: "@aishacreatives", headline: "AI Brand Storyteller | Purpose-Driven Campaigns", badge: "Studio", rate: 85, rating: 4.9, tools: ["Veo", "Runway", "ElevenLabs"], avatar: "https://picsum.photos/seed/aisha/200/200", cover: "https://picsum.photos/seed/aishacover/800/300", id: "creator-012", availability: "Available" },
-  { name: "Zara Ahmed", handle: "@zarafashionai", headline: "AI Fashion Filmmaker | High-Fashion Campaigns", badge: "Verified", rate: 120, rating: 4.85, tools: ["Midjourney", "Flux", "Adobe Firefly"], avatar: "https://picsum.photos/seed/zara/200/200", cover: "https://picsum.photos/seed/zaracover/800/300", id: "creator-004", availability: "Available" },
-  { name: "Meera Iyer", handle: "@meeravisualai", headline: "AI Visual Artist | Experimental & Art-House Films", badge: "Studio", rate: 100, rating: 5.0, tools: ["Stable Diffusion", "ComfyUI", "Runway"], avatar: "https://picsum.photos/seed/meera/200/200", cover: "https://picsum.photos/seed/meeracover/800/300", id: "creator-015", availability: "Limited" },
+  { name: "Aryan Kapoor", handle: "@aryanvisuals", headline: "AI Filmmaker & Cinematic Visual Storyteller", badge: "Studio", rate: 95, rating: 4.9, tools: ["Runway", "Kling", "Midjourney"], avatar: "https://picsum.photos/seed/aryan/200/200", id: "creator-001", availability: "Available", category: "AI Filmmaking" },
+  { name: "Marcus Chen", handle: "@marcusaivfx", headline: "AI VFX Director | Epic Sci-Fi & Fantasy Visuals", badge: "Studio", rate: 150, rating: 5.0, tools: ["Sora", "Runway", "ComfyUI"], avatar: "https://picsum.photos/seed/marcus/200/200", id: "creator-005", availability: "Limited", category: "3D & CGI" },
+  { name: "Lena Volkov", handle: "@lenamusicals", headline: "Music Video Director | Ethereal AI Aesthetics", badge: "Studio", rate: 130, rating: 4.9, tools: ["Higgsfield", "Runway", "Kling"], avatar: "https://picsum.photos/seed/lena/200/200", id: "creator-008", availability: "Available", category: "Music Video" },
+  { name: "Aisha Okafor", handle: "@aishacreatives", headline: "AI Brand Storyteller | Purpose-Driven Campaigns", badge: "Studio", rate: 85, rating: 4.9, tools: ["Veo", "Runway", "ElevenLabs"], avatar: "https://picsum.photos/seed/aisha/200/200", id: "creator-012", availability: "Available", category: "Brand Film" },
+  { name: "Zara Ahmed", handle: "@zarafashionai", headline: "AI Fashion Filmmaker | High-Fashion Campaigns", badge: "Verified", rate: 120, rating: 4.85, tools: ["Midjourney", "Flux", "Adobe Firefly"], avatar: "https://picsum.photos/seed/zara/200/200", id: "creator-004", availability: "Available", category: "Fashion" },
+  { name: "Rahul Sharma", handle: "@rahul3d", headline: "3D Gaussian Splatting Artist & Product Visualizer", badge: "Studio", rate: 110, rating: 4.95, tools: ["ComfyUI", "Flux", "Topaz"], avatar: "https://picsum.photos/seed/rahul/200/200", id: "creator-003", availability: "Limited", category: "Product Viz" },
 ];
 
-const BADGE_STYLES: Record<string, string> = {
-  Studio: "bg-violet-500/80 text-white",
-  Verified: "bg-cyan-500/80 text-white",
-  Rising: "bg-amber-500/80 text-white",
-  Unverified: "bg-white/20 text-white",
-};
+const CATEGORIES = [
+  { name: "AI Filmmaking", count: 4, bg: "bg-[#1a2e1a]", image: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400&q=80" },
+  { name: "3D & CGI", count: 3, bg: "bg-[#2e1a1a]", image: "https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=400&q=80" },
+  { name: "Brand Film", count: 5, bg: "bg-[#1a1a2e]", image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=400&q=80" },
+  { name: "Fashion", count: 2, bg: "bg-[#2e2a1a]", image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80" },
+];
 
-const AVAIL_COLOR: Record<string, string> = {
-  Available: "text-green-400",
-  Limited: "text-amber-400",
-  Booked: "text-red-400",
-};
+const STATS = [
+  { value: "18", label: "Verified AI creators" },
+  { value: "4", label: "Active campaigns" },
+  { value: "15+", label: "AI tools covered" },
+  { value: "4.9★", label: "Average rating" },
+];
 
 export default function HomePage() {
   const [bannerDismissed, setBannerDismissed] = useState(false);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ background: "var(--cream)" }}>
 
-      {/* Judge Welcome Banner */}
+      {/* Judge banner */}
       {!bannerDismissed && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-violet-600/90 to-cyan-600/90 text-white px-4 py-2.5 text-center text-sm font-medium relative z-50"
-        >
-          <span>🎯 Hackathon Demo — </span>
-          <Link href="/login" className="underline underline-offset-2 hover:no-underline font-semibold">
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
+          className="text-center py-2.5 px-4 text-sm font-medium relative"
+          style={{ background: "var(--dark-green)", color: "white" }}>
+          🎯 Hackathon Demo —{" "}
+          <Link href="/login" className="underline underline-offset-2 font-semibold" style={{ color: "var(--lime-light)" }}>
             Click here for instant 1-click access
           </Link>
-          <span> · Brand & Creator accounts ready · No signup needed</span>
-          <button
-            onClick={() => setBannerDismissed(true)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-white/20 rounded transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          {" "}· Brand & Creator accounts ready · No signup needed
+          <button onClick={() => setBannerDismissed(true)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 opacity-70 hover:opacity-100">✕</button>
         </motion.div>
       )}
 
       {/* Hero */}
-      <section className="relative overflow-hidden pt-20 pb-32">
-        {/* Cinematic background */}
-        <div className="absolute inset-0 pointer-events-none">
-          <img
-            src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=80&auto=format&fit=crop"
-            alt=""
-            className="w-full h-full object-cover opacity-[0.07]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-background" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/80" />
-          <div className="absolute top-20 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl" />
-          <div className="absolute top-40 right-1/4 w-64 h-64 bg-cyan-500/15 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-32 bg-gradient-to-t from-background to-transparent" />
-        </div>
-
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm font-medium mb-8">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>AI-Native Creative Marketplace · Kampus.VC Hackathon</span>
-          </div>
-
-          {/* Headline */}
-          <h1 className="font-display font-bold text-5xl sm:text-6xl lg:text-7xl leading-tight mb-6">
-            Hire the world&apos;s best{" "}
-            <span className="gradient-text">AI creators</span>
-            <br />
-            for your brand
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            CineGen connects brands with verified AI filmmakers, animators, and generative artists. Discover talent, build briefs with AI, get explainable match scores — all in one place.
-          </p>
-
-          {/* CTAs — max 2 */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-            <Link
-              href="/login"
-              className="flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl font-semibold text-base hover:from-violet-500 hover:to-violet-400 transition-all shadow-lg shadow-violet-500/30 hover:-translate-y-0.5"
-            >
-              <Play className="w-4 h-4" />
-              Try Demo — Instant Access
-            </Link>
-            <Link
-              href="/creators"
-              className="flex items-center gap-2 px-8 py-4 glass border border-white/10 text-foreground rounded-xl font-semibold text-base hover:bg-white/5 transition-all hover:-translate-y-0.5"
-            >
-              <Search className="w-4 h-4" />
-              Browse Creators
-            </Link>
-          </div>
-
-          {/* Creator avatars — no fake claim */}
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <div className="flex -space-x-2">
-              {FEATURED_CREATORS.slice(0, 5).map((c) => (
-                <img
-                  key={c.id}
-                  src={c.avatar}
-                  alt={c.name}
-                  className="w-7 h-7 rounded-full border-2 border-background object-cover"
-                />
-              ))}
+      <section className="pt-16 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="section-label mb-4">CREATIVE ENERGY, CONNECTED</div>
+            <h1 className="heading-editorial text-5xl sm:text-6xl lg:text-7xl mb-6" style={{ color: "var(--text-primary)" }}>
+              Better<br />together.{" "}
+              <span style={{ color: "var(--lime)", fontStyle: "italic" }}>Always.</span>
+            </h1>
+            <p className="text-lg mb-8" style={{ color: "var(--text-secondary)", maxWidth: "480px", lineHeight: "1.7" }}>
+              CineGen connects brands with verified AI filmmakers, animators, and generative artists. Post a brief, discover talent, get matched — all in one place.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/creators" className="btn-lime flex items-center gap-2 px-6 py-3 text-sm">
+                Discover creators <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link href="/register" className="btn-dark flex items-center gap-2 px-6 py-3 text-sm">
+                Get started free
+              </Link>
+              <Link href="/demo" className="btn-outline flex items-center gap-2 px-6 py-3 text-sm">
+                Try the demo
+              </Link>
             </div>
-            <span>18 verified AI creators ready to hire</span>
-          </div>
-        </div>
-      </section>
+          </motion.div>
 
-      {/* Stats Strip — real numbers */}
-      <section className="py-8 border-y border-white/5 bg-white/[0.02]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {STATS.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * i }}
-                className="text-center"
-              >
-                <div className="text-3xl font-display font-bold gradient-text mb-1">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </motion.div>
+          {/* Creator cards mosaic */}
+          <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
+            className="hidden lg:grid grid-cols-2 gap-3">
+            {FEATURED_CREATORS.slice(0, 4).map((creator, i) => (
+              <Link key={creator.id} href={`/creators/${creator.id}`}>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * i }}
+                  className="bg-white rounded-2xl p-4 border border-[var(--cream-dark)] hover:shadow-md transition-all hover:-translate-y-0.5 cursor-pointer">
+                  <div className="flex items-center gap-3 mb-3">
+                    <img src={creator.avatar} alt={creator.name} className="w-10 h-10 rounded-full object-cover" />
+                    <div>
+                      <div className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>{creator.name}</div>
+                      <div className="text-xs" style={{ color: "var(--text-secondary)" }}>{creator.category}</div>
+                    </div>
+                  </div>
+                  <p className="text-xs mb-3 line-clamp-2" style={{ color: "var(--text-secondary)" }}>{creator.headline}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>${creator.rate}/hr</span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${creator.availability === "Available" ? "text-green-700 bg-green-100" : "text-amber-700 bg-amber-100"}`}>
+                      {creator.availability}
+                    </span>
+                  </div>
+                </motion.div>
+              </Link>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="font-display font-bold text-4xl mb-4">How CineGen works</h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-            From idea to delivered content — in three steps.
-          </p>
+      {/* Stats */}
+      <section className="py-8 border-y border-[var(--cream-dark)] bg-white">
+        <div className="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
+          {STATS.map((stat, i) => (
+            <motion.div key={stat.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
+              className="text-center">
+              <div className="text-3xl font-bold mb-1" style={{ fontFamily: "Playfair Display, serif", color: "var(--text-primary)" }}>{stat.value}</div>
+              <div className="text-sm" style={{ color: "var(--text-secondary)" }}>{stat.label}</div>
+            </motion.div>
+          ))}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {HOW_IT_WORKS.map((step, i) => (
-            <motion.div
-              key={step.step}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 * i }}
-              className="glass rounded-2xl p-6 border border-white/5 hover:border-violet-500/20 transition-all group"
-            >
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                <step.icon className="w-6 h-6 text-white" />
-              </div>
-              <div className="text-4xl font-display font-bold text-white/10 mb-2">{step.step}</div>
-              <h3 className="font-display font-semibold text-xl mb-3">{step.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
+      </section>
+
+      {/* Categories */}
+      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-end justify-between mb-10">
+          <div>
+            <div className="section-label mb-3">CREATIVE CRAFT</div>
+            <h2 className="heading-editorial text-4xl" style={{ color: "var(--text-primary)" }}>
+              Find your craft.
+            </h2>
+          </div>
+          <Link href="/categories" className="flex items-center gap-1 text-sm font-medium hover:underline" style={{ color: "var(--text-primary)" }}>
+            All categories <ArrowUpRight className="w-4 h-4" />
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {CATEGORIES.map((cat, i) => (
+            <motion.div key={cat.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
+              <Link href={`/categories`}>
+                <div className="relative rounded-2xl overflow-hidden aspect-[4/5] group cursor-pointer">
+                  <img src={cat.image} alt={cat.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <div className="section-label mb-1" style={{ color: "rgba(255,255,255,0.6)" }}>{i + 1} / CREATIVE CRAFT</div>
+                    <div className="font-bold text-lg text-white">{cat.name}</div>
+                    <div className="text-sm" style={{ color: "rgba(255,255,255,0.7)" }}>{cat.count} creators</div>
+                  </div>
+                  <div className="absolute top-3 right-3 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <ArrowUpRight className="w-4 h-4 text-white" />
+                  </div>
+                </div>
+              </Link>
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* Featured Creators */}
-      <section className="py-16 bg-gradient-to-b from-transparent via-violet-950/10 to-transparent">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-10">
+      <section className="py-20 border-t border-[var(--cream-dark)]" style={{ background: "white" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-end justify-between mb-10">
             <div>
-              <h2 className="font-display font-bold text-3xl mb-2">Featured Creators</h2>
-              <p className="text-muted-foreground">Handpicked AI creators available for your next campaign</p>
+              <div className="section-label mb-3">TALENT</div>
+              <h2 className="heading-editorial text-4xl" style={{ color: "var(--text-primary)" }}>
+                Discover creators.
+              </h2>
             </div>
-            <Link href="/creators" className="hidden sm:flex items-center gap-1.5 text-sm text-violet-400 hover:text-violet-300 transition-colors font-medium">
-              View all 18 <ArrowRight className="w-4 h-4" />
+            <Link href="/creators" className="flex items-center gap-1 text-sm font-medium hover:underline" style={{ color: "var(--text-primary)" }}>
+              View all 18 <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {FEATURED_CREATORS.map((creator, i) => (
-              <motion.div
-                key={creator.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.05 * i }}
-              >
+              <motion.div key={creator.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}>
                 <Link href={`/creators/${creator.id}`}>
-                  <div className="glass rounded-2xl overflow-hidden border border-white/5 hover:border-violet-500/30 transition-all group hover:-translate-y-1 cursor-pointer h-full">
-                    <div className="relative h-28 overflow-hidden">
-                      <img src={creator.cover} alt="" className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                      <div className={`absolute top-3 right-3 text-xs px-2 py-0.5 rounded-full font-medium ${BADGE_STYLES[creator.badge]}`}>
-                        {creator.badge === "Studio" && "★ "}{creator.badge}
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <div className="flex items-start gap-3 -mt-8 mb-3 relative z-10">
-                        <img src={creator.avatar} alt={creator.name} className="w-12 h-12 rounded-xl border-2 border-background object-cover shadow-xl" />
-                        <div className="mt-5">
-                          <div className="font-semibold text-sm">{creator.name}</div>
-                          <div className="text-xs text-muted-foreground">{creator.handle}</div>
+                  <div className="bg-white border border-[var(--cream-dark)] rounded-2xl p-5 hover:shadow-md transition-all hover:-translate-y-0.5 cursor-pointer">
+                    <div className="flex items-start gap-3 mb-4">
+                      <img src={creator.avatar} alt={creator.name} className="w-12 h-12 rounded-full object-cover" />
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>{creator.name}</div>
+                        <div className="text-xs" style={{ color: "var(--text-secondary)" }}>{creator.handle}</div>
+                        <div className="mt-1">
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${creator.badge === "Studio" ? "text-[var(--lime)] bg-green-50" : "text-blue-600 bg-blue-50"}`}>
+                            {creator.badge}
+                          </span>
                         </div>
                       </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2 mb-3">{creator.headline}</p>
-                      <div className="flex flex-wrap gap-1 mb-3">
-                        {creator.tools.map((t) => (
-                          <span key={t} className="text-xs px-1.5 py-0.5 bg-white/5 rounded text-muted-foreground">{t}</span>
-                        ))}
+                    </div>
+                    <p className="text-sm mb-4 line-clamp-2" style={{ color: "var(--text-secondary)" }}>{creator.headline}</p>
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {creator.tools.map((t) => (
+                        <span key={t} className="text-xs px-2 py-0.5 rounded-full bg-[var(--cream)] border border-[var(--cream-dark)]" style={{ color: "var(--text-secondary)" }}>{t}</span>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between pt-3 border-t border-[var(--cream-dark)]">
+                      <div className="flex items-center gap-1 text-sm">
+                        <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                        <span className="font-medium" style={{ color: "var(--text-primary)" }}>{creator.rating}</span>
                       </div>
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1 text-amber-400 font-medium">
-                          <Star className="w-3 h-3 fill-amber-400" />{creator.rating}
-                        </span>
-                        <span className={`font-medium ${AVAIL_COLOR[creator.availability]}`}>● {creator.availability}</span>
-                        <span className="text-foreground font-semibold">${creator.rate}/hr</span>
-                      </div>
+                      <span className={`text-xs font-medium ${creator.availability === "Available" ? "text-green-600" : "text-amber-600"}`}>
+                        ● {creator.availability}
+                      </span>
+                      <span className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>${creator.rate}/hr</span>
                     </div>
                   </div>
                 </Link>
               </motion.div>
             ))}
           </div>
-
-          <div className="text-center mt-8">
-            <Link href="/creators" className="inline-flex items-center gap-2 px-6 py-3 glass border border-white/10 rounded-xl text-sm font-medium hover:bg-white/5 transition-all">
-              View all 18 creators <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* Features Strip */}
-      <section className="py-12 border-y border-white/5 bg-white/[0.01]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-xs text-muted-foreground uppercase tracking-widest mb-8 font-medium">Everything you need to hire AI creators</p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[
-              { emoji: "🧠", label: "Brief Intelligence", desc: "AI audits your brief in real-time", href: "/briefs/new" },
-              { emoji: "⚖️", label: "Creator Compare", desc: "Side-by-side creator analysis", href: "/compare" },
-              { emoji: "💰", label: "Budget Estimator", desc: "Instant AI production cost estimate", href: "/estimator" },
-              { emoji: "🛡️", label: "Risk Scanner", desc: "IP & licensing compliance check", href: "/risk-scanner" },
-              { emoji: "🏆", label: "Leaderboard", desc: "Top-ranked AI creators", href: "/leaderboard" },
-              { emoji: "🧬", label: "Style DNA", desc: "Radar chart of creator aesthetics", href: "/creators" },
-              { emoji: "🎯", label: "Match Scoring", desc: "Explainable % match engine", href: "/briefs/new" },
-              { emoji: "✅", label: "Verification Evidence", desc: "Audited proof of AI production", href: "/creators" },
-            ].map((f) => (
-              <Link key={f.label} href={f.href}
-                className="glass rounded-xl border border-white/5 hover:border-violet-500/20 p-4 transition-all group">
+      {/* Features Grid */}
+      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="section-label mb-4">PLATFORM TOOLS</div>
+        <h2 className="heading-editorial text-4xl mb-12" style={{ color: "var(--text-primary)" }}>
+          Everything you need.
+        </h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {[
+            { emoji: "🧠", label: "Brief Intelligence", desc: "AI audits your brief in real-time", href: "/briefs/new" },
+            { emoji: "⚖️", label: "Creator Compare", desc: "Side-by-side analysis", href: "/compare" },
+            { emoji: "💰", label: "Budget Estimator", desc: "Instant cost estimate", href: "/estimator" },
+            { emoji: "🛡️", label: "Risk Scanner", desc: "IP & licensing check", href: "/risk-scanner" },
+            { emoji: "🏆", label: "Leaderboard", desc: "Top-ranked creators", href: "/leaderboard" },
+            { emoji: "🧬", label: "Style DNA", desc: "Creator style radar", href: "/creators" },
+            { emoji: "🎯", label: "Match Scoring", desc: "Explainable % match", href: "/briefs/new" },
+            { emoji: "✅", label: "Verification", desc: "Audited proof of work", href: "/creators" },
+          ].map((f) => (
+            <Link key={f.label} href={f.href}>
+              <div className="bg-white border border-[var(--cream-dark)] rounded-xl p-4 hover:shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer">
                 <div className="text-2xl mb-2">{f.emoji}</div>
-                <div className="font-semibold text-sm group-hover:text-violet-300 transition-colors">{f.label}</div>
-                <div className="text-xs text-muted-foreground mt-0.5">{f.desc}</div>
-              </Link>
-            ))}
-          </div>
+                <div className="font-semibold text-sm mb-0.5" style={{ color: "var(--text-primary)" }}>{f.label}</div>
+                <div className="text-xs" style={{ color: "var(--text-secondary)" }}>{f.desc}</div>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
-      {/* CTA Section — clean, 2 buttons only */}
-      <section className="py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="glass rounded-3xl border border-violet-500/20 p-12 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-violet-600/10 to-cyan-500/5 pointer-events-none" />
-          <div className="relative">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm font-medium mb-6">
-              <TrendingUp className="w-3.5 h-3.5" />
-              Ready to create?
-            </div>
-            <h2 className="font-display font-bold text-4xl mb-4">
-              Your next campaign starts here
+      {/* CTA */}
+      <section className="py-24">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <div className="rounded-3xl p-12" style={{ background: "var(--dark-green)" }}>
+            <div className="section-label mb-4" style={{ color: "rgba(255,255,255,0.5)" }}>GET STARTED</div>
+            <h2 className="heading-editorial text-4xl mb-4 text-white">
+              Your next campaign<br />starts here.
             </h2>
-            <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
-              Discover 18 verified AI creators, build structured briefs with Gemini AI, and get explainable match scores — all without leaving the platform.
+            <p className="text-lg mb-8" style={{ color: "rgba(255,255,255,0.6)", maxWidth: "480px", margin: "0 auto 2rem" }}>
+              Discover 18 verified AI creators, build structured briefs with Gemini AI, and get explainable match scores.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/login"
-                className="flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-violet-600 to-cyan-600 text-white rounded-xl font-semibold text-base hover:opacity-90 transition-all shadow-xl shadow-violet-500/30"
-              >
-                <Sparkles className="w-5 h-5" />
-                Try the Demo
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link href="/login" className="btn-lime flex items-center gap-2 px-8 py-3.5 text-sm">
+                Try the demo
               </Link>
-              <Link
-                href="/creators"
-                className="flex items-center gap-2 px-8 py-4 glass border border-white/10 rounded-xl font-semibold text-base hover:bg-white/5 transition-all"
-              >
-                Browse Creators <ArrowRight className="w-4 h-4" />
+              <Link href="/creators" className="btn-outline flex items-center gap-2 px-8 py-3.5 text-sm" style={{ borderColor: "rgba(255,255,255,0.3)", color: "white" }}>
+                Browse creators <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>

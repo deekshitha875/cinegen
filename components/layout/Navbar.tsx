@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { Film, Menu, X, LogOut, LayoutDashboard, FileText, Search, Zap, Plus, ChevronDown, Trophy, Shield, Calculator } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
+import { Menu, X, ChevronDown, Bell } from "lucide-react";
 import { useSession } from "@/hooks/useSession";
 import { useAuth } from "@/lib/auth-context";
 import { signOut } from "@/lib/auth";
@@ -12,76 +12,66 @@ import { toast } from "sonner";
 export function Navbar() {
   const { session, logout, switchRole } = useSession();
   const { user: supabaseUser } = useAuth();
-  const router = useRouter();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
-  // Use Supabase user if available, fall back to localStorage session
   const activeUser = supabaseUser
-    ? { name: supabaseUser.name, role: supabaseUser.role, email: supabaseUser.email }
+    ? { name: supabaseUser.name, role: supabaseUser.role }
     : session
-    ? { name: session.name, role: session.role, email: session.email }
+    ? { name: session.name, role: session.role }
     : null;
 
   const handleLogout = async () => {
-    // Sign out from both Supabase and localStorage
     try { await signOut(); } catch {}
     logout();
     toast.success("Logged out");
     window.location.href = "/";
-    setMobileOpen(false);
   };
 
   const handleSwitchRole = (role: "brand" | "creator") => {
     switchRole(role);
-    toast.success(`Switched to ${role === "brand" ? "Brand" : "Creator"} mode`);
+    toast.success(`Switched to ${role}`);
   };
 
   const navLinks = [
-    { href: "/creators", label: "Discover", icon: Search },
-    { href: "/briefs", label: "Briefs", icon: FileText },
-    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/categories", label: "Categories" },
+    { href: "/creators", label: "Discover creators" },
+    { href: "/demo", label: "Try the demo" },
+    { href: "/briefs", label: "Opportunities" },
   ];
 
-  const toolLinks = [
-    { href: "/estimator", label: "Budget Estimator", icon: Calculator, desc: "Instant AI cost estimate" },
-    { href: "/risk-scanner", label: "Risk Scanner", icon: Shield, desc: "IP & licensing check" },
-    { href: "/compare", label: "Compare Creators", icon: Search, desc: "Side-by-side analysis" },
-    { href: "/leaderboard", label: "Leaderboard", icon: Trophy, desc: "Top-ranked creators" },
+  const creatorLinks = [
+    { href: "/dashboard", label: "My portfolio" },
+    { href: "/dashboard", label: "My gigs" },
+    { href: "/inbox", label: "Inbox" },
+    { href: "/dashboard", label: "Dashboard" },
   ];
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-white/5"
-      style={{ background: "rgba(10,10,15,0.9)", backdropFilter: "blur(20px)" }}>
+    <nav className="sticky top-0 z-50 bg-white border-b border-[var(--cream-dark)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-violet-500/25">
-              <Film className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-display font-bold text-xl tracking-tight">
-              Cine<span className="gradient-text">Gen</span>
+          <Link href="/" className="flex items-center gap-1.5">
+            <span className="font-bold text-xl tracking-tight text-[var(--text-primary)]" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              CINE<span style={{ color: 'var(--lime)' }}>GEN</span>
             </span>
           </Link>
 
-          {/* Desktop Nav Links */}
+          {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                  pathname === link.href || pathname.startsWith(link.href + "/")
-                    ? "bg-violet-500/20 text-violet-300"
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  pathname === link.href
+                    ? "text-[var(--text-primary)] font-semibold"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 }`}>
-                <link.icon className="w-4 h-4" />
                 {link.label}
               </Link>
             ))}
@@ -91,32 +81,28 @@ export function Navbar() {
               <button
                 onClick={() => setToolsOpen(!toolsOpen)}
                 onBlur={() => setTimeout(() => setToolsOpen(false), 150)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                  toolsOpen ? "bg-violet-500/20 text-violet-300" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-                }`}>
-                <Zap className="w-4 h-4" />
+                className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
                 Tools
-                <ChevronDown className={`w-3 h-3 transition-transform ${toolsOpen ? "rotate-180" : ""}`} />
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${toolsOpen ? "rotate-180" : ""}`} />
               </button>
-
               <AnimatePresence>
                 {toolsOpen && (
                   <motion.div
                     initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
-                    className="absolute top-full left-0 mt-2 w-56 rounded-xl shadow-2xl overflow-hidden z-50 border border-white/10"
-                    style={{ background: "rgba(10,10,15,0.97)", backdropFilter: "blur(20px)" }}
-                  >
-                    {toolLinks.map((tool) => (
+                    className="absolute top-full left-0 mt-1 w-52 bg-white border border-[var(--cream-dark)] rounded-xl shadow-lg overflow-hidden z-50">
+                    {[
+                      { href: "/estimator", label: "💰 Budget Estimator", desc: "Instant cost estimate" },
+                      { href: "/risk-scanner", label: "🛡️ Risk Scanner", desc: "IP & licensing check" },
+                      { href: "/compare", label: "⚖️ Compare Creators", desc: "Side-by-side analysis" },
+                      { href: "/leaderboard", label: "🏆 Leaderboard", desc: "Top-ranked creators" },
+                    ].map((tool) => (
                       <Link key={tool.href} href={tool.href}
                         onClick={() => setToolsOpen(false)}
-                        className="flex items-start gap-3 px-4 py-3 hover:bg-white/5 transition-colors group">
-                        <tool.icon className="w-4 h-4 text-violet-400 mt-0.5 flex-shrink-0" />
-                        <div>
-                          <div className="text-sm font-medium group-hover:text-violet-300 transition-colors">{tool.label}</div>
-                          <div className="text-xs text-muted-foreground">{tool.desc}</div>
-                        </div>
+                        className="flex flex-col px-4 py-3 hover:bg-[var(--cream)] transition-colors">
+                        <span className="text-sm font-medium text-[var(--text-primary)]">{tool.label}</span>
+                        <span className="text-xs text-[var(--text-secondary)]">{tool.desc}</span>
                       </Link>
                     ))}
                   </motion.div>
@@ -125,73 +111,62 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Right side — only render after mount */}
+          {/* Right side */}
           <div className="hidden md:flex items-center gap-3">
             {!mounted ? (
-              <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
+              <div className="w-8 h-8 rounded-full bg-[var(--cream-dark)] animate-pulse" />
             ) : activeUser ? (
               <>
-                {/* Demo Role Switcher — only show for localStorage demo users */}
+                {/* Demo switcher — only for localStorage demo */}
                 {session && !supabaseUser && (
-                  <div className="flex items-center gap-1 bg-violet-500/10 border border-violet-500/20 rounded-lg px-2 py-1">
-                    <Zap className="w-3 h-3 text-violet-400" />
-                    <span className="text-xs text-violet-400 font-medium mr-1">Demo</span>
+                  <div className="flex items-center gap-1 bg-[var(--cream)] border border-[var(--cream-dark)] rounded-full px-2 py-1">
+                    <span className="text-xs text-[var(--text-secondary)] font-medium mr-1">Demo</span>
                     <button onClick={() => handleSwitchRole("brand")}
-                      className={`text-xs px-2 py-0.5 rounded transition-all font-medium ${session.role === "brand" ? "bg-violet-500 text-white" : "text-muted-foreground hover:text-foreground"}`}>
+                      className={`text-xs px-2 py-0.5 rounded-full transition-all font-medium ${session.role === "brand" ? "bg-[var(--dark-green)] text-white" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}`}>
                       Brand
                     </button>
                     <button onClick={() => handleSwitchRole("creator")}
-                      className={`text-xs px-2 py-0.5 rounded transition-all font-medium ${session.role === "creator" ? "bg-cyan-500 text-white" : "text-muted-foreground hover:text-foreground"}`}>
+                      className={`text-xs px-2 py-0.5 rounded-full transition-all font-medium ${session.role === "creator" ? "bg-[var(--lime)] text-white" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}`}>
                       Creator
                     </button>
                   </div>
                 )}
 
-                {/* User info */}
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center text-white text-sm font-bold shadow-lg flex-shrink-0">
-                    {activeUser.name.charAt(0)}
-                  </div>
-                  <div className="leading-tight">
-                    <div className="text-sm font-semibold text-foreground">{activeUser.name}</div>
-                    <div className={`text-xs font-medium ${activeUser.role === "brand" ? "text-violet-400" : "text-cyan-400"}`}>
-                      {activeUser.role === "brand" ? "Brand" : "Creator"}
-                    </div>
-                  </div>
-                </div>
+                {/* Notification bell */}
+                <button className="relative p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+                  <Bell className="w-4 h-4" />
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-[var(--lime)] rounded-full" />
+                </button>
 
-                {activeUser.role === "brand" && (
-                  <Link href="/briefs/new"
-                    className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-lg text-sm font-semibold hover:from-violet-500 hover:to-violet-400 transition-all shadow-lg shadow-violet-500/25">
-                    <Plus className="w-3.5 h-3.5" /> Post Brief
-                  </Link>
-                )}
+                {/* Motion/static toggle */}
+                <button className="text-xs text-[var(--text-secondary)] border border-[var(--cream-dark)] px-3 py-1.5 rounded-full hover:bg-[var(--cream)] transition-colors">
+                  Motion
+                </button>
 
-                <button
-                  onClick={handleLogout}
-                  className="p-2 rounded-lg text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-all"
-                  title="Logout">
-                  <LogOut className="w-4 h-4" />
+                {/* User */}
+                <span className="text-sm text-[var(--text-secondary)]">Hi, {activeUser.name.split(' ')[0]}</span>
+
+                <button onClick={handleLogout}
+                  className="text-sm font-medium text-[var(--text-primary)] hover:text-red-500 transition-colors">
+                  Log out
                 </button>
               </>
             ) : (
               <>
                 <Link href="/login"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2 rounded-lg hover:bg-white/5">
-                  Sign In
+                  className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+                  Log in
                 </Link>
-                <Link href="/login"
-                  className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-lg text-sm font-semibold hover:from-violet-500 hover:to-violet-400 transition-all shadow-lg shadow-violet-500/25">
-                  Get Started
+                <Link href="/register"
+                  className="btn-lime text-sm px-5 py-2">
+                  Get started
                 </Link>
               </>
             )}
           </div>
 
-          {/* Mobile menu toggle */}
-          <button
-            className="md:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5"
-            onClick={() => setMobileOpen(!mobileOpen)}>
+          {/* Mobile toggle */}
+          <button className="md:hidden p-2" onClick={() => setMobileOpen(!mobileOpen)}>
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
@@ -204,55 +179,27 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-white/5"
-            style={{ background: "rgba(10,10,15,0.97)" }}
-          >
+            className="md:hidden bg-white border-t border-[var(--cream-dark)]">
             <div className="px-4 py-3 space-y-1">
-              {navLinks.map((link) => (
+              {[...navLinks, { href: "/estimator", label: "Budget Estimator" }, { href: "/leaderboard", label: "Leaderboard" }].map((link) => (
                 <Link key={link.href} href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all">
-                  <link.icon className="w-4 h-4" />
+                  className="block px-3 py-2.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--cream)] rounded-lg transition-colors">
                   {link.label}
                 </Link>
               ))}
-
-              {mounted && session ? (
-                <div className="pt-3 border-t border-white/5 space-y-2">
-                  <div className="flex items-center gap-3 px-3 py-2">
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center text-white font-bold">
-                      {session.name.charAt(0)}
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold">{session.name}</div>
-                      <div className={`text-xs ${session.role === "brand" ? "text-violet-400" : "text-cyan-400"}`}>
-                        {session.role}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 px-3">
-                    <span className="text-xs text-muted-foreground">Switch role:</span>
-                    <button onClick={() => { handleSwitchRole("brand"); setMobileOpen(false); }}
-                      className={`text-xs px-3 py-1 rounded-lg font-medium ${session.role === "brand" ? "bg-violet-500 text-white" : "bg-white/5 text-muted-foreground"}`}>
-                      Brand
-                    </button>
-                    <button onClick={() => { handleSwitchRole("creator"); setMobileOpen(false); }}
-                      className={`text-xs px-3 py-1 rounded-lg font-medium ${session.role === "creator" ? "bg-cyan-500 text-white" : "bg-white/5 text-muted-foreground"}`}>
-                      Creator
-                    </button>
-                  </div>
+              {mounted && (
+                activeUser ? (
                   <button onClick={handleLogout}
-                    className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm text-red-400 hover:bg-red-500/10 transition-all">
-                    <LogOut className="w-4 h-4" /> Logout
+                    className="w-full text-left px-3 py-2.5 text-sm text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                    Log out
                   </button>
-                </div>
-              ) : (
-                <div className="pt-3 border-t border-white/5">
-                  <Link href="/login" onClick={() => setMobileOpen(false)}
-                    className="block w-full text-center px-4 py-3 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl text-sm font-semibold">
-                    Sign In / Get Started
+                ) : (
+                  <Link href="/register" onClick={() => setMobileOpen(false)}
+                    className="block w-full text-center btn-lime px-4 py-2.5 text-sm mt-2">
+                    Get started
                   </Link>
-                </div>
+                )
               )}
             </div>
           </motion.div>
