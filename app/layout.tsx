@@ -3,6 +3,7 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Toaster } from "sonner";
+import { AuthProvider } from "@/lib/auth-context";
 
 export const metadata: Metadata = {
   title: "CineGen — AI Content Creator Marketplace",
@@ -32,19 +33,21 @@ export default function RootLayout({
         />
       </head>
       <body className="grain min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <Toaster
-          position="bottom-right"
-          toastOptions={{
-            style: {
-              background: "hsl(240 8% 10%)",
-              color: "hsl(0 0% 95%)",
-              border: "1px solid hsl(240 6% 20%)",
-            },
-          }}
-        />
+        <AuthProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <Toaster
+            position="bottom-right"
+            toastOptions={{
+              style: {
+                background: "hsl(240 8% 10%)",
+                color: "hsl(0 0% 95%)",
+                border: "1px solid hsl(240 6% 20%)",
+              },
+            }}
+          />
+        </AuthProvider>
       </body>
     </html>
   );
