@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Film, Menu, X, LogOut, LayoutDashboard, FileText, Search, Zap, Plus, ChevronDown, Trophy, Shield, Calculator, GitCompare } from "lucide-react";
+import { Film, Menu, X, LogOut, LayoutDashboard, FileText, Search, Zap, Plus, ChevronDown, Trophy, Shield, Calculator, MessageSquare } from "lucide-react";
 import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
 
@@ -35,6 +35,7 @@ export function Navbar() {
     { href: "/creators", label: "Discover", icon: Search },
     { href: "/briefs", label: "Briefs", icon: FileText },
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/inbox", label: "Inbox", icon: MessageSquare },
   ];
 
   const toolLinks = [

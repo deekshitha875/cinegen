@@ -236,7 +236,7 @@ function CreatorDashboard() {
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-display font-semibold text-xl">My Proposals</h2>
           <Link href="/briefs" className="text-sm text-violet-400 hover:text-violet-300 transition-colors flex items-center gap-1">
-            Browse briefs <ArrowRight className="w-3.5 h-3.5" />
+            Inbox ??
           </Link>
         </div>
         {myProposals.length > 0 ? (
