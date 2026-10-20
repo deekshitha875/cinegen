@@ -153,34 +153,37 @@ export default function CreatorsPage() {
       {/* Search bar */}
       <div className="flex gap-3 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--text-muted)" }} />
           <input
             type="text"
             placeholder="Search by name, skill, tool, specialization..."
             value={filters.search}
             onChange={(e) => setFilter("search", e.target.value)}
-            className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400/30 focus:ring-2 focus:ring-amber-400/20 placeholder:text-muted-foreground transition-all"
+            className="input-field pl-11"
           />
           {filters.search && (
-            <button onClick={() => setFilter("search", "")} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+            <button onClick={() => setFilter("search", "")} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: "var(--text-muted)" }}>
               <X className="w-4 h-4" />
             </button>
           )}
         </div>
         <button
           onClick={() => setFiltersOpen(!filtersOpen)}
-          className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium transition-all ${filtersOpen ? "bg-amber-500/10 border-amber-400/30 text-amber-600" : "bg-white/5 border-white/10 text-muted-foreground hover:text-foreground hover:bg-white/10"}`}
-        >
+          className="flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium transition-all"
+          style={{
+            background: filtersOpen ? "rgba(232,184,75,0.1)" : "white",
+            borderColor: filtersOpen ? "rgba(232,184,75,0.4)" : "var(--border)",
+            color: filtersOpen ? "var(--gold-dark)" : "var(--text-secondary)",
+          }}>
           <SlidersHorizontal className="w-4 h-4" />
           Filters
-          {hasActiveFilters && <span className="w-2 h-2 rounded-full bg-violet-400" />}
+          {hasActiveFilters && <span className="w-2 h-2 rounded-full" style={{ background: "var(--gold)" }} />}
         </button>
 
         <select
           value={filters.sortBy}
           onChange={(e) => setFilter("sortBy", e.target.value as FilterState["sortBy"])}
-          className="hidden sm:block px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-muted-foreground focus:outline-none focus:border-amber-400/30 cursor-pointer"
-        >
+          className="hidden sm:block input-field" style={{ width: "auto", paddingLeft: "16px", paddingRight: "36px" }}>
           {SORT_OPTIONS.map((o) => (
             <option key={o.value} value={o.value}>{o.label}</option>
           ))}
@@ -206,7 +209,7 @@ export default function CreatorsPage() {
         {/* Sidebar Filters */}
         {filtersOpen && (
           <aside className="hidden md:block w-64 flex-shrink-0">
-            <div className="sticky top-24 bg-white border border-gray-100 rounded-2xl border border-white/5 p-5 space-y-6 max-h-[80vh] overflow-y-auto">
+            <div className="sticky top-24 bg-white rounded-2xl p-5 space-y-6 max-h-[80vh] overflow-y-auto" style={{ border: "1px solid var(--border)" }}>
                 {/* Tools */}
                 <div>
                   <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">AI Tools</h3>
