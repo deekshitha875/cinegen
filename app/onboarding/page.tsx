@@ -103,7 +103,7 @@ export default function OnboardingPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-muted-foreground mb-4">Please sign in first</p>
-          <Link href="/login" className="text-violet-400 hover:text-violet-300">Go to login →</Link>
+          <Link href="/login" className="text-amber-600 hover:text-amber-600">Go to login →</Link>
         </div>
       </div>
     );
@@ -113,8 +113,8 @@ export default function OnboardingPage() {
     <div className="min-h-screen flex items-center justify-center px-4 py-16">
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-violet-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl" />
       </div>
 
       <div className="relative w-full max-w-2xl">
@@ -124,7 +124,7 @@ export default function OnboardingPage() {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center">
               <Film className="w-5 h-5 text-white" />
             </div>
-            <span className="font-display font-bold text-2xl">Cine<span className="gradient-text">Gen</span></span>
+            <span className="font-display font-bold text-2xl">Cine<span className="font-bold text-amber-600">Gen</span></span>
           </Link>
           <h1 className="font-display font-bold text-3xl mb-1">Set up your creator profile</h1>
           <p className="text-muted-foreground text-sm">Hey {session.name}! Let brands discover you. Takes 2 minutes.</p>
@@ -136,7 +136,7 @@ export default function OnboardingPage() {
             <div key={s} className="flex items-center gap-2">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
                 i < step ? "bg-green-500 text-white" :
-                i === step ? "bg-gradient-to-br from-violet-500 to-cyan-500 text-white ring-2 ring-violet-500/30" :
+                i === step ? "bg-gradient-to-br from-violet-500 to-cyan-500 text-white ring-2 ring-amber-400/30" :
                 "bg-white/5 text-muted-foreground border border-white/10"
               }`}>
                 {i < step ? <CheckCircle className="w-4 h-4" /> : i + 1}
@@ -151,9 +151,9 @@ export default function OnboardingPage() {
           {/* Step 0 — Profile */}
           {step === 0 && (
             <motion.div key="step0" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-              className="glass rounded-2xl border border-white/10 p-6 space-y-5">
+              className="bg-white border border-gray-100 rounded-2xl border border-white/10 p-6 space-y-5">
               <div className="flex items-center gap-2 mb-2">
-                <User className="w-5 h-5 text-violet-400" />
+                <User className="w-5 h-5 text-amber-600" />
                 <h2 className="font-semibold text-lg">Your Creator Profile</h2>
               </div>
 
@@ -163,7 +163,7 @@ export default function OnboardingPage() {
                   value={headline}
                   onChange={(e) => setHeadline(e.target.value)}
                   placeholder="e.g. AI Filmmaker & Cinematic Visual Storyteller"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 placeholder:text-muted-foreground transition-all"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400/30 focus:ring-2 focus:ring-amber-400/20 placeholder:text-muted-foreground transition-all"
                 />
               </div>
 
@@ -174,7 +174,7 @@ export default function OnboardingPage() {
                   onChange={(e) => setBio(e.target.value)}
                   rows={4}
                   placeholder="Tell brands about yourself, your style, and what makes your AI work unique..."
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 placeholder:text-muted-foreground transition-all resize-none"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400/30 focus:ring-2 focus:ring-amber-400/20 placeholder:text-muted-foreground transition-all resize-none"
                 />
               </div>
 
@@ -186,13 +186,13 @@ export default function OnboardingPage() {
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   placeholder="e.g. Mumbai, India / Remote"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 placeholder:text-muted-foreground transition-all"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400/30 focus:ring-2 focus:ring-amber-400/20 placeholder:text-muted-foreground transition-all"
                 />
               </div>
 
               <button
                 onClick={() => { if (!headline.trim()) { toast.error("Please add a headline"); return; } setStep(1); }}
-                className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-violet-600 to-cyan-600 text-white rounded-xl font-semibold hover:opacity-90 transition-all shadow-lg"
+                className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#0f1729] to-cyan-600 text-white rounded-xl font-semibold hover:opacity-90 transition-all shadow-lg"
               >
                 Continue <ArrowRight className="w-4 h-4" />
               </button>
@@ -202,9 +202,9 @@ export default function OnboardingPage() {
           {/* Step 1 — Tools & Skills */}
           {step === 1 && (
             <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-              className="glass rounded-2xl border border-white/10 p-6 space-y-5">
+              className="bg-white border border-gray-100 rounded-2xl border border-white/10 p-6 space-y-5">
               <div className="flex items-center gap-2 mb-2">
-                <Zap className="w-5 h-5 text-cyan-400" />
+                <Zap className="w-5 h-5 text-blue-600" />
                 <h2 className="font-semibold text-lg">Tools & Specializations</h2>
               </div>
 
@@ -215,7 +215,7 @@ export default function OnboardingPage() {
                     <button key={t} onClick={() => toggleTool(t)}
                       className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
                         tools.includes(t)
-                          ? "bg-cyan-500/20 border-cyan-500/40 text-cyan-300"
+                          ? "bg-blue-500/10 border-blue-400/30 text-blue-600"
                           : "bg-white/5 border-white/10 text-muted-foreground hover:text-foreground"
                       }`}>
                       {t}
@@ -223,7 +223,7 @@ export default function OnboardingPage() {
                   ))}
                 </div>
                 {tools.length > 0 && (
-                  <p className="text-xs text-cyan-400 mt-2">{tools.length} tool{tools.length > 1 ? "s" : ""} selected</p>
+                  <p className="text-xs text-blue-600 mt-2">{tools.length} tool{tools.length > 1 ? "s" : ""} selected</p>
                 )}
               </div>
 
@@ -234,7 +234,7 @@ export default function OnboardingPage() {
                     <button key={s} onClick={() => toggleSpec(s)}
                       className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
                         specializations.includes(s)
-                          ? "bg-violet-500/20 border-violet-500/40 text-violet-300"
+                          ? "bg-amber-500/10 border-amber-400/30 text-amber-600"
                           : "bg-white/5 border-white/10 text-muted-foreground hover:text-foreground"
                       }`}>
                       {s}
@@ -259,9 +259,9 @@ export default function OnboardingPage() {
                     onChange={(e) => setSkill(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && addSkill()}
                     placeholder="e.g. Color grading, Prompt engineering (Enter to add)"
-                    className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-violet-500/50 transition-all placeholder:text-muted-foreground"
+                    className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400/30 transition-all placeholder:text-muted-foreground"
                   />
-                  <button onClick={addSkill} className="px-4 py-2.5 bg-violet-500/20 border border-violet-500/30 text-violet-300 rounded-xl hover:bg-violet-500/30 transition-all">
+                  <button onClick={addSkill} className="px-4 py-2.5 bg-amber-500/10 border border-amber-400/30 text-amber-600 rounded-xl hover:bg-amber-500/10 transition-all">
                     <Plus className="w-4 h-4" />
                   </button>
                 </div>
@@ -273,7 +273,7 @@ export default function OnboardingPage() {
                 </button>
                 <button
                   onClick={() => { if (tools.length === 0) { toast.error("Select at least one AI tool"); return; } setStep(2); }}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-violet-600 to-cyan-600 text-white rounded-xl font-semibold hover:opacity-90 transition-all shadow-lg"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-[#0f1729] to-cyan-600 text-white rounded-xl font-semibold hover:opacity-90 transition-all shadow-lg"
                 >
                   Continue <ArrowRight className="w-4 h-4" />
                 </button>
@@ -284,7 +284,7 @@ export default function OnboardingPage() {
           {/* Step 2 — Rate & Availability */}
           {step === 2 && (
             <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-              className="glass rounded-2xl border border-white/10 p-6 space-y-5">
+              className="bg-white border border-gray-100 rounded-2xl border border-white/10 p-6 space-y-5">
               <div className="flex items-center gap-2 mb-2">
                 <DollarSign className="w-5 h-5 text-green-400" />
                 <h2 className="font-semibold text-lg">Availability & Rate</h2>
@@ -320,7 +320,7 @@ export default function OnboardingPage() {
                     value={rate}
                     onChange={(e) => setRate(e.target.value)}
                     placeholder="50"
-                    className="w-full pl-8 pr-16 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 transition-all"
+                    className="w-full pl-8 pr-16 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400/30 focus:ring-2 focus:ring-amber-400/20 transition-all"
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">/hr</span>
                 </div>
@@ -343,7 +343,7 @@ export default function OnboardingPage() {
                 <button
                   onClick={handleFinish}
                   disabled={saving}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-violet-600 to-cyan-600 text-white rounded-xl font-semibold hover:opacity-90 transition-all shadow-lg disabled:opacity-50"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-[#0f1729] to-cyan-600 text-white rounded-xl font-semibold hover:opacity-90 transition-all shadow-lg disabled:opacity-50"
                 >
                   {saving ? <span className="animate-pulse">Saving...</span> : <><Sparkles className="w-4 h-4" /> Launch My Profile</>}
                 </button>
@@ -354,7 +354,7 @@ export default function OnboardingPage() {
           {/* Step 3 — Done */}
           {step === 3 && (
             <motion.div key="step3" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-              className="text-center glass rounded-2xl border border-white/10 p-10">
+              className="text-center bg-white border border-gray-100 rounded-2xl border border-white/10 p-10">
               <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center mx-auto mb-6">
                 <CheckCircle className="w-10 h-10 text-white" />
               </div>

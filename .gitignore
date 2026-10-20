@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Hackathon judge access — share privately, don't commit to public repo
+JUDGES.md

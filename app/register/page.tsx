@@ -76,8 +76,8 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-16">
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#0f1729]/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
       </div>
 
       <div className="relative w-full max-w-4xl">
@@ -86,12 +86,12 @@ export default function RegisterPage() {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center">
               <Film className="w-5 h-5 text-white" />
             </div>
-            <span className="font-display font-bold text-2xl">Cine<span className="gradient-text">Gen</span></span>
+            <span className="font-display font-bold text-2xl">Cine<span className="font-bold text-amber-600">Gen</span></span>
           </Link>
           <h1 className="font-display font-bold text-3xl mb-2">Create your account</h1>
           <p className="text-muted-foreground">
             Already have one?{' '}
-            <Link href="/login" className="text-violet-400 hover:text-violet-300 transition-colors font-medium">
+            <Link href="/login" className="text-amber-600 hover:text-amber-600 transition-colors font-medium">
               Sign in
             </Link>
           </p>
@@ -99,7 +99,7 @@ export default function RegisterPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
-            className="glass rounded-2xl border border-white/10 p-6">
+            className="bg-white border border-gray-100 rounded-2xl border border-white/10 p-6">
             {/* Role picker */}
             <div className="flex gap-2 mb-6 p-1 bg-white/5 rounded-xl">
               {(['brand', 'creator'] as Role[]).map((r) => (
@@ -107,7 +107,7 @@ export default function RegisterPage() {
                   className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all ${
                     role === r
                       ? r === 'brand'
-                        ? 'bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/25'
+                        ? 'bg-gradient-to-r from-[#0f1729] to-[#1a2540] text-white shadow-lg shadow-violet-500/25'
                         : 'bg-gradient-to-r from-cyan-600 to-cyan-500 text-white shadow-lg shadow-cyan-500/25'
                       : 'text-muted-foreground hover:text-foreground'
                   }`}>
@@ -124,14 +124,14 @@ export default function RegisterPage() {
                 </label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)}
                   placeholder={role === 'brand' ? 'e.g. Nexus Energy Co.' : 'e.g. Aryan Kapoor'}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 placeholder:text-muted-foreground transition-all"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400/30 focus:ring-2 focus:ring-amber-400/20 placeholder:text-muted-foreground transition-all"
                   required />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1.5">Email address</label>
                 <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 placeholder:text-muted-foreground transition-all"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400/30 focus:ring-2 focus:ring-amber-400/20 placeholder:text-muted-foreground transition-all"
                   required />
               </div>
               <div>
@@ -140,7 +140,7 @@ export default function RegisterPage() {
                   <input type={showPass ? 'text' : 'password'} value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="At least 6 characters"
-                    className="w-full px-4 py-3 pr-10 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 placeholder:text-muted-foreground transition-all"
+                    className="w-full px-4 py-3 pr-10 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400/30 focus:ring-2 focus:ring-amber-400/20 placeholder:text-muted-foreground transition-all"
                     required minLength={6} />
                   <button type="button" onClick={() => setShowPass(!showPass)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
@@ -152,7 +152,7 @@ export default function RegisterPage() {
               <button type="submit" disabled={loading}
                 className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white transition-all disabled:opacity-50 shadow-lg ${
                   role === 'brand'
-                    ? 'bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-500 hover:to-violet-400 shadow-violet-500/25'
+                    ? 'bg-gradient-to-r from-[#0f1729] to-[#1a2540] hover:from-violet-500 hover:to-violet-400 shadow-violet-500/25'
                     : 'bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 shadow-cyan-500/25'
                 }`}>
                 {loading ? <span className="animate-pulse">Creating account...</span> : (
@@ -167,9 +167,9 @@ export default function RegisterPage() {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
-            className="glass rounded-2xl border border-white/10 p-6">
+            className="bg-white border border-gray-100 rounded-2xl border border-white/10 p-6">
             <div className="flex items-center gap-2 mb-5">
-              {role === 'brand' ? <Sparkles className="w-5 h-5 text-violet-400" /> : <Zap className="w-5 h-5 text-cyan-400" />}
+              {role === 'brand' ? <Sparkles className="w-5 h-5 text-amber-600" /> : <Zap className="w-5 h-5 text-blue-600" />}
               <h2 className="font-semibold">What you get as a {role === 'brand' ? 'Brand' : 'Creator'}</h2>
             </div>
             <ul className="space-y-3">
@@ -177,12 +177,12 @@ export default function RegisterPage() {
                 <motion.li key={perk} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.08 }}
                   className="flex items-center gap-3 text-sm">
-                  <CheckCircle className={`w-4 h-4 flex-shrink-0 ${role === 'brand' ? 'text-violet-400' : 'text-cyan-400'}`} />
+                  <CheckCircle className={`w-4 h-4 flex-shrink-0 ${role === 'brand' ? 'text-amber-600' : 'text-blue-600'}`} />
                   <span className="text-muted-foreground">{perk}</span>
                 </motion.li>
               ))}
             </ul>
-            <div className={`mt-6 p-4 rounded-xl border ${role === 'brand' ? 'bg-violet-500/5 border-violet-500/20' : 'bg-cyan-500/5 border-cyan-500/20'}`}>
+            <div className={`mt-6 p-4 rounded-xl border ${role === 'brand' ? 'bg-amber-500/10 border-amber-400/30' : 'bg-blue-500/10 border-blue-400/30'}`}>
               <p className="text-xs text-muted-foreground">
                 🎉 <span className="font-medium text-foreground">Free forever</span> — No credit card required.
               </p>
@@ -190,10 +190,10 @@ export default function RegisterPage() {
             <div className="mt-4 pt-4 border-t border-white/5">
               <p className="text-xs text-muted-foreground mb-3">Just want to explore? Use demo login:</p>
               <div className="flex gap-2">
-                <Link href="/login" className="flex-1 text-center text-xs px-3 py-2 bg-violet-500/10 border border-violet-500/20 text-violet-300 rounded-lg hover:bg-violet-500/20 transition-all">
+                <Link href="/login" className="flex-1 text-center text-xs px-3 py-2 bg-amber-500/10 border border-amber-400/30 text-amber-600 rounded-lg hover:bg-amber-500/10 transition-all">
                   Brand Demo
                 </Link>
-                <Link href="/login" className="flex-1 text-center text-xs px-3 py-2 bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 rounded-lg hover:bg-cyan-500/20 transition-all">
+                <Link href="/login" className="flex-1 text-center text-xs px-3 py-2 bg-blue-500/10 border border-blue-400/30 text-blue-600 rounded-lg hover:bg-blue-500/10 transition-all">
                   Creator Demo
                 </Link>
               </div>

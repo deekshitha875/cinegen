@@ -22,7 +22,7 @@ function EngagementStepper({ currentStage }: { currentStage: EngagementStage }) 
           <div className="flex flex-col items-center">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
               i < currentIdx ? "bg-green-500 text-white" :
-              i === currentIdx ? "bg-gradient-to-br from-violet-500 to-cyan-500 text-white ring-2 ring-violet-500/30" :
+              i === currentIdx ? "bg-gradient-to-br from-violet-500 to-cyan-500 text-white ring-2 ring-amber-400/30" :
               "bg-white/5 text-muted-foreground border border-white/10"
             }`}>
               {i < currentIdx ? <CheckCircle className="w-4 h-4" /> : i + 1}
@@ -51,8 +51,8 @@ function BrandDashboard() {
   const displayEngagements = acceptedProposals.length > 0 ? acceptedProposals : proposals.slice(0, 2);
 
   const stats = [
-    { label: "Active Briefs", value: myBriefs.filter((b) => b.status === "Open").length, icon: FileText, color: "text-violet-400" },
-    { label: "Proposals Received", value: totalProposals.length, icon: Users, color: "text-cyan-400" },
+    { label: "Active Briefs", value: myBriefs.filter((b) => b.status === "Open").length, icon: FileText, color: "text-amber-500" },
+    { label: "Proposals Received", value: totalProposals.length, icon: Users, color: "text-blue-500" },
     { label: "Creators Hired", value: acceptedProposals.length, icon: CheckCircle, color: "text-green-400" },
     { label: "Total Budget", value: formatCurrency(myBriefs.reduce((s, b) => s + b.budgetMax, 0)), icon: TrendingUp, color: "text-amber-400" },
   ];
@@ -65,8 +65,8 @@ function BrandDashboard() {
       </div>
 
       {/* Primary action */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-600/30 to-cyan-600/20 border border-violet-500/30 p-6">
-        <div className="absolute inset-0 bg-gradient-to-br from-violet-600/10 to-transparent pointer-events-none" />
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0f1729]/30 to-cyan-600/20 border border-amber-400/30 p-6">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0f1729]/10 to-transparent pointer-events-none" />
         <div className="relative flex items-center justify-between gap-4">
           <div>
             <h2 className="font-display font-bold text-xl mb-1">Ready to find your next AI creator?</h2>
@@ -74,7 +74,7 @@ function BrandDashboard() {
           </div>
           <div className="flex gap-3 flex-shrink-0">
             <Link href="/briefs/new"
-              className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl text-sm font-semibold hover:from-violet-500 hover:to-violet-400 transition-all shadow-lg shadow-violet-500/25 whitespace-nowrap">
+              className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#0f1729] to-[#1a2540] text-white rounded-xl text-sm font-semibold hover:from-[#1a2540] hover:to-[#243060] transition-all shadow-lg shadow-black/20 whitespace-nowrap">
               <Plus className="w-4 h-4" /> Post a Brief
             </Link>
             <Link href="/estimator"
@@ -89,7 +89,7 @@ function BrandDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
           <motion.div key={stat.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-            className="glass rounded-xl border border-white/5 p-4">
+            className="bg-white border border-gray-100 rounded-xl border border-white/5 p-4">
             <stat.icon className={`w-5 h-5 ${stat.color} mb-2`} />
             <div className="text-2xl font-display font-bold">{stat.value}</div>
             <div className="text-xs text-muted-foreground mt-0.5">{stat.label}</div>
@@ -111,7 +111,7 @@ function BrandDashboard() {
                           proposal.status === "Shortlisted" ? "Proposals" : "Proposals";
             return (
               <motion.div key={proposal.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                className="glass rounded-2xl border border-white/5 p-5">
+                className="bg-white border border-gray-100 rounded-2xl border border-white/5 p-5">
                 <div className="flex items-center justify-between mb-5">
                   <div className="flex items-center gap-3">
                     <img src={creator.avatarUrl} alt={creator.name} className="w-11 h-11 rounded-xl object-cover border border-white/10" />
@@ -154,13 +154,13 @@ function BrandDashboard() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-display font-semibold text-xl">Recent Briefs</h2>
-          <Link href="/briefs" className="text-sm text-violet-400 hover:text-violet-300 transition-colors flex items-center gap-1">
+          <Link href="/briefs" className="text-sm text-amber-500 hover:text-amber-600 transition-colors flex items-center gap-1">
             View all <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
         <div className="space-y-3">
           {myBriefs.slice(0, 3).map((brief, i) => (
-            <div key={brief.id} className="glass rounded-xl border border-white/5 p-4 flex items-center justify-between gap-4">
+            <div key={brief.id} className="bg-white border border-gray-100 rounded-xl border border-white/5 p-4 flex items-center justify-between gap-4">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className={`text-xs px-1.5 py-0.5 rounded-full ${
@@ -179,7 +179,7 @@ function BrandDashboard() {
           ))}
         </div>
         <div className="mt-4">
-          <Link href="/briefs/new" className="w-full flex items-center justify-center gap-2 py-3 glass border border-violet-500/20 text-violet-400 rounded-xl text-sm font-medium hover:bg-violet-500/10 transition-all">
+          <Link href="/briefs/new" className="w-full flex items-center justify-center gap-2 py-3 glass border border-amber-400/20 text-amber-500 rounded-xl text-sm font-medium hover:bg-amber-500/10 transition-all">
             <Plus className="w-4 h-4" /> Create New Brief
           </Link>
         </div>
@@ -199,9 +199,9 @@ function CreatorDashboard() {
   const acceptedProposals = myProposals.filter((p) => p.status === "Accepted");
 
   const stats = [
-    { label: "Proposals Sent", value: myProposals.length, icon: Send, color: "text-violet-400" },
+    { label: "Proposals Sent", value: myProposals.length, icon: Send, color: "text-amber-500" },
     { label: "Accepted", value: acceptedProposals.length, icon: CheckCircle, color: "text-green-400" },
-    { label: "Open Briefs", value: openBriefs.length, icon: FileText, color: "text-cyan-400" },
+    { label: "Open Briefs", value: openBriefs.length, icon: FileText, color: "text-blue-500" },
     { label: "Response Rate", value: "98%", icon: TrendingUp, color: "text-amber-400" },
   ];
 
@@ -223,7 +223,7 @@ function CreatorDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
           <motion.div key={stat.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-            className="glass rounded-xl border border-white/5 p-4">
+            className="bg-white border border-gray-100 rounded-xl border border-white/5 p-4">
             <stat.icon className={`w-5 h-5 ${stat.color} mb-2`} />
             <div className="text-2xl font-display font-bold">{stat.value}</div>
             <div className="text-xs text-muted-foreground mt-0.5">{stat.label}</div>
@@ -235,7 +235,7 @@ function CreatorDashboard() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-display font-semibold text-xl">My Proposals</h2>
-          <Link href="/briefs" className="text-sm text-violet-400 hover:text-violet-300 transition-colors flex items-center gap-1">
+          <Link href="/briefs" className="text-sm text-amber-500 hover:text-amber-600 transition-colors flex items-center gap-1">
             Browse briefs <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -246,7 +246,7 @@ function CreatorDashboard() {
               if (!brief) return null;
               return (
                 <motion.div key={proposal.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                  className="glass rounded-xl border border-white/5 p-4">
+                  className="bg-white border border-gray-100 rounded-xl border border-white/5 p-4">
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm truncate">{brief.campaignTitle}</p>
@@ -262,10 +262,10 @@ function CreatorDashboard() {
             })}
           </div>
         ) : (
-          <div className="glass rounded-2xl border border-dashed border-white/10 p-8 text-center">
+          <div className="bg-white border border-gray-100 rounded-2xl border border-dashed border-white/10 p-8 text-center">
             <Search className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
             <p className="text-muted-foreground text-sm mb-4">No proposals yet. Browse open briefs and submit your first proposal.</p>
-            <Link href="/briefs" className="inline-flex items-center gap-2 px-4 py-2 bg-violet-500/20 border border-violet-500/30 text-violet-300 rounded-xl text-sm font-medium hover:bg-violet-500/30 transition-all">
+            <Link href="/briefs" className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-400/30 text-amber-600 rounded-xl text-sm font-medium hover:bg-amber-400/30 transition-all">
               Browse Open Briefs
             </Link>
           </div>
@@ -276,21 +276,21 @@ function CreatorDashboard() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-display font-semibold text-xl">🔔 New Briefs Matching Your Profile</h2>
-          <span className="text-xs px-2 py-1 bg-violet-500/20 text-violet-300 rounded-full border border-violet-500/30 animate-pulse">
+          <span className="text-xs px-2 py-1 bg-amber-500/10 text-amber-600 rounded-full border border-amber-400/30 animate-pulse">
             {openBriefs.length} new
           </span>
         </div>
         <div className="space-y-3">
           {openBriefs.slice(0, 3).map((brief, i) => (
             <motion.div key={brief.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-              className="glass rounded-xl border border-white/5 hover:border-violet-500/20 transition-all p-4 flex items-center justify-between gap-4">
+              className="bg-white border border-gray-100 rounded-xl border border-white/5 hover:border-amber-400/20 transition-all p-4 flex items-center justify-between gap-4">
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-sm truncate">{brief.campaignTitle}</p>
                 <p className="text-xs text-muted-foreground">{brief.brandName} · {brief.contentType}</p>
               </div>
               <div className="flex items-center gap-3 flex-shrink-0">
                 <span className="text-sm font-semibold text-green-400">{formatCurrency(brief.budgetMin)}–{formatCurrency(brief.budgetMax)}</span>
-                <Link href="/briefs" className="text-xs px-3 py-1.5 bg-violet-500/20 border border-violet-500/30 text-violet-300 rounded-lg hover:bg-violet-500/30 transition-all">
+                <Link href="/briefs" className="text-xs px-3 py-1.5 bg-amber-500/10 border border-amber-400/30 text-amber-600 rounded-lg hover:bg-amber-400/30 transition-all">
                   Apply
                 </Link>
               </div>
@@ -313,7 +313,7 @@ export default function DashboardPage() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center">
         <h2 className="font-display text-2xl mb-3">Sign in to view your dashboard</h2>
-        <Link href="/login" className="text-violet-400 hover:text-violet-300 transition-colors">Go to login →</Link>
+        <Link href="/login" className="text-amber-500 hover:text-amber-600 transition-colors">Go to login →</Link>
       </div>
     );
   }

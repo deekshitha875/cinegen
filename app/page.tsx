@@ -66,29 +66,43 @@ export default function HomePage() {
 
       {/* ── HERO ── */}
       <section className="relative pt-20 pb-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        {/* Subtle background shapes */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute rounded-full opacity-10" style={{ width: 700, height: 700, background: "radial-gradient(circle, var(--gold) 0%, transparent 70%)", top: "-200px", right: "-200px" }} />
-          <div className="absolute rounded-full opacity-8" style={{ width: 500, height: 500, background: "radial-gradient(circle, var(--navy) 0%, transparent 70%)", bottom: "-100px", left: "-100px" }} />
+        {/* 3D Orbital animation */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center" style={{ zIndex: 0 }}>
+          {/* Central glow */}
+          <div className="absolute rounded-full animate-pulse-ring" style={{ width: 400, height: 400, background: "radial-gradient(circle, rgba(232,184,75,0.12) 0%, transparent 70%)", top: "50%", left: "60%", transform: "translate(-50%,-50%)" }} />
+          {/* Rotating ring 1 */}
+          <div className="absolute rounded-full border" style={{ width: 360, height: 360, borderColor: "rgba(232,184,75,0.12)", top: "50%", left: "60%", transform: "translate(-50%,-50%) rotateX(70deg)", animation: "rotate-slow 15s linear infinite" }} />
+          {/* Rotating ring 2 */}
+          <div className="absolute rounded-full border" style={{ width: 500, height: 500, borderColor: "rgba(15,23,41,0.08)", top: "50%", left: "60%", transform: "translate(-50%,-50%) rotateX(70deg) rotateZ(30deg)", animation: "rotate-slow 25s linear infinite reverse" }} />
+          {/* Floating dots */}
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="absolute rounded-full"
+              style={{
+                width: i % 2 === 0 ? 8 : 5,
+                height: i % 2 === 0 ? 8 : 5,
+                background: i % 3 === 0 ? "var(--gold)" : "var(--navy)",
+                top: `${20 + i * 12}%`,
+                left: `${45 + (i % 2 === 0 ? 20 : -5)}%`,
+                opacity: 0.4,
+                animation: `float ${5 + i}s ease-in-out infinite ${i * 0.8}s`,
+              }} />
+          ))}
         </div>
 
-        <div className="relative max-w-7xl mx-auto">
+        <div className="relative max-w-7xl mx-auto" style={{ zIndex: 1 }}>
           {/* Top label */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 mb-6">
             <div className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--gold)" }} />
             <span className="label">AI-NATIVE CREATIVE MARKETPLACE · KAMPUS.VC HACKATHON</span>
           </motion.div>
 
-          {/* Hero content + visual side by side */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             {/* Left */}
             <div>
               <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
                 style={{ fontSize: "clamp(2.8rem, 6vw, 5.5rem)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.05, color: "var(--text-primary)" }}>
                 Hire the{" "}
-                <span className="relative">
-                  <span style={{ color: "var(--gold-dark)", fontStyle: "italic" }}>world's best</span>
-                </span>
+                <span style={{ color: "var(--gold-dark)", fontStyle: "italic" }}>world's best</span>
                 <br />
                 <span style={{ color: "var(--navy)" }}>AI creators.</span>
               </motion.h1>
@@ -111,7 +125,6 @@ export default function HomePage() {
                 </Link>
               </motion.div>
 
-              {/* Avatars */}
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
                 className="flex items-center gap-3 mt-8">
                 <div className="flex -space-x-2">
@@ -135,31 +148,35 @@ export default function HomePage() {
                 <motion.div key={creator.id}
                   initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 + i * 0.1 }}
-                  whileHover={{ y: -6, boxShadow: "0 20px 50px rgba(0,0,0,0.12)" }}
-                  style={{ background: "white", border: "1px solid var(--border)", borderRadius: 16, padding: 16, cursor: "pointer", transition: "box-shadow 0.3s ease" }}>
+                  whileHover={{ y: -8, rotateX: 5, rotateY: -5 }}
+                  style={{ transformStyle: "preserve-3d", perspective: 1000 }}>
                   <Link href={`/creators/${creator.id}`}>
-                    <div className="flex items-center gap-2.5 mb-3">
-                      <div className="relative">
-                        <img src={creator.avatar} alt={creator.name} className="w-10 h-10 rounded-full object-cover" />
-                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white"
-                          style={{ background: creator.available ? "#22c55e" : "#f59e0b" }} />
+                    <div style={{ background: "white", border: "1px solid var(--border)", borderRadius: 16, padding: 16, cursor: "pointer", transition: "box-shadow 0.3s ease", boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}
+                      onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 20px 50px rgba(0,0,0,0.12), 0 0 0 1px rgba(232,184,75,0.2)"; }}
+                      onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(0,0,0,0.06)"; }}>
+                      <div className="flex items-center gap-2.5 mb-3">
+                        <div className="relative">
+                          <img src={creator.avatar} alt={creator.name} className="w-10 h-10 rounded-full object-cover" />
+                          <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white"
+                            style={{ background: creator.available ? "#22c55e" : "#f59e0b" }} />
+                        </div>
+                        <div>
+                          <div className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>{creator.name}</div>
+                          <div className="text-xs" style={{ color: "var(--text-secondary)" }}>{creator.role}</div>
+                        </div>
                       </div>
-                      <div>
-                        <div className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>{creator.name}</div>
-                        <div className="text-xs" style={{ color: "var(--text-secondary)" }}>{creator.role}</div>
+                      <div className="flex flex-wrap gap-1 mb-3">
+                        {creator.tools.map((t) => (
+                          <span key={t} className="text-xs px-2 py-0.5 rounded-full"
+                            style={{ background: "rgba(232,184,75,0.1)", color: "var(--gold-dark)", border: "1px solid rgba(232,184,75,0.25)" }}>{t}</span>
+                        ))}
                       </div>
-                    </div>
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {creator.tools.map((t) => (
-                        <span key={t} className="text-xs px-2 py-0.5 rounded-full"
-                          style={{ background: "rgba(232,184,75,0.1)", color: "var(--gold-dark)", border: "1px solid rgba(232,184,75,0.25)" }}>{t}</span>
-                      ))}
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>${creator.rate}/hr</span>
-                      <div className="flex items-center gap-1">
-                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                        <span className="text-xs font-medium" style={{ color: "var(--text-primary)" }}>{creator.rating}</span>
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>${creator.rate}/hr</span>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                          <span className="text-xs font-medium" style={{ color: "var(--text-primary)" }}>{creator.rating}</span>
+                        </div>
                       </div>
                     </div>
                   </Link>
