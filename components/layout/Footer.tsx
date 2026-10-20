@@ -1,50 +1,51 @@
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
+import { Film, Globe, ExternalLink, Share2 } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer style={{ background: "var(--navy)", borderTop: "1px solid var(--border-dark)" }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-                style={{ background: "linear-gradient(135deg, var(--gold), var(--navy-2))" }}>
-                <Sparkles className="w-4 h-4 text-white" />
+    <footer className="border-t border-white/5 bg-black/20 mt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="col-span-1 md:col-span-2">
+            <Link href="/" className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center">
+                <Film className="w-4 h-4 text-white" />
               </div>
-              <span className="font-black text-lg text-white" style={{ fontFamily: "Syne, Inter, sans-serif" }}>
-                CINE<span style={{ color: "var(--gold)" }}>GEN</span>
+              <span className="font-display font-bold text-xl">
+                Cine<span className="gradient-text">Gen</span>
               </span>
-            </div>
-            <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.45)", maxWidth: "280px" }}>
+            </Link>
+            <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
               The AI-native marketplace where brands discover, brief, and hire the world's best AI content creators.
             </p>
-            <div className="p-4 rounded-2xl" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <div className="text-xs font-bold mb-2" style={{ color: "var(--gold)" }}>🎯 Judge Access</div>
-              <div className="space-y-1 text-xs mb-3" style={{ color: "rgba(255,255,255,0.5)" }}>
-                <div>Brand: <code className="text-white">brand@cinegen.demo</code> / <code className="text-white">Demo@123</code></div>
-                <div>Creator: <code className="text-white">creator@cinegen.demo</code> / <code className="text-white">Demo@123</code></div>
-              </div>
-              <Link href="/login" className="btn-gold text-xs px-4 py-2 inline-flex items-center gap-1">
-                → 1-Click Demo Login
-              </Link>
+            <div className="flex items-center gap-3 mt-4">
+              <a href="#" className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all">
+                <Share2 className="w-4 h-4" />
+              </a>
+              <a href="#" className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all">
+                <Globe className="w-4 h-4" />
+              </a>
+              <a href="#" className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all">
+                <ExternalLink className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
           <div>
-            <h3 className="text-sm font-bold mb-4" style={{ color: "rgba(255,255,255,0.6)", letterSpacing: "0.1em", textTransform: "uppercase" }}>Platform</h3>
-            <ul className="space-y-2.5">
+            <h3 className="text-sm font-semibold text-foreground mb-3">Platform</h3>
+            <ul className="space-y-2">
               {[
                 { label: "Discover Creators", href: "/creators" },
                 { label: "Post a Brief", href: "/briefs/new" },
                 { label: "Browse Briefs", href: "/briefs" },
-                { label: "Categories", href: "/categories" },
-                { label: "Try the Demo", href: "/demo" },
-                { label: "Leaderboard", href: "/leaderboard" },
+                { label: "Dashboard", href: "/dashboard" },
+                { label: "Compare Creators", href: "/compare" },
+                { label: "Creator Leaderboard", href: "/leaderboard" },
+                { label: "Budget Estimator", href: "/estimator" },
+                { label: "Risk Scanner", href: "/risk-scanner" },
               ].map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="text-sm hover:text-white transition-colors"
-                    style={{ color: "rgba(255,255,255,0.45)" }}>
+                  <Link href={l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                     {l.label}
                   </Link>
                 </li>
@@ -53,33 +54,31 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-bold mb-4" style={{ color: "rgba(255,255,255,0.6)", letterSpacing: "0.1em", textTransform: "uppercase" }}>Tools</h3>
-            <ul className="space-y-2.5">
-              {[
-                { label: "Budget Estimator", href: "/estimator" },
-                { label: "Risk Scanner", href: "/risk-scanner" },
-                { label: "Compare Creators", href: "/compare" },
-                { label: "Brief Intelligence", href: "/briefs/new" },
-                { label: "Style DNA", href: "/creators" },
-              ].map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className="text-sm hover:text-white transition-colors"
-                    style={{ color: "rgba(255,255,255,0.45)" }}>
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <h3 className="text-sm font-semibold text-foreground mb-3">🎯 Judge Access</h3>
+            <div className="space-y-3">
+              <div className="p-3 bg-violet-500/10 border border-violet-500/20 rounded-xl">
+                <div className="text-xs text-violet-400 font-semibold mb-1">Brand Account</div>
+                <div className="font-mono text-xs text-foreground">brand@cinegen.demo</div>
+                <div className="font-mono text-xs text-muted-foreground">Demo@123</div>
+              </div>
+              <div className="p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-xl">
+                <div className="text-xs text-cyan-400 font-semibold mb-1">Creator Account</div>
+                <div className="font-mono text-xs text-foreground">creator@cinegen.demo</div>
+                <div className="font-mono text-xs text-muted-foreground">Demo@123</div>
+              </div>
+              <Link href="/login" className="block w-full text-center py-2 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-lg text-xs font-semibold hover:opacity-90 transition-all">
+                → 1-Click Demo Login
+              </Link>
+            </div>
           </div>
         </div>
 
-        <div className="mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-          <p className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>
-            © 2026 CineGen · Built for Kampus.VC HacXLerate 2026
+        <div className="mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-muted-foreground">
+            © 2025 CineGen. Built for Kampus.VC Hackathon — AI Content Creator Marketplace Challenge.
           </p>
-          <p className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>
-            Next.js 14 · Gemini AI · Supabase · Vercel
+          <p className="text-xs text-muted-foreground">
+            Powered by Next.js 14 · Gemini AI · Vercel
           </p>
         </div>
       </div>

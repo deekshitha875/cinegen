@@ -75,27 +75,27 @@ export default function ComparePage() {
 
       {/* Creator selector */}
       {selected.length < 3 && (
-        <div className="bg-white border border-gray-100 rounded-2xl border border-white/10 p-5 mb-8">
+        <div className="glass rounded-2xl border border-white/10 p-5 mb-8">
           <h2 className="font-semibold text-sm mb-3">Add a creator to compare</h2>
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name or specialty..."
-            className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400/30 mb-3 placeholder:text-muted-foreground"
+            className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-violet-500/50 mb-3 placeholder:text-muted-foreground"
           />
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-48 overflow-y-auto">
             {filtered.slice(0, 12).map((c) => (
               <button
                 key={c.id}
                 onClick={() => addCreator(c)}
-                className="flex items-center gap-2 p-2 glass border border-white/5 rounded-xl hover:border-amber-400/30 transition-all text-left group"
+                className="flex items-center gap-2 p-2 glass border border-white/5 rounded-xl hover:border-violet-500/30 transition-all text-left group"
               >
                 <img src={c.avatarUrl} alt={c.name} className="w-8 h-8 rounded-lg object-cover flex-shrink-0" />
                 <div className="min-w-0">
                   <div className="text-xs font-medium truncate">{c.name}</div>
                   <div className="text-xs text-muted-foreground truncate">${c.hourlyRateUsd}/hr</div>
                 </div>
-                <Plus className="w-3.5 h-3.5 text-muted-foreground group-hover:text-amber-600 ml-auto flex-shrink-0" />
+                <Plus className="w-3.5 h-3.5 text-muted-foreground group-hover:text-violet-400 ml-auto flex-shrink-0" />
               </button>
             ))}
           </div>
@@ -104,7 +104,7 @@ export default function ComparePage() {
 
       {selected.length === 0 ? (
         <div className="text-center py-20 text-muted-foreground">
-          <Zap className="w-12 h-12 mx-auto mb-4 text-amber-600/40" />
+          <Zap className="w-12 h-12 mx-auto mb-4 text-violet-400/40" />
           <p className="text-lg font-medium mb-1">Select creators above to compare</p>
           <p className="text-sm">Add 2–3 creators to see a side-by-side breakdown</p>
         </div>
@@ -116,7 +116,7 @@ export default function ComparePage() {
                 <th className="text-left text-xs text-muted-foreground uppercase tracking-wider pb-4 pr-4 w-32">Attribute</th>
                 {selected.map((creator) => (
                   <th key={creator.id} className="pb-4 px-3 min-w-[200px]">
-                    <div className="bg-white border border-gray-100 rounded-2xl border border-white/10 p-4 text-left relative">
+                    <div className="glass rounded-2xl border border-white/10 p-4 text-left relative">
                       <button
                         onClick={() => removeCreator(creator.id)}
                         className="absolute top-2 right-2 p-1 rounded-full hover:bg-white/10 text-muted-foreground hover:text-foreground"
@@ -127,8 +127,8 @@ export default function ComparePage() {
                       <div className="font-semibold text-sm">{creator.name}</div>
                       <div className="text-xs text-muted-foreground mb-2">{creator.handle}</div>
                       <div className={`text-xs px-2 py-0.5 rounded-full inline-block font-medium ${
-                        creator.verification.badge === "Studio" ? "bg-amber-500/10 text-amber-600" :
-                        creator.verification.badge === "Verified" ? "bg-blue-500/10 text-blue-600" :
+                        creator.verification.badge === "Studio" ? "bg-violet-500/20 text-violet-300" :
+                        creator.verification.badge === "Verified" ? "bg-cyan-500/20 text-cyan-300" :
                         "bg-white/10 text-muted-foreground"
                       }`}>{creator.verification.badge}</div>
                     </div>
@@ -154,9 +154,9 @@ export default function ComparePage() {
                       return (
                         <td key={creator.id} className="py-3 px-3">
                           <div className={`text-sm rounded-lg px-3 py-2 ${
-                            isBest ? "bg-amber-500/10 border border-amber-400/30 text-amber-600 font-medium" : "text-muted-foreground"
+                            isBest ? "bg-violet-500/10 border border-violet-500/20 text-violet-300 font-medium" : "text-muted-foreground"
                           }`}>
-                            {isBest && <span className="text-xs text-amber-600 mr-1">★</span>}
+                            {isBest && <span className="text-xs text-violet-400 mr-1">★</span>}
                             {field.key === "tools" || field.key === "specs" ? (
                               <div className="flex flex-wrap gap-1">
                                 {val.split(", ").slice(0, 4).map((v) => (
@@ -182,9 +182,9 @@ export default function ComparePage() {
       )}
 
       {selected.length >= 2 && (
-        <div className="mt-8 bg-white border border-gray-100 rounded-2xl border border-amber-400/30 p-5">
+        <div className="mt-8 glass rounded-2xl border border-violet-500/20 p-5">
           <h3 className="font-semibold text-sm mb-3 flex items-center gap-2">
-            <Zap className="w-4 h-4 text-amber-600" /> AI Recommendation
+            <Zap className="w-4 h-4 text-violet-400" /> AI Recommendation
           </h3>
           {(() => {
             const best = selected.reduce((a, b) =>
@@ -202,7 +202,7 @@ export default function ComparePage() {
                 </div>
                 <Link
                   href={`/creators/${best.id}`}
-                  className="ml-auto px-4 py-2 bg-amber-500/10 border border-amber-400/30 text-amber-600 rounded-xl text-sm hover:bg-amber-500/10 transition-all flex-shrink-0"
+                  className="ml-auto px-4 py-2 bg-violet-500/20 border border-violet-500/30 text-violet-300 rounded-xl text-sm hover:bg-violet-500/30 transition-all flex-shrink-0"
                 >
                   View Profile
                 </Link>

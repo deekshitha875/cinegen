@@ -158,7 +158,7 @@ export default function RiskScannerPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Config */}
         <div className="space-y-5">
-          <div className="bg-white border border-gray-100 rounded-2xl border border-white/10 p-5 space-y-4">
+          <div className="glass rounded-2xl border border-white/10 p-5 space-y-4">
             <h2 className="font-semibold">Campaign Configuration</h2>
 
             <div>
@@ -166,7 +166,7 @@ export default function RiskScannerPage() {
               <div className="flex flex-wrap gap-2">
                 {["Instagram", "YouTube", "TikTok", "TV", "OTT", "Print"].map((p) => (
                   <button key={p} onClick={() => togglePlatform(p)}
-                    className={`px-3 py-1.5 rounded-lg border text-sm transition-all ${platforms.includes(p) ? "bg-amber-500/10 border-amber-400/30 text-amber-600" : "glass border-white/10 text-muted-foreground hover:text-foreground"}`}>
+                    className={`px-3 py-1.5 rounded-lg border text-sm transition-all ${platforms.includes(p) ? "bg-violet-500/20 border-violet-500/40 text-violet-300" : "glass border-white/10 text-muted-foreground hover:text-foreground"}`}>
                     {p}
                   </button>
                 ))}
@@ -178,7 +178,7 @@ export default function RiskScannerPage() {
               <div className="flex gap-2">
                 {["commercial", "editorial", "product", "awareness"].map((u) => (
                   <button key={u} onClick={() => setUsage(u)}
-                    className={`px-3 py-1.5 rounded-lg border text-sm capitalize transition-all ${usage === u ? "bg-blue-500/10 border-blue-400/30 text-blue-600" : "glass border-white/10 text-muted-foreground hover:text-foreground"}`}>
+                    className={`px-3 py-1.5 rounded-lg border text-sm capitalize transition-all ${usage === u ? "bg-cyan-500/20 border-cyan-500/40 text-cyan-300" : "glass border-white/10 text-muted-foreground hover:text-foreground"}`}>
                     {u}
                   </button>
                 ))}
@@ -207,7 +207,7 @@ export default function RiskScannerPage() {
               <div className="flex gap-2">
                 {[{ id: "india", label: "India" }, { id: "asia", label: "Asia" }, { id: "worldwide", label: "Worldwide" }].map((r) => (
                   <button key={r.id} onClick={() => setRegion(r.id)}
-                    className={`px-3 py-1.5 rounded-lg border text-sm transition-all ${region === r.id ? "bg-amber-500/10 border-amber-400/30 text-amber-600" : "glass border-white/10 text-muted-foreground hover:text-foreground"}`}>
+                    className={`px-3 py-1.5 rounded-lg border text-sm transition-all ${region === r.id ? "bg-violet-500/20 border-violet-500/30 text-violet-300" : "glass border-white/10 text-muted-foreground hover:text-foreground"}`}>
                     {r.label}
                   </button>
                 ))}
@@ -249,14 +249,14 @@ export default function RiskScannerPage() {
         <div>
           <AnimatePresence>
             {!scanned && !scanning && (
-              <div className="flex flex-col items-center justify-center h-64 bg-white border border-gray-100 rounded-2xl border border-white/5 text-center p-8">
+              <div className="flex flex-col items-center justify-center h-64 glass rounded-2xl border border-white/5 text-center p-8">
                 <Shield className="w-12 h-12 text-muted-foreground/30 mb-3" />
                 <p className="text-muted-foreground">Configure your campaign and run the scan to see risk analysis</p>
               </div>
             )}
             {scanning && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center h-64 bg-white border border-gray-100 rounded-2xl border border-red-500/20 text-center p-8">
+                className="flex flex-col items-center justify-center h-64 glass rounded-2xl border border-red-500/20 text-center p-8">
                 <div className="w-16 h-16 rounded-full border-2 border-red-500/40 border-t-red-500 animate-spin mb-4" />
                 <p className="text-sm text-muted-foreground">Analyzing IP risks, license conflicts, and compliance requirements...</p>
               </motion.div>
@@ -301,8 +301,8 @@ export default function RiskScannerPage() {
                       </div>
                       <div className="pl-6 space-y-1">
                         <div className="flex items-start gap-1.5 text-xs">
-                          <Zap className="w-3 h-3 text-amber-600 mt-0.5 flex-shrink-0" />
-                          <span className="text-amber-600">{risk.recommendation}</span>
+                          <Zap className="w-3 h-3 text-violet-400 mt-0.5 flex-shrink-0" />
+                          <span className="text-violet-300">{risk.recommendation}</span>
                         </div>
                         <div className="flex items-start gap-1.5 text-xs">
                           <Info className="w-3 h-3 text-muted-foreground mt-0.5 flex-shrink-0" />
@@ -314,7 +314,7 @@ export default function RiskScannerPage() {
                 </div>
 
                 <Link href="/briefs/new"
-                  className="w-full flex items-center justify-center gap-2 py-3 glass border border-amber-400/30 text-amber-600 rounded-xl text-sm font-medium hover:bg-amber-500/10 transition-all">
+                  className="w-full flex items-center justify-center gap-2 py-3 glass border border-violet-500/20 text-violet-300 rounded-xl text-sm font-medium hover:bg-violet-500/10 transition-all">
                   Apply these findings to my brief <ArrowRight className="w-4 h-4" />
                 </Link>
               </motion.div>

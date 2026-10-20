@@ -190,7 +190,7 @@ export default function NewBriefPage() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * i }}
-                className="bg-white border border-gray-100 rounded-xl border border-white/5 hover:border-amber-400/30 transition-all p-4 flex items-center gap-4"
+                className="glass rounded-xl border border-white/5 hover:border-violet-500/30 transition-all p-4 flex items-center gap-4"
               >
                 <div className="text-2xl font-display font-bold text-muted-foreground w-8">#{i + 1}</div>
                 <img src={match.creator.avatarUrl} alt={match.creator.name} className="w-12 h-12 rounded-xl object-cover" />
@@ -199,7 +199,7 @@ export default function NewBriefPage() {
                   {/* Explainable match breakdown */}
                   <div className="flex flex-wrap gap-1 mt-1">
                     {match.reasons.slice(0, 3).map((r, ri) => (
-                      <span key={ri} className="text-xs px-2 py-0.5 bg-amber-500/10 border border-amber-400/30 text-amber-600 rounded-full">{r}</span>
+                      <span key={ri} className="text-xs px-2 py-0.5 bg-violet-500/10 border border-violet-500/20 text-violet-300 rounded-full">{r}</span>
                     ))}
                   </div>
                 </div>
@@ -224,7 +224,7 @@ export default function NewBriefPage() {
                   </div>
                   <Link
                     href={`/creators/${match.creator.id}`}
-                    className="px-3 py-2 bg-amber-500/10 border border-amber-400/30 text-amber-600 rounded-lg text-sm hover:bg-amber-500/10 transition-all"
+                    className="px-3 py-2 bg-violet-500/20 border border-violet-500/30 text-violet-300 rounded-lg text-sm hover:bg-violet-500/30 transition-all"
                   >
                     View
                   </Link>
@@ -238,7 +238,7 @@ export default function NewBriefPage() {
               View all briefs
             </Link>
             <button onClick={() => { setPublished(null); setForm(DEFAULT_FORM); setIdea(""); setMode("ai"); }}
-              className="px-6 py-3 bg-gradient-to-r from-[#0f1729] to-[#1a2540] text-white rounded-xl text-sm font-semibold hover:from-violet-500 hover:to-violet-400 transition-all">
+              className="px-6 py-3 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl text-sm font-semibold hover:from-violet-500 hover:to-violet-400 transition-all">
               Post another brief
             </button>
           </div>
@@ -263,7 +263,7 @@ export default function NewBriefPage() {
       <div className="flex gap-2 mb-6">
         <button
           onClick={() => setMode("ai")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${mode === "ai" ? "bg-gradient-to-r from-[#0f1729] to-[#1a2540] text-white shadow-lg shadow-violet-500/25" : "glass border border-white/10 text-muted-foreground hover:text-foreground"}`}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${mode === "ai" ? "bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/25" : "glass border border-white/10 text-muted-foreground hover:text-foreground"}`}
         >
           <Sparkles className="w-4 h-4" /> AI Brief Builder
         </button>
@@ -277,7 +277,7 @@ export default function NewBriefPage() {
 
       {/* Completeness bar */}
       {mode === "manual" && (
-        <div className="mb-6 bg-white border border-gray-100 rounded-xl border border-white/5 p-4">
+        <div className="mb-6 glass rounded-xl border border-white/5 p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium">Brief Completeness</span>
             <span className={`text-sm font-bold ${completeness >= 80 ? "text-green-400" : completeness >= 50 ? "text-amber-400" : "text-muted-foreground"}`}>{completeness}%</span>
@@ -302,7 +302,7 @@ export default function NewBriefPage() {
           <AnimatePresence mode="wait">
             {mode === "ai" && (
               <motion.div key="ai" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-                className="bg-white border border-gray-100 rounded-2xl border border-amber-400/30 p-6 space-y-5">
+                className="glass rounded-2xl border border-violet-500/20 p-6 space-y-5">
                 <div className="flex items-center gap-2 mb-1">
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center">
                     <Sparkles className="w-4 h-4 text-white" />
@@ -319,7 +319,7 @@ export default function NewBriefPage() {
                     value={idea}
                     onChange={(e) => setIdea(e.target.value)}
                     placeholder="e.g. A cinematic brand film for a luxury watch brand targeting HNIs, with golden hour aesthetics and Indian heritage elements..."
-                    className="w-full h-32 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400/30 focus:ring-2 focus:ring-amber-400/20 resize-none placeholder:text-muted-foreground transition-all"
+                    className="w-full h-32 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 resize-none placeholder:text-muted-foreground transition-all"
                   />
                 </div>
 
@@ -330,7 +330,7 @@ export default function NewBriefPage() {
                       <button
                         key={ex}
                         onClick={() => setIdea(ex)}
-                        className="text-xs px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg hover:bg-amber-500/10 hover:border-amber-400/30 hover:text-amber-600 transition-all text-muted-foreground"
+                        className="text-xs px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg hover:bg-violet-500/10 hover:border-violet-500/30 hover:text-violet-300 transition-all text-muted-foreground"
                       >
                         {ex}
                       </button>
@@ -341,11 +341,11 @@ export default function NewBriefPage() {
                 <button
                   onClick={handleGenerate}
                   disabled={generating || !idea.trim()}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#0f1729] via-purple-600 to-cyan-600 text-white rounded-xl font-semibold hover:opacity-90 transition-all disabled:opacity-50 shadow-lg shadow-violet-500/25 relative overflow-hidden"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-violet-600 via-purple-600 to-cyan-600 text-white rounded-xl font-semibold hover:opacity-90 transition-all disabled:opacity-50 shadow-lg shadow-violet-500/25 relative overflow-hidden"
                 >
                   {generating ? (
                     <>
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#0f1729] via-cyan-500 to-violet-600 animate-pulse" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-violet-600 via-cyan-500 to-violet-600 animate-pulse" />
                       <Loader2 className="w-4 h-4 animate-spin relative z-10" />
                       <span className="relative z-10">AI is thinking...</span>
                     </>
@@ -370,44 +370,44 @@ export default function NewBriefPage() {
               <motion.div key="manual" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
                 className="space-y-5">
                 {form.generatedByAI && (
-                  <div className="flex items-center gap-2 px-4 py-2.5 bg-amber-500/10 border border-amber-400/30 rounded-xl text-sm text-amber-600">
+                  <div className="flex items-center gap-2 px-4 py-2.5 bg-violet-500/10 border border-violet-500/20 rounded-xl text-sm text-violet-300">
                     <Sparkles className="w-4 h-4" />
                     Generated by AI — review and edit below
                   </div>
                 )}
 
                 {/* Campaign */}
-                <div className="bg-white border border-gray-100 rounded-2xl border border-white/5 p-5 space-y-4">
-                  <h3 className="font-semibold flex items-center gap-2"><span className="w-5 h-5 rounded-full bg-amber-500/10 text-amber-600 text-xs flex items-center justify-center font-bold">1</span> Campaign Details</h3>
+                <div className="glass rounded-2xl border border-white/5 p-5 space-y-4">
+                  <h3 className="font-semibold flex items-center gap-2"><span className="w-5 h-5 rounded-full bg-violet-500/20 text-violet-300 text-xs flex items-center justify-center font-bold">1</span> Campaign Details</h3>
                   <div>
                     <label className="block text-xs text-muted-foreground mb-1.5">Campaign Title *</label>
                     <input value={form.campaignTitle} onChange={(e) => setField("campaignTitle", e.target.value)}
                       placeholder="e.g. Nexus Energy Drink — Urban Warriors Launch"
-                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-amber-400/30 transition-all" />
+                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-violet-500/50 transition-all" />
                   </div>
                   <div>
                     <label className="block text-xs text-muted-foreground mb-1.5">Campaign Objective *</label>
                     <textarea value={form.objective} onChange={(e) => setField("objective", e.target.value)}
                       placeholder="What do you want this content to achieve?"
-                      className="w-full h-20 px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-amber-400/30 transition-all resize-none" />
+                      className="w-full h-20 px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-violet-500/50 transition-all resize-none" />
                   </div>
                   <div>
                     <label className="block text-xs text-muted-foreground mb-1.5">Brand Name</label>
                     <input value={form.brandName} onChange={(e) => setField("brandName", e.target.value)}
                       placeholder="Your brand or company name"
-                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-amber-400/30 transition-all" />
+                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-violet-500/50 transition-all" />
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="bg-white border border-gray-100 rounded-2xl border border-white/5 p-5 space-y-4">
-                  <h3 className="font-semibold flex items-center gap-2"><span className="w-5 h-5 rounded-full bg-amber-500/10 text-amber-600 text-xs flex items-center justify-center font-bold">2</span> Content Specs</h3>
+                <div className="glass rounded-2xl border border-white/5 p-5 space-y-4">
+                  <h3 className="font-semibold flex items-center gap-2"><span className="w-5 h-5 rounded-full bg-violet-500/20 text-violet-300 text-xs flex items-center justify-center font-bold">2</span> Content Specs</h3>
                   <div>
                     <label className="block text-xs text-muted-foreground mb-1.5">Content Type *</label>
                     <div className="flex flex-wrap gap-2">
                       {CONTENT_TYPES.map((ct) => (
                         <button key={ct} onClick={() => setField("contentType", ct)}
-                          className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${form.contentType === ct ? "bg-amber-500/10 border-amber-400/30 text-amber-600" : "bg-white/5 border-white/10 text-muted-foreground hover:text-foreground"}`}>
+                          className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${form.contentType === ct ? "bg-violet-500/20 border-violet-500/40 text-violet-300" : "bg-white/5 border-white/10 text-muted-foreground hover:text-foreground"}`}>
                           {ct}
                         </button>
                       ))}
@@ -417,14 +417,14 @@ export default function NewBriefPage() {
                     <label className="block text-xs text-muted-foreground mb-1.5">Visual Style *</label>
                     <input value={form.style} onChange={(e) => setField("style", e.target.value)}
                       placeholder="e.g. Dark cinematic, neon accents, slow motion, luxury feel"
-                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-amber-400/30 transition-all" />
+                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-violet-500/50 transition-all" />
                   </div>
                   <div>
                     <label className="block text-xs text-muted-foreground mb-1.5">Aspect Ratios *</label>
                     <div className="flex flex-wrap gap-2">
                       {ASPECT_RATIOS.map((ar) => (
                         <button key={ar} onClick={() => toggleAspect(ar)}
-                          className={`text-xs px-3 py-1.5 rounded-lg border transition-all font-mono ${form.aspectRatios.includes(ar) ? "bg-blue-500/10 border-blue-400/30 text-blue-600" : "bg-white/5 border-white/10 text-muted-foreground hover:text-foreground"}`}>
+                          className={`text-xs px-3 py-1.5 rounded-lg border transition-all font-mono ${form.aspectRatios.includes(ar) ? "bg-cyan-500/20 border-cyan-500/40 text-cyan-300" : "bg-white/5 border-white/10 text-muted-foreground hover:text-foreground"}`}>
                           {ar}
                         </button>
                       ))}
@@ -434,30 +434,30 @@ export default function NewBriefPage() {
                     <div>
                       <label className="block text-xs text-muted-foreground mb-1.5">Duration (sec)</label>
                       <input type="number" value={form.durationSeconds ?? ""} onChange={(e) => setField("durationSeconds", Number(e.target.value) || undefined)}
-                        className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-amber-400/30 transition-all" />
+                        className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-violet-500/50 transition-all" />
                     </div>
                     <div>
                       <label className="block text-xs text-muted-foreground mb-1.5">Resolution</label>
                       <select value={form.resolution ?? "1080p"} onChange={(e) => setField("resolution", e.target.value)}
-                        className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-amber-400/30 transition-all cursor-pointer">
+                        className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-violet-500/50 transition-all cursor-pointer">
                         {["720p", "1080p", "4K", "8K"].map((r) => <option key={r} value={r}>{r}</option>)}
                       </select>
                     </div>
                     <div>
                       <label className="block text-xs text-muted-foreground mb-1.5">Quantity</label>
                       <input type="number" min={1} value={form.quantity} onChange={(e) => setField("quantity", Number(e.target.value))}
-                        className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-amber-400/30 transition-all" />
+                        className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-violet-500/50 transition-all" />
                     </div>
                   </div>
                 </div>
 
                 {/* Tools */}
-                <div className="bg-white border border-gray-100 rounded-2xl border border-white/5 p-5 space-y-3">
-                  <h3 className="font-semibold flex items-center gap-2"><span className="w-5 h-5 rounded-full bg-amber-500/10 text-amber-600 text-xs flex items-center justify-center font-bold">3</span> Preferred AI Tools</h3>
+                <div className="glass rounded-2xl border border-white/5 p-5 space-y-3">
+                  <h3 className="font-semibold flex items-center gap-2"><span className="w-5 h-5 rounded-full bg-violet-500/20 text-violet-300 text-xs flex items-center justify-center font-bold">3</span> Preferred AI Tools</h3>
                   <div className="flex flex-wrap gap-2">
                     {AI_TOOLS.map((tool) => (
                       <button key={tool} onClick={() => toggleTool(tool)}
-                        className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${form.toolsPreferred.includes(tool) ? "bg-amber-500/10 border-amber-400/30 text-amber-600" : "bg-white/5 border-white/10 text-muted-foreground hover:text-foreground"}`}>
+                        className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${form.toolsPreferred.includes(tool) ? "bg-violet-500/20 border-violet-500/40 text-violet-300" : "bg-white/5 border-white/10 text-muted-foreground hover:text-foreground"}`}>
                         {tool}
                       </button>
                     ))}
@@ -465,38 +465,38 @@ export default function NewBriefPage() {
                 </div>
 
                 {/* Budget & Timeline */}
-                <div className="bg-white border border-gray-100 rounded-2xl border border-white/5 p-5 space-y-4">
-                  <h3 className="font-semibold flex items-center gap-2"><span className="w-5 h-5 rounded-full bg-amber-500/10 text-amber-600 text-xs flex items-center justify-center font-bold">4</span> Budget & Timeline</h3>
+                <div className="glass rounded-2xl border border-white/5 p-5 space-y-4">
+                  <h3 className="font-semibold flex items-center gap-2"><span className="w-5 h-5 rounded-full bg-violet-500/20 text-violet-300 text-xs flex items-center justify-center font-bold">4</span> Budget & Timeline</h3>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs text-muted-foreground mb-1.5">Min Budget (USD) *</label>
                       <input type="number" min={0} value={form.budgetMin || ""} onChange={(e) => setField("budgetMin", Number(e.target.value))}
                         placeholder="2000"
-                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-amber-400/30 transition-all" />
+                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-violet-500/50 transition-all" />
                     </div>
                     <div>
                       <label className="block text-xs text-muted-foreground mb-1.5">Max Budget (USD) *</label>
                       <input type="number" min={0} value={form.budgetMax || ""} onChange={(e) => setField("budgetMax", Number(e.target.value))}
                         placeholder="8000"
-                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-amber-400/30 transition-all" />
+                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-violet-500/50 transition-all" />
                     </div>
                   </div>
                   <div>
                     <label className="block text-xs text-muted-foreground mb-1.5">Deadline *</label>
                     <input type="date" value={form.deadline} onChange={(e) => setField("deadline", e.target.value)}
-                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-amber-400/30 transition-all" />
+                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-violet-500/50 transition-all" />
                   </div>
                 </div>
 
                 {/* Commercial Use */}
-                <div className="bg-white border border-gray-100 rounded-2xl border border-white/5 p-5 space-y-4">
-                  <h3 className="font-semibold flex items-center gap-2"><span className="w-5 h-5 rounded-full bg-amber-500/10 text-amber-600 text-xs flex items-center justify-center font-bold">5</span> Commercial Use</h3>
+                <div className="glass rounded-2xl border border-white/5 p-5 space-y-4">
+                  <h3 className="font-semibold flex items-center gap-2"><span className="w-5 h-5 rounded-full bg-violet-500/20 text-violet-300 text-xs flex items-center justify-center font-bold">5</span> Commercial Use</h3>
                   <div>
                     <label className="block text-xs text-muted-foreground mb-1.5">License Tier</label>
                     <div className="flex flex-wrap gap-2">
                       {LICENSE_TIERS.map((lt) => (
                         <button key={lt} onClick={() => setCommercial("licenseTier", lt)}
-                          className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${form.commercialUse.licenseTier === lt ? "bg-amber-500/10 border-amber-400/30 text-amber-600" : "bg-white/5 border-white/10 text-muted-foreground hover:text-foreground"}`}>
+                          className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${form.commercialUse.licenseTier === lt ? "bg-violet-500/20 border-violet-500/40 text-violet-300" : "bg-white/5 border-white/10 text-muted-foreground hover:text-foreground"}`}>
                           {lt}
                         </button>
                       ))}
@@ -526,7 +526,7 @@ export default function NewBriefPage() {
                     <label className="block text-xs text-muted-foreground mb-1.5">Usage Regions</label>
                     <div className="flex flex-wrap gap-1.5 mb-2">
                       {form.commercialUse.usageRegions.map((r) => (
-                        <span key={r} className="flex items-center gap-1 text-xs px-2 py-0.5 bg-amber-500/10 text-amber-600 rounded-full">
+                        <span key={r} className="flex items-center gap-1 text-xs px-2 py-0.5 bg-violet-500/10 text-violet-300 rounded-full">
                           {r}
                           <button onClick={() => setCommercial("usageRegions", form.commercialUse.usageRegions.filter((x) => x !== r))}><X className="w-2.5 h-2.5" /></button>
                         </span>
@@ -536,14 +536,14 @@ export default function NewBriefPage() {
                       <input value={newRegion} onChange={(e) => setNewRegion(e.target.value)}
                         onKeyDown={(e) => { if (e.key === "Enter" && newRegion.trim()) { setCommercial("usageRegions", [...form.commercialUse.usageRegions, newRegion.trim()]); setNewRegion(""); } }}
                         placeholder="Add region (Enter to add)"
-                        className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs focus:outline-none focus:border-amber-400/30 transition-all" />
+                        className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs focus:outline-none focus:border-violet-500/50 transition-all" />
                     </div>
                   </div>
                 </div>
 
                 {/* Negative keywords */}
-                <div className="bg-white border border-gray-100 rounded-2xl border border-white/5 p-5 space-y-3">
-                  <h3 className="font-semibold flex items-center gap-2"><span className="w-5 h-5 rounded-full bg-amber-500/10 text-amber-600 text-xs flex items-center justify-center font-bold">6</span> Negative Keywords</h3>
+                <div className="glass rounded-2xl border border-white/5 p-5 space-y-3">
+                  <h3 className="font-semibold flex items-center gap-2"><span className="w-5 h-5 rounded-full bg-violet-500/20 text-violet-300 text-xs flex items-center justify-center font-bold">6</span> Negative Keywords</h3>
                   <p className="text-xs text-muted-foreground">What should this content avoid?</p>
                   <div className="flex flex-wrap gap-1.5">
                     {form.negativeKeywords.map((kw) => (
@@ -557,7 +557,7 @@ export default function NewBriefPage() {
                     <input value={newKeyword} onChange={(e) => setNewKeyword(e.target.value)}
                       onKeyDown={(e) => { if (e.key === "Enter" && newKeyword.trim()) { setField("negativeKeywords", [...form.negativeKeywords, newKeyword.trim()]); setNewKeyword(""); } }}
                       placeholder="e.g. cartoon, childlike (Enter to add)"
-                      className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs focus:outline-none focus:border-amber-400/30 transition-all" />
+                      className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs focus:outline-none focus:border-violet-500/50 transition-all" />
                   </div>
                 </div>
 
@@ -568,7 +568,7 @@ export default function NewBriefPage() {
                     <Save className="w-4 h-4" /> Save Draft
                   </button>
                   <button onClick={() => handleSave("Open")}
-                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-[#0f1729] to-[#1a2540] text-white rounded-xl font-semibold hover:from-violet-500 hover:to-violet-400 transition-all shadow-lg shadow-violet-500/25">
+                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl font-semibold hover:from-violet-500 hover:to-violet-400 transition-all shadow-lg shadow-violet-500/25">
                     <Send className="w-4 h-4" /> Publish Brief
                   </button>
                 </div>
@@ -584,9 +584,9 @@ export default function NewBriefPage() {
             <BriefIntelligence form={form} />
 
             <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Live Preview</h3>
-            <div className="bg-white border border-gray-100 rounded-2xl border border-white/5 p-5 space-y-3">
+            <div className="glass rounded-2xl border border-white/5 p-5 space-y-3">
               {form.generatedByAI && (
-                <div className="flex items-center gap-1.5 text-xs px-2 py-1 bg-amber-500/10 border border-amber-400/30 text-amber-600 rounded-lg w-fit">
+                <div className="flex items-center gap-1.5 text-xs px-2 py-1 bg-violet-500/10 border border-violet-500/20 text-violet-300 rounded-lg w-fit">
                   <Sparkles className="w-3 h-3" /> AI Generated
                 </div>
               )}
@@ -594,12 +594,12 @@ export default function NewBriefPage() {
               <p className="text-xs text-muted-foreground line-clamp-3">{form.objective || "Campaign objective will appear here"}</p>
               <div className="flex flex-wrap gap-1">
                 {form.aspectRatios.map((ar) => (
-                  <span key={ar} className="text-xs px-1.5 py-0.5 bg-blue-500/10 text-blue-600 rounded font-mono">{ar}</span>
+                  <span key={ar} className="text-xs px-1.5 py-0.5 bg-cyan-500/10 text-cyan-300 rounded font-mono">{ar}</span>
                 ))}
               </div>
               <div className="flex flex-wrap gap-1">
                 {form.toolsPreferred.slice(0, 4).map((t) => (
-                  <span key={t} className="text-xs px-1.5 py-0.5 bg-amber-500/10 text-amber-600 rounded">{t}</span>
+                  <span key={t} className="text-xs px-1.5 py-0.5 bg-violet-500/10 text-violet-300 rounded">{t}</span>
                 ))}
               </div>
               {(form.budgetMin > 0 || form.budgetMax > 0) && (

@@ -8,8 +8,8 @@ import Link from "next/link";
 type Period = "all" | "monthly" | "weekly";
 
 const BADGE_STYLES: Record<string, string> = {
-  Studio: "bg-amber-500/10 text-amber-600 border-amber-400/30",
-  Verified: "bg-blue-500/10 text-blue-600 border-blue-400/30",
+  Studio: "bg-violet-500/20 text-violet-300 border-violet-500/30",
+  Verified: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
   Rising: "bg-amber-500/20 text-amber-300 border-amber-500/30",
   Unverified: "bg-white/10 text-muted-foreground border-white/10",
 };
@@ -65,7 +65,7 @@ export default function LeaderboardPage() {
             { key: "repeat", label: "Repeat", icon: TrendingUp },
           ] as const).map(({ key, label, icon: Icon }) => (
             <button key={key} onClick={() => setMetric(key)}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all ${metric === key ? "bg-amber-500/10 text-amber-600 border border-amber-400/30" : "text-muted-foreground hover:text-foreground"}`}>
+              className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all ${metric === key ? "bg-violet-500/20 text-violet-300 border border-violet-500/30" : "text-muted-foreground hover:text-foreground"}`}>
               <Icon className="w-3.5 h-3.5" /> {label}
             </button>
           ))}
@@ -87,13 +87,13 @@ export default function LeaderboardPage() {
               <Link href={`/creators/${creator.id}`} className="group">
                 <div className="relative mb-3">
                   <img src={creator.avatarUrl} alt={creator.name}
-                    className="w-16 h-16 rounded-2xl object-cover border-2 border-white/10 group-hover:border-amber-400/30 transition-all mx-auto" />
+                    className="w-16 h-16 rounded-2xl object-cover border-2 border-white/10 group-hover:border-violet-500/50 transition-all mx-auto" />
                   <div className={`absolute -top-2 -right-2 w-7 h-7 rounded-full bg-gradient-to-br ${RANK_STYLES[rank - 1]} flex items-center justify-center text-xs font-bold text-white shadow-lg`}>
                     {rank}
                   </div>
                 </div>
                 <div className="text-center mb-2">
-                  <div className="font-semibold text-sm group-hover:text-amber-600 transition-colors">{creator.name}</div>
+                  <div className="font-semibold text-sm group-hover:text-violet-300 transition-colors">{creator.name}</div>
                   <div className="text-xs text-muted-foreground">{creator.handle}</div>
                   <div className={`text-sm font-bold mt-1 ${rank === 1 ? "text-amber-400" : rank === 2 ? "text-slate-300" : "text-amber-600"}`}>{val}</div>
                 </div>
@@ -115,11 +115,11 @@ export default function LeaderboardPage() {
           return (
             <motion.div key={creator.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }}>
               <Link href={`/creators/${creator.id}`}
-                className="flex items-center gap-4 p-4 bg-white border border-gray-100 rounded-xl border border-white/5 hover:border-amber-400/30 transition-all group">
+                className="flex items-center gap-4 p-4 glass rounded-xl border border-white/5 hover:border-violet-500/20 transition-all group">
                 <span className="text-lg font-display font-bold text-muted-foreground w-8 text-center">{rank}</span>
                 <img src={creator.avatarUrl} alt={creator.name} className="w-10 h-10 rounded-xl object-cover" />
                 <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-sm group-hover:text-amber-600 transition-colors">{creator.name}</div>
+                  <div className="font-semibold text-sm group-hover:text-violet-300 transition-colors">{creator.name}</div>
                   <div className="text-xs text-muted-foreground">{creator.headline}</div>
                 </div>
                 <span className={`text-xs px-2 py-0.5 rounded-full border ${BADGE_STYLES[creator.verification.badge]}`}>

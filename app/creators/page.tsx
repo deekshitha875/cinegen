@@ -36,7 +36,7 @@ const DEFAULT_FILTERS: FilterState = {
 
 function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <span className="inline-flex items-center gap-1 text-xs px-2 py-1 bg-amber-500/10 text-amber-600 rounded-full border border-amber-400/30">
+    <span className="inline-flex items-center gap-1 text-xs px-2 py-1 bg-violet-500/20 text-violet-300 rounded-full border border-violet-500/30">
       {label}
       <button onClick={onRemove} className="hover:text-white transition-colors">
         <X className="w-3 h-3" />
@@ -140,50 +140,47 @@ export default function CreatorsPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="font-black text-4xl mb-2" style={{ letterSpacing: "-0.02em", color: "var(--text-primary)" }}>Discover AI Creators</h1>
-        <p className="text-lg" style={{ color: "var(--text-secondary)" }}>Find the perfect AI filmmaker, animator, or generative artist for your campaign</p>
+        <h1 className="font-display font-bold text-3xl mb-2">Discover AI Creators</h1>
+        <p className="text-muted-foreground">Find the perfect AI filmmaker, animator, or generative artist for your campaign</p>
         <Link
           href="/compare"
-          className="btn-outline text-sm mt-3 inline-flex"
+          className="inline-flex items-center gap-2 mt-3 px-4 py-2 glass border border-violet-500/20 text-violet-300 rounded-xl text-sm font-medium hover:bg-violet-500/10 transition-all"
         >
-          ⚖️ Compare Creators Side-by-Side
+          <span>⚖️</span> Compare Creators Side-by-Side
         </Link>
       </div>
 
       {/* Search bar */}
       <div className="flex gap-3 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--text-muted)" }} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search by name, skill, tool, specialization..."
             value={filters.search}
             onChange={(e) => setFilter("search", e.target.value)}
-            className="input-field pl-11"
+            className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 placeholder:text-muted-foreground transition-all"
           />
           {filters.search && (
-            <button onClick={() => setFilter("search", "")} className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: "var(--text-muted)" }}>
+            <button onClick={() => setFilter("search", "")} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
               <X className="w-4 h-4" />
             </button>
           )}
         </div>
         <button
           onClick={() => setFiltersOpen(!filtersOpen)}
-          className="flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium transition-all"
-          style={{
-            background: filtersOpen ? "rgba(232,184,75,0.1)" : "white",
-            borderColor: filtersOpen ? "rgba(232,184,75,0.4)" : "var(--border)",
-            color: filtersOpen ? "var(--gold-dark)" : "var(--text-secondary)",
-          }}>
+          className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium transition-all ${filtersOpen ? "bg-violet-500/20 border-violet-500/40 text-violet-300" : "bg-white/5 border-white/10 text-muted-foreground hover:text-foreground hover:bg-white/10"}`}
+        >
           <SlidersHorizontal className="w-4 h-4" />
           Filters
-          {hasActiveFilters && <span className="w-2 h-2 rounded-full" style={{ background: "var(--gold)" }} />}
+          {hasActiveFilters && <span className="w-2 h-2 rounded-full bg-violet-400" />}
         </button>
 
         <select
           value={filters.sortBy}
           onChange={(e) => setFilter("sortBy", e.target.value as FilterState["sortBy"])}
-          className="hidden sm:block input-field" style={{ width: "auto", paddingLeft: "16px", paddingRight: "36px" }}>
+          className="hidden sm:block px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-muted-foreground focus:outline-none focus:border-violet-500/50 cursor-pointer"
+        >
           {SORT_OPTIONS.map((o) => (
             <option key={o.value} value={o.value}>{o.label}</option>
           ))}
@@ -209,7 +206,7 @@ export default function CreatorsPage() {
         {/* Sidebar Filters */}
         {filtersOpen && (
           <aside className="hidden md:block w-64 flex-shrink-0">
-            <div className="sticky top-24 bg-white rounded-2xl p-5 space-y-6 max-h-[80vh] overflow-y-auto" style={{ border: "1px solid var(--border)" }}>
+            <div className="sticky top-24 glass rounded-2xl border border-white/5 p-5 space-y-6 max-h-[80vh] overflow-y-auto">
                 {/* Tools */}
                 <div>
                   <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">AI Tools</h3>
@@ -301,7 +298,7 @@ export default function CreatorsPage() {
                     />
                     <div>
                       <div className="text-sm font-medium flex items-center gap-1">
-                        <CheckCircle className="w-3.5 h-3.5 text-amber-600" />
+                        <CheckCircle className="w-3.5 h-3.5 text-violet-400" />
                         Verified Only
                       </div>
                       <div className="text-xs text-muted-foreground">Studio or Verified badge</div>
@@ -336,8 +333,8 @@ export default function CreatorsPage() {
           ) : filtered.length === 0 ? (
             /* Empty State */
             <div className="text-center py-20">
-              <div className="w-20 h-20 rounded-full bg-amber-500/10 border border-amber-400/30 flex items-center justify-center mx-auto mb-6">
-                <Search className="w-8 h-8 text-amber-600" />
+              <div className="w-20 h-20 rounded-full bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mx-auto mb-6">
+                <Search className="w-8 h-8 text-violet-400" />
               </div>
               <h3 className="font-display font-semibold text-xl mb-2">No creators match</h3>
               <p className="text-muted-foreground mb-2">
@@ -348,7 +345,7 @@ export default function CreatorsPage() {
                   <button
                     key={f.label}
                     onClick={f.remove}
-                    className="text-sm px-3 py-1.5 bg-amber-500/10 border border-amber-400/30 text-amber-600 rounded-lg hover:bg-amber-500/10 transition-all"
+                    className="text-sm px-3 py-1.5 bg-violet-500/10 border border-violet-500/20 text-violet-300 rounded-lg hover:bg-violet-500/20 transition-all"
                   >
                     Remove: {f.label}
                   </button>

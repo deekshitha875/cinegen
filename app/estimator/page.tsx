@@ -72,7 +72,7 @@ export default function EstimatorPage() {
             <div className="grid grid-cols-2 gap-2">
               {CONTENT_TYPES.map((ct) => (
                 <button key={ct.id} onClick={() => setContentType(ct)}
-                  className={`p-3 rounded-xl border text-left transition-all ${contentType.id === ct.id ? "bg-amber-500/10 border-amber-400/30 text-amber-600" : "glass border-white/10 text-muted-foreground hover:text-foreground hover:border-white/20"}`}>
+                  className={`p-3 rounded-xl border text-left transition-all ${contentType.id === ct.id ? "bg-violet-500/20 border-violet-500/40 text-violet-300" : "glass border-white/10 text-muted-foreground hover:text-foreground hover:border-white/20"}`}>
                   <div className="font-medium text-sm">{ct.label}</div>
                   <div className="text-xs opacity-70 mt-0.5">{ct.desc}</div>
                 </button>
@@ -86,7 +86,7 @@ export default function EstimatorPage() {
             <div className="flex flex-wrap gap-2">
               {PLATFORMS.map((p) => (
                 <button key={p.id} onClick={() => setPlatform(p)}
-                  className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${platform.id === p.id ? "bg-blue-500/10 border-blue-400/30 text-blue-600" : "glass border-white/10 text-muted-foreground hover:text-foreground"}`}>
+                  className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all ${platform.id === p.id ? "bg-cyan-500/20 border-cyan-500/40 text-cyan-300" : "glass border-white/10 text-muted-foreground hover:text-foreground"}`}>
                   {p.label}
                 </button>
               ))}
@@ -114,7 +114,7 @@ export default function EstimatorPage() {
               <div className="space-y-2">
                 {REGIONS.map((r) => (
                   <button key={r.id} onClick={() => setRegion(r)}
-                    className={`w-full px-3 py-2 rounded-lg border text-sm text-left transition-all ${region.id === r.id ? "bg-amber-500/10 border-amber-400/30 text-amber-600" : "glass border-white/10 text-muted-foreground hover:text-foreground"}`}>
+                    className={`w-full px-3 py-2 rounded-lg border text-sm text-left transition-all ${region.id === r.id ? "bg-violet-500/20 border-violet-500/30 text-violet-300" : "glass border-white/10 text-muted-foreground hover:text-foreground"}`}>
                     {r.label}
                   </button>
                 ))}
@@ -143,17 +143,17 @@ export default function EstimatorPage() {
             key={`${contentType.id}-${platform.id}-${quality.id}-${region.id}-${quantity}`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white border border-gray-100 rounded-2xl border border-amber-400/30 p-6 space-y-5"
+            className="glass rounded-2xl border border-violet-500/20 p-6 space-y-5"
           >
             <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="w-5 h-5 text-amber-600" />
+              <Sparkles className="w-5 h-5 text-violet-400" />
               <h2 className="font-display font-semibold text-lg">Your Estimate</h2>
             </div>
 
             {/* Price range */}
-            <div className="text-center p-5 bg-gradient-to-br from-violet-500/10 to-cyan-500/5 border border-amber-400/30 rounded-2xl">
+            <div className="text-center p-5 bg-gradient-to-br from-violet-500/10 to-cyan-500/5 border border-violet-500/20 rounded-2xl">
               <div className="text-xs text-muted-foreground mb-1">Estimated AI Production Cost</div>
-              <div className="font-display font-bold text-4xl font-bold text-amber-600">
+              <div className="font-display font-bold text-4xl gradient-text">
                 ${estimate.min.toLocaleString()} – ${estimate.max.toLocaleString()}
               </div>
               <div className="text-sm text-muted-foreground mt-1">for {quantity} {contentType.label.toLowerCase()}{quantity > 1 ? "s" : ""}</div>
@@ -166,7 +166,7 @@ export default function EstimatorPage() {
                 <div className="text-xs text-muted-foreground">Savings vs traditional</div>
               </div>
               <div className="p-3 bg-white/3 border border-white/5 rounded-xl text-center">
-                <div className="text-xl font-bold text-blue-600">{estimate.days}</div>
+                <div className="text-xl font-bold text-cyan-400">{estimate.days}</div>
                 <div className="text-xs text-muted-foreground">Days to deliver</div>
               </div>
               <div className="p-3 bg-white/3 border border-white/5 rounded-xl text-center">
@@ -174,7 +174,7 @@ export default function EstimatorPage() {
                 <div className="text-xs text-muted-foreground">Matching creators</div>
               </div>
               <div className="p-3 bg-white/3 border border-white/5 rounded-xl text-center">
-                <div className="text-xl font-bold text-amber-600">${estimate.traditional.toLocaleString()}</div>
+                <div className="text-xl font-bold text-violet-400">${estimate.traditional.toLocaleString()}</div>
                 <div className="text-xs text-muted-foreground">Traditional agency cost</div>
               </div>
             </div>
@@ -196,7 +196,7 @@ export default function EstimatorPage() {
             </div>
 
             <Link href="/briefs/new"
-              className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#0f1729] to-cyan-600 text-white rounded-xl font-semibold hover:opacity-90 transition-all shadow-lg">
+              className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-violet-600 to-cyan-600 text-white rounded-xl font-semibold hover:opacity-90 transition-all shadow-lg">
               <Sparkles className="w-4 h-4" /> Post This Brief Now <ArrowRight className="w-4 h-4" />
             </Link>
             <Link href="/creators"
