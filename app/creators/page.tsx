@@ -140,13 +140,13 @@ export default function CreatorsPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="font-display font-bold text-3xl mb-2">Discover AI Creators</h1>
-        <p className="text-muted-foreground">Find the perfect AI filmmaker, animator, or generative artist for your campaign</p>
+        <h1 className="font-black text-4xl mb-2" style={{ letterSpacing: "-0.02em", color: "var(--text-primary)" }}>Discover AI Creators</h1>
+        <p className="text-lg" style={{ color: "var(--text-secondary)" }}>Find the perfect AI filmmaker, animator, or generative artist for your campaign</p>
         <Link
           href="/compare"
-          className="inline-flex items-center gap-2 mt-3 px-4 py-2 glass border border-violet-500/20 text-violet-300 rounded-xl text-sm font-medium hover:bg-violet-500/10 transition-all"
+          className="btn-outline text-sm mt-3 inline-flex"
         >
-          <span>⚖️</span> Compare Creators Side-by-Side
+          ⚖️ Compare Creators Side-by-Side
         </Link>
       </div>
 
