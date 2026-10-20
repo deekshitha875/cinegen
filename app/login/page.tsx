@@ -3,26 +3,16 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Film, Eye, EyeOff, Copy, Check, Zap, Users, Search, ArrowRight, Sparkles } from "lucide-react";
+import { Eye, EyeOff, Sparkles, ArrowRight, Copy, Check, Zap } from "lucide-react";
 import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
 
-const CREDS = [
-  { role: "Brand", email: "brand@cinegen.demo", password: "Demo@123", desc: "Post briefs, discover creators, manage campaigns", color: "violet" },
-  { role: "Creator (Aryan)", email: "creator@cinegen.demo", password: "Demo@123", desc: "Browse briefs, submit proposals, manage profile", color: "cyan" },
-];
-
-function CopyButton({ text }: { text: string }) {
+function CopyBtn({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
-  const handleCopy = () => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
   return (
-    <button onClick={handleCopy} className="p-1 rounded hover:bg-white/10 transition-colors text-muted-foreground hover:text-foreground">
-      {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+    <button onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+      className="p-1.5 rounded-lg transition-colors hover:bg-black/5">
+      {copied ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" style={{ color: "var(--text-muted)" }} />}
     </button>
   );
 }
@@ -33,23 +23,19 @@ export default function LoginPage() {
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login, loginAsRole, session, loading: sessionLoading } = useSession();
+  const { login, loginAsRole, session } = useSession();
   const router = useRouter();
 
-  // If already logged in, redirect immediately
   useEffect(() => {
-    if (session) {
-      window.location.href = "/dashboard";
-    }
-  }, [session, router]);
+    if (session) { window.location.href = "/dashboard"; }
+  }, [session]);
 
-  // Show spinner while redirecting
   if (session) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg)" }}>
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          <p className="text-sm text-muted-foreground">Redirecting to dashboard...</p>
+          <div className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin mx-auto mb-3" style={{ borderColor: "var(--gold)" }} />
+          <p className="text-sm" style={{ color: "var(--text-secondary)" }}>Redirecting...</p>
         </div>
       </div>
     );
@@ -65,223 +51,154 @@ export default function LoginPage() {
       toast.success("Welcome to CineGen!");
       window.location.href = "/dashboard";
     } else {
-      setError("Invalid credentials. Use the demo credentials below.");
+      setError("Invalid credentials. Try the demo accounts below.");
     }
     setLoading(false);
   };
 
   const handleOneClick = (role: "brand" | "creator") => {
     loginAsRole(role);
-    toast.success(`Logged in as ${role === "brand" ? "Brand — Arjun Mehta" : "Creator — Aryan Kapoor"}`);
+    toast.success(`Logged in as ${role === "brand" ? "Brand" : "Creator"}`);
     window.location.href = "/dashboard";
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-16">
-      {/* Background */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl" />
-      </div>
+  const DEMO_ACCOUNTS = [
+    { role: "brand" as const, label: "Brand Account", email: "brand@cinegen.demo", desc: "Post briefs, discover creators", icon: Sparkles, color: "var(--navy)" },
+    { role: "creator" as const, label: "Creator Account", email: "creator@cinegen.demo", desc: "Browse briefs, submit proposals", icon: Zap, color: "var(--gold-dark)" },
+  ];
 
-      <div className="relative w-full max-w-4xl">
-        <div className="text-center mb-10">
-          <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center">
-              <Film className="w-5 h-5 text-white" />
+  return (
+    <div className="min-h-screen flex" style={{ background: "var(--bg)" }}>
+      {/* Left panel - decorative */}
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden" style={{ background: "var(--navy)" }}>
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 30% 40%, rgba(232,184,75,0.2) 0%, transparent 60%)" }} />
+        <div className="relative z-10 flex flex-col justify-between p-12 w-full">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, var(--gold), #c49a2a)" }}>
+              <Sparkles className="w-5 h-5 text-white" />
             </div>
-            <span className="font-display font-bold text-2xl">Cine<span className="gradient-text">Gen</span></span>
+            <span className="font-black text-xl text-white" style={{ fontFamily: "Syne, Inter, sans-serif" }}>CINEGEN</span>
           </Link>
-          <h1 className="font-display font-bold text-3xl mb-2">Welcome back</h1>
-          <p className="text-muted-foreground">
-            Sign in to your account or{" "}
-            <Link href="/register" className="text-violet-400 hover:text-violet-300 transition-colors font-medium">
-              create one free
-            </Link>
+
+          <div>
+            <h2 className="text-white mb-4" style={{ fontSize: "3.5rem", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.05 }}>
+              Welcome<br />back.
+            </h2>
+            <p className="text-lg mb-10" style={{ color: "rgba(255,255,255,0.5)" }}>
+              The AI-native marketplace for creative talent.
+            </p>
+
+            {/* Demo credentials */}
+            <div className="space-y-3">
+              {DEMO_ACCOUNTS.map((acc) => (
+                <div key={acc.role} className="p-4 rounded-2xl" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-bold text-white">{acc.label}</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: "rgba(232,184,75,0.2)", color: "var(--gold)" }}>Demo</span>
+                  </div>
+                  <div className="flex items-center justify-between mb-1">
+                    <code className="text-xs" style={{ color: "rgba(255,255,255,0.6)" }}>{acc.email}</code>
+                    <CopyBtn text={acc.email} />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <code className="text-xs" style={{ color: "rgba(255,255,255,0.6)" }}>Demo@123</code>
+                    <CopyBtn text="Demo@123" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p className="text-xs" style={{ color: "rgba(255,255,255,0.25)" }}>
+            CineGen · Kampus.VC HacXLerate 2026
           </p>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          {/* Login Form */}
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="glass rounded-2xl border border-white/10 p-6">
-            <h2 className="font-semibold text-lg mb-6">Sign In</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1.5">Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="brand@cinegen.demo"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 placeholder:text-muted-foreground transition-all"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1.5">Password</label>
-                <div className="relative">
-                  <input
-                    type={showPass ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Demo@123"
-                    className="w-full px-4 py-3 pr-10 bg-white/5 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 placeholder:text-muted-foreground transition-all"
-                    required
-                  />
-                  <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
-                    {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
+      {/* Right panel - form */}
+      <div className="flex-1 flex items-center justify-center px-6 py-12">
+        <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="w-full max-w-md">
+
+          {/* Mobile logo */}
+          <Link href="/" className="flex items-center gap-2 mb-10 lg:hidden">
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, var(--gold), var(--navy))" }}>
+              <Sparkles className="w-4 h-4 text-white" />
+            </div>
+            <span className="font-black text-lg" style={{ fontFamily: "Syne, Inter, sans-serif", color: "var(--text-primary)" }}>CINEGEN</span>
+          </Link>
+
+          <h1 className="font-black mb-2" style={{ fontSize: "2rem", color: "var(--text-primary)", letterSpacing: "-0.02em" }}>Sign in</h1>
+          <p className="mb-8 text-sm" style={{ color: "var(--text-secondary)" }}>
+            Don't have an account?{" "}
+            <Link href="/register" className="font-semibold hover:underline" style={{ color: "var(--navy)" }}>Create one free</Link>
+          </p>
+
+          {/* 1-click buttons */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            {DEMO_ACCOUNTS.map((acc) => (
+              <button key={acc.role} onClick={() => handleOneClick(acc.role)}
+                className="p-3.5 rounded-2xl text-left transition-all hover:-translate-y-0.5"
+                style={{ background: acc.role === "brand" ? "var(--navy)" : "rgba(232,184,75,0.12)", border: `1px solid ${acc.role === "brand" ? "var(--navy)" : "rgba(232,184,75,0.3)"}` }}>
+                <acc.icon className="w-4 h-4 mb-2" style={{ color: acc.role === "brand" ? "var(--gold)" : "var(--gold-dark)" }} />
+                <div className="font-semibold text-sm" style={{ color: acc.role === "brand" ? "white" : "var(--navy)" }}>
+                  Continue as {acc.role === "brand" ? "Brand" : "Creator"}
                 </div>
-              </div>
-
-              {error && (
-                <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
-                  {error}
+                <div className="text-xs mt-0.5" style={{ color: acc.role === "brand" ? "rgba(255,255,255,0.5)" : "var(--text-secondary)" }}>
+                  {acc.desc}
                 </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl font-semibold hover:from-violet-500 hover:to-violet-400 transition-all disabled:opacity-50 shadow-lg shadow-violet-500/25"
-              >
-                {loading ? "Signing in..." : "Sign In"}
               </button>
-            </form>
+            ))}
+          </div>
 
-            <div className="relative my-5">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/10" />
-              </div>
-              <div className="relative flex justify-center">
-                <span className="px-3 bg-transparent text-xs text-muted-foreground">or jump in instantly</span>
+          {/* Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t" style={{ borderColor: "var(--border)" }} />
+            </div>
+            <div className="relative flex justify-center">
+              <span className="px-3 text-xs font-medium" style={{ background: "var(--bg)", color: "var(--text-muted)" }}>or sign in with email</span>
+            </div>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--text-primary)" }}>Email</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com" required
+                className="input-field" />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold mb-1.5" style={{ color: "var(--text-primary)" }}>Password</label>
+              <div className="relative">
+                <input type={showPass ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••" required className="input-field" style={{ paddingRight: "44px" }} />
+                <button type="button" onClick={() => setShowPass(!showPass)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2" style={{ color: "var(--text-muted)" }}>
+                  {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <button
-                onClick={() => handleOneClick("brand")}
-                className="w-full flex items-center gap-3 px-4 py-3 bg-violet-500/10 border border-violet-500/20 rounded-xl hover:bg-violet-500/20 transition-all group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-violet-500/20 flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-violet-400" />
-                </div>
-                <div className="flex-1 text-left">
-                  <div className="text-sm font-medium">Continue as Brand</div>
-                  <div className="text-xs text-muted-foreground">Post briefs & hire creators</div>
-                </div>
-                <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-violet-400 transition-colors" />
-              </button>
-
-              <button
-                onClick={() => handleOneClick("creator")}
-                className="w-full flex items-center gap-3 px-4 py-3 bg-cyan-500/10 border border-cyan-500/20 rounded-xl hover:bg-cyan-500/20 transition-all group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center">
-                  <Zap className="w-4 h-4 text-cyan-400" />
-                </div>
-                <div className="flex-1 text-left">
-                  <div className="text-sm font-medium">Continue as Creator</div>
-                  <div className="text-xs text-muted-foreground">Browse briefs & submit proposals</div>
-                </div>
-                <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-cyan-400 transition-colors" />
-              </button>
-
-              <Link
-                href="/creators"
-                className="w-full flex items-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
-                  <Search className="w-4 h-4 text-muted-foreground" />
-                </div>
-                <div className="flex-1 text-left">
-                  <div className="text-sm font-medium">Explore as Guest</div>
-                  <div className="text-xs text-muted-foreground">Browse creators without signing in</div>
-                </div>
-                <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* Credentials Card */}
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-            {/* Judge callout */}
-            <div className="bg-gradient-to-br from-violet-500/10 to-cyan-500/5 border border-violet-500/20 rounded-2xl p-5 mb-4">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center">
-                  <Users className="w-3 h-3 text-white" />
-                </div>
-                <span className="font-semibold text-sm text-violet-300">For Judges & Evaluators</span>
+            {error && (
+              <div className="text-sm px-4 py-3 rounded-xl" style={{ background: "#fef2f2", color: "#dc2626", border: "1px solid #fecaca" }}>
+                {error}
               </div>
-              <p className="text-xs text-muted-foreground mb-4">
-                Use the 1-click buttons or credentials below. No email verification, no OTP — instant access.
-              </p>
+            )}
 
-              <div className="space-y-3">
-                {CREDS.map((c) => (
-                  <div key={c.role} className={`p-4 rounded-xl bg-${c.color}-500/10 border border-${c.color}-500/20`}>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className={`text-xs font-semibold text-${c.color}-400 uppercase tracking-wider`}>{c.role} Account</span>
-                    </div>
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">Email:</span>
-                        <div className="flex items-center gap-1">
-                          <code className="text-xs text-foreground bg-white/5 px-2 py-0.5 rounded">{c.email}</code>
-                          <CopyButton text={c.email} />
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">Password:</span>
-                        <div className="flex items-center gap-1">
-                          <code className="text-xs text-foreground bg-white/5 px-2 py-0.5 rounded">{c.password}</code>
-                          <CopyButton text={c.password} />
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-2">{c.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <button type="submit" disabled={loading}
+              className="btn-dark w-full justify-center py-3.5 text-sm disabled:opacity-50">
+              {loading ? "Signing in..." : <>Sign In <ArrowRight className="w-4 h-4" /></>}
+            </button>
+          </form>
 
-            {/* Feature list */}
-            <div className="glass border border-white/5 rounded-2xl p-5">
-              <h3 className="font-semibold text-sm mb-4 text-muted-foreground uppercase tracking-wider">All 18 creator accounts</h3>
-              <p className="text-xs text-muted-foreground mb-3">All use password: <code className="bg-white/5 px-1.5 py-0.5 rounded text-foreground">Demo@123</code></p>
-              <div className="grid grid-cols-1 gap-1 max-h-48 overflow-y-auto pr-1">
-                {[
-                  { name: "Aryan Kapoor", email: "aryan@cinegen.demo" },
-                  { name: "Priya Nair", email: "priya@cinegen.demo" },
-                  { name: "Rahul Sharma", email: "rahul@cinegen.demo" },
-                  { name: "Zara Ahmed", email: "zara@cinegen.demo" },
-                  { name: "Marcus Chen", email: "marcus@cinegen.demo" },
-                  { name: "Anjali Desai", email: "anjali@cinegen.demo" },
-                  { name: "Vikram Rajan", email: "vikram@cinegen.demo" },
-                  { name: "Lena Volkov", email: "lena@cinegen.demo" },
-                  { name: "Dev Patel", email: "dev@cinegen.demo" },
-                  { name: "Yuna Kim", email: "yuna@cinegen.demo" },
-                  { name: "Rohan Mathur", email: "rohan@cinegen.demo" },
-                  { name: "Aisha Okafor", email: "aisha@cinegen.demo" },
-                  { name: "Sameer Joshi", email: "sameer@cinegen.demo" },
-                  { name: "Carlos Rivera", email: "carlos@cinegen.demo" },
-                  { name: "Meera Iyer", email: "meera@cinegen.demo" },
-                  { name: "Tanvir Sheikh", email: "tanvir@cinegen.demo" },
-                  { name: "Natasha Pinto", email: "natasha@cinegen.demo" },
-                  { name: "Ishaan Verma", email: "ishaan@cinegen.demo" },
-                ].map((c) => (
-                  <div key={c.email} className="flex items-center justify-between py-1 px-2 rounded hover:bg-white/5 transition-colors">
-                    <span className="text-xs text-foreground font-medium">{c.name}</span>
-                    <div className="flex items-center gap-1">
-                      <code className="text-xs text-muted-foreground">{c.email}</code>
-                      <CopyButton text={c.email} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        </div>
+          {/* Guest explore */}
+          <div className="mt-4 text-center">
+            <Link href="/creators" className="text-sm hover:underline" style={{ color: "var(--text-secondary)" }}>
+              Explore without signing in →
+            </Link>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
