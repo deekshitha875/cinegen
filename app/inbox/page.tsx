@@ -76,6 +76,7 @@ export default function InboxPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const [typing, setTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -112,25 +113,52 @@ export default function InboxPage() {
     setSending(false);
     setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
 
-    // Simulate reply after 2 seconds
-    setTimeout(() => {
-      const replies = [
-        "That sounds great! Let me check my schedule.",
-        "Perfect, I can definitely work on this.",
-        "I'll send over some reference work shortly.",
-        "Looking forward to collaborating!",
-      ];
-      const autoReply: Message = {
-        id: `auto-${Date.now()}`,
-        thread_id: selectedThread.id,
-        sender_id: session.role === "brand" ? selectedThread.creator_id : selectedThread.brand_id,
-        content: replies[Math.floor(Math.random() * replies.length)],
-        created_at: new Date().toISOString(),
-      };
-      setMessages((prev) => [...prev, autoReply]);
-      DEMO_MESSAGES[selectedThread.id] = [...(DEMO_MESSAGES[selectedThread.id] || []), autoReply];
-      setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
-    }, 2000);
+    // Smart AI reply using Gemini
+    const otherName = selectedThread.other_name;
+    setTyping(true);
+    const isUserBrand = session.role === "brand";
+    const otherRole = isUserBrand ? "AI creator" : "brand manager";
+
+    setTimeout(async () => {
+      try {
+        const res = await fetch("/api/assistant", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: [{
+              role: "user",
+              content: `You are ${otherName}, a ${otherRole} on CineGen marketplace. 
+Reply naturally and briefly (1-2 sentences max) to this message from a ${isUserBrand ? "brand" : "creator"}:
+"${content}"
+${selectedThread.brief_title ? `Context: discussing the brief "${selectedThread.brief_title}"` : ""}
+Be professional, friendly, and specific to what they said. Don't start with "I".`,
+            }],
+          }),
+        });
+        const data = await res.json();
+        const autoReply: Message = {
+          id: `auto-${Date.now()}`,
+          thread_id: selectedThread.id,
+          sender_id: isUserBrand ? selectedThread.creator_id : selectedThread.brand_id,
+          content: data.reply,
+          created_at: new Date().toISOString(),
+        };
+        setMessages((prev) => [...prev, autoReply]);
+        DEMO_MESSAGES[selectedThread.id] = [...(DEMO_MESSAGES[selectedThread.id] || []), autoReply];
+        setTyping(false);
+        setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
+      } catch {
+        setTyping(false);
+        const autoReply: Message = {
+          id: `auto-${Date.now()}`,
+          thread_id: selectedThread.id,
+          sender_id: isUserBrand ? selectedThread.creator_id : selectedThread.brand_id,
+          content: "Thanks for reaching out! I'll get back to you shortly.",
+          created_at: new Date().toISOString(),
+        };
+        setMessages((prev) => [...prev, autoReply]);
+      }
+    }, 1500);
   };
 
   if (!session) {
@@ -225,6 +253,22 @@ export default function InboxPage() {
                   );
                 })}
                 <div ref={messagesEndRef} />
+
+                {/* Typing indicator */}
+                {typing && (
+                  <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 mt-2">
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                      {selectedThread?.other_name.charAt(0)}
+                    </div>
+                    <div className="px-4 py-3 rounded-2xl bg-white/10 border border-white/5 flex items-center gap-1">
+                      {[0, 1, 2].map((i) => (
+                        <motion.div key={i} className="w-1.5 h-1.5 rounded-full bg-muted-foreground"
+                          animate={{ y: [0, -4, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }} />
+                      ))}
+                    </div>
+                    <span className="text-xs text-muted-foreground">{selectedThread?.other_name.split(' ')[0]} is typing...</span>
+                  </motion.div>
+                )}
               </div>
 
               {/* Input */}
