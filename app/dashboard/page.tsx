@@ -219,6 +219,22 @@ function CreatorDashboard() {
         <p className="text-muted-foreground">Welcome back, {session?.name}</p>
       </div>
 
+      {/* Quick actions */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { href: "/profile/edit", label: "✏️ Edit Profile", desc: "Update bio & socials" },
+          { href: "/portfolio", label: "📁 Add Portfolio", desc: "Upload new work" },
+          { href: "/gigs", label: "⚡ My Gigs", desc: "Manage service offers" },
+          { href: "/inbox", label: "💬 Inbox", desc: "Messages from brands" },
+        ].map((item) => (
+          <Link key={item.href} href={item.href}
+            className="glass rounded-xl border border-white/5 p-4 hover:border-violet-500/20 transition-all group">
+            <div className="font-semibold text-sm group-hover:text-violet-300 transition-colors">{item.label}</div>
+            <div className="text-xs text-muted-foreground mt-0.5">{item.desc}</div>
+          </Link>
+        ))}
+      </div>
+
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
