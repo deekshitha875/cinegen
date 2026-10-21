@@ -129,7 +129,7 @@ export default function InboxPage() {
               role: "user",
               content: `You are ${otherName}, a ${otherRole} on CineGen marketplace. 
 Reply naturally and briefly (1-2 sentences max) to this message from a ${isUserBrand ? "brand" : "creator"}:
-"${content}"
+"${msg.content}"
 ${selectedThread.brief_title ? `Context: discussing the brief "${selectedThread.brief_title}"` : ""}
 Be professional, friendly, and specific to what they said. Don't start with "I".`,
             }],
