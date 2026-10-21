@@ -46,7 +46,7 @@ export default function BriefDetailPage() {
           return {
             ...c,
             score: result.score,
-            factors: result.factors,
+            reasons: result.reasons,
           };
         }).filter((c) => c.score >= 50).sort((a, b) => b.score - a.score).slice(0, 5);
         setMatches(scored);
