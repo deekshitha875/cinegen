@@ -41,10 +41,14 @@ export default function BriefDetailPage() {
 
       // Compute matches
       if (session.role === "brand") {
-        const scored = seedCreators.map((c) => ({
-          ...c,
-          score: computeMatchScore(c, brief),
-        })).filter((c) => c.score >= 50).sort((a, b) => b.score - a.score).slice(0, 5);
+        const scored = seedCreators.map((c) => {
+          const result = computeMatchScore(c, brief);
+          return {
+            ...c,
+            score: result.score,
+            factors: result.factors,
+          };
+        }).filter((c) => c.score >= 50).sort((a, b) => b.score - a.score).slice(0, 5);
         setMatches(scored);
       }
     }
