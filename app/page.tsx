@@ -88,16 +88,38 @@ export default function HomePage() {
       )}
 
       {/* Hero */}
-      <section className="relative overflow-hidden pt-20 pb-32">
-        {/* Cinematic background */}
-        <div className="absolute inset-0 pointer-events-none">
-          <img
-            src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=80&auto=format&fit=crop"
-            alt=""
-            className="w-full h-full object-cover opacity-[0.07]"
+      <section className="relative overflow-hidden pt-32 pb-40">
+        {/* Premium animated background */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {/* Gradient orbs */}
+          <motion.div
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-0 left-1/4 w-96 h-96 bg-violet-500/30 rounded-full blur-3xl"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-background" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/80" />
+          <motion.div
+            animate={{
+              scale: [1.2, 1, 1.2],
+              opacity: [0.4, 0.6, 0.4],
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute top-20 right-1/4 w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.2, 0.4, 0.2],
+            }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            className="absolute bottom-0 left-1/2 w-[600px] h-[600px] bg-violet-600/20 rounded-full blur-3xl"
+          />
+          
+          {/* Grid overlay */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
           <div className="absolute top-20 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl" />
           <div className="absolute top-40 right-1/4 w-64 h-64 bg-cyan-500/15 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-32 bg-gradient-to-t from-background to-transparent" />
@@ -105,23 +127,35 @@ export default function HomePage() {
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm font-medium mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm font-medium mb-8">
             <Sparkles className="w-3.5 h-3.5" />
             <span>AI-Native Creative Marketplace · Kampus.VC Hackathon</span>
-          </div>
+          </motion.div>
 
           {/* Headline */}
-          <h1 className="font-display font-bold text-5xl sm:text-6xl lg:text-7xl leading-tight mb-6">
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="font-display font-bold text-5xl sm:text-6xl lg:text-7xl leading-tight mb-6">
             Hire the world&apos;s best{" "}
             <span className="gradient-text">AI creators</span>
             <br />
             for your brand
-          </h1>
+          </motion.h1>
 
           {/* Subtitle */}
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
             CineGen connects brands with verified AI filmmakers, animators, and generative artists. Discover talent, build briefs with AI, get explainable match scores — all in one place.
-          </p>
+          </motion.p>
 
           {/* CTAs — max 2 */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
