@@ -3,6 +3,7 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Toaster } from "sonner";
+import { CineGenAssistant } from "@/components/CineGenAssistant";
 
 export const metadata: Metadata = {
   title: "CineGen — AI Content Creator Marketplace",
@@ -35,6 +36,7 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
+        <CineGenAssistant />
         <Toaster
           position="bottom-right"
           toastOptions={{
