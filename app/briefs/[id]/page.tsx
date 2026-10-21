@@ -82,6 +82,7 @@ export default function BriefDetailPage() {
   };
 
   const rejectProposal = (proposalId: string) => {
+    if (!brief) return;
     const updated = proposals.map((p) => p.id === proposalId ? { ...p, status: "rejected" as const } : p);
     setProposals(updated);
     storage.write(`proposals_${brief.id}`, updated);
