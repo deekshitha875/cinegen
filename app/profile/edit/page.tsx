@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, CheckCircle, Loader2, Sparkles, Instagram, Globe, User } from "lucide-react";
+import { ArrowLeft, CheckCircle, Loader2, Sparkles, Globe, User } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "@/hooks/useSession";
 import { storage } from "@/lib/storage";
@@ -193,7 +193,7 @@ Keep it under 60 words, professional and creative.`,
           <h2 className="font-semibold">Your Channels</h2>
           <p className="text-xs text-muted-foreground">Add your URLs so brands can visit your work. Only logos appear on your public profile.</p>
           {[
-            { key: "instagram", Icon: Instagram, placeholder: "https://instagram.com/yourname", label: "Instagram" },
+            { key: "instagram", Icon: Globe, placeholder: "https://instagram.com/yourname", label: "Instagram" },
             { key: "youtube", Icon: Globe, placeholder: "https://youtube.com/@yourname", label: "YouTube" },
             { key: "twitter", Icon: Globe, placeholder: "https://x.com/yourname", label: "X (Twitter)" },
             { key: "website", Icon: Globe, placeholder: "https://yourportfolio.com", label: "Portfolio Website" },
