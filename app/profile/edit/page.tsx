@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, CheckCircle, Loader2, Sparkles, Instagram, Youtube, Twitter, Globe, User } from "lucide-react";
+import { ArrowLeft, CheckCircle, Loader2, Sparkles, Instagram, Globe, User } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "@/hooks/useSession";
 import { storage } from "@/lib/storage";
@@ -194,8 +194,8 @@ Keep it under 60 words, professional and creative.`,
           <p className="text-xs text-muted-foreground">Add your URLs so brands can visit your work. Only logos appear on your public profile.</p>
           {[
             { key: "instagram", Icon: Instagram, placeholder: "https://instagram.com/yourname", label: "Instagram" },
-            { key: "youtube", Icon: Youtube, placeholder: "https://youtube.com/@yourname", label: "YouTube" },
-            { key: "twitter", Icon: Twitter, placeholder: "https://x.com/yourname", label: "X (Twitter)" },
+            { key: "youtube", Icon: Globe, placeholder: "https://youtube.com/@yourname", label: "YouTube" },
+            { key: "twitter", Icon: Globe, placeholder: "https://x.com/yourname", label: "X (Twitter)" },
             { key: "website", Icon: Globe, placeholder: "https://yourportfolio.com", label: "Portfolio Website" },
           ].map(({ key, Icon, placeholder, label }) => (
             <div key={key} className="flex items-center gap-3">
