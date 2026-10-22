@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Film, Eye, EyeOff, Copy, Check, Zap, Users, Search, ArrowRight, Sparkles } from "lucide-react";
 import { useSession } from "@/hooks/useSession";
+import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 
 const CREDS = [
@@ -201,12 +202,33 @@ export default function LoginPage() {
                 <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
               </Link>
 
-              {/* Google Login - Works as Brand Login */}
+              {/* Google Login - REAL OAuth */}
               <button
-                onClick={() => {
-                  loginAsRole("brand");
-                  toast.success("Signed in with Google as Arjun Mehta");
-                  window.location.href = "/dashboard";
+                onClick={async () => {
+                  try {
+                    const { data, error } = await supabase.auth.signInWithOAuth({
+                      provider: 'google',
+                      options: {
+                        redirectTo: `${window.location.origin}/auth/callback`,
+                        queryParams: {
+                          access_type: 'offline',
+                          prompt: 'consent',
+                        },
+                      },
+                    });
+                    if (error) {
+                      console.error('Google OAuth error:', error);
+                      // Fallback to demo for hackathon
+                      loginAsRole("brand");
+                      toast.success("Demo mode: Signed in as Arjun Mehta");
+                      window.location.href = "/dashboard";
+                    }
+                  } catch (err) {
+                    // Fallback to demo for hackathon
+                    loginAsRole("brand");
+                    toast.success("Demo mode: Signed in as Arjun Mehta");
+                    window.location.href = "/dashboard";
+                  }
                 }}
                 className="w-full flex items-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all group"
               >
@@ -220,7 +242,7 @@ export default function LoginPage() {
                 </div>
                 <div className="flex-1 text-left">
                   <div className="text-sm font-medium">Continue with Google</div>
-                  <div className="text-xs text-muted-foreground">One-click sign in</div>
+                  <div className="text-xs text-muted-foreground">Real OAuth • Create your account</div>
                 </div>
                 <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
               </button>
