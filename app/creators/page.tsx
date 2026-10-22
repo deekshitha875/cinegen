@@ -150,6 +150,43 @@ export default function CreatorsPage() {
         </Link>
       </div>
 
+      {/* PROMINENT CATEGORY NAVIGATION */}
+      <div className="mb-8 glass rounded-2xl border border-white/10 p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-xl">🎬</span>
+          <h2 className="font-display font-semibold text-lg">Browse by Category</h2>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
+          {ALL_CONTENT_TYPES.map((type) => (
+            <motion.button
+              key={type}
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                setFilter("specializations", filters.specializations.includes(type) ? [] : [type]);
+                setFiltersOpen(false);
+              }}
+              className={`p-4 rounded-xl border transition-all text-center ${
+                filters.specializations.includes(type)
+                  ? "bg-gradient-to-br from-violet-500/20 to-cyan-500/20 border-violet-500/40 text-violet-200"
+                  : "bg-white/5 border-white/10 hover:bg-white/10 text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <div className="text-2xl mb-2">
+                {type === "Short-form Video" && "📱"}
+                {type === "Long-form Video" && "🎥"}
+                {type === "Animation" && "✨"}
+                {type === "Motion Graphics" && "🎨"}
+                {type === "Image Campaign" && "🖼️"}
+                {type === "Social Media Pack" && "📲"}
+                {type === "Brand Film" && "🎬"}
+              </div>
+              <div className="text-xs font-medium leading-tight">{type}</div>
+            </motion.button>
+          ))}
+        </div>
+      </div>
+
       {/* Search bar */}
       <div className="flex gap-3 mb-6">
         <div className="relative flex-1">

@@ -89,35 +89,73 @@ export default function HomePage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden pt-32 pb-40">
-        {/* Premium animated background */}
+        {/* Premium 3D animated background */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Gradient orbs */}
+          {/* Animated gradient orbs with 3D effect */}
           <motion.div
             animate={{
               scale: [1, 1.2, 1],
               opacity: [0.3, 0.5, 0.3],
+              rotateZ: [0, 10, 0],
             }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             className="absolute top-0 left-1/4 w-96 h-96 bg-violet-500/30 rounded-full blur-3xl"
+            style={{ transform: "translate3d(0, 0, 0)" }}
           />
           <motion.div
             animate={{
               scale: [1.2, 1, 1.2],
               opacity: [0.4, 0.6, 0.4],
+              rotateZ: [0, -15, 0],
             }}
             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             className="absolute top-20 right-1/4 w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-3xl"
+            style={{ transform: "translate3d(0, 0, 0)" }}
           />
           <motion.div
             animate={{
               scale: [1, 1.3, 1],
               opacity: [0.2, 0.4, 0.2],
+              x: [0, 50, 0],
             }}
             transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
             className="absolute bottom-0 left-1/2 w-[600px] h-[600px] bg-violet-600/20 rounded-full blur-3xl"
+            style={{ transform: "translate3d(0, 0, 0)" }}
           />
           
-          {/* Grid overlay */}
+          {/* Floating 3D shapes */}
+          <motion.div
+            animate={{
+              y: [0, -30, 0],
+              rotateX: [0, 15, 0],
+              rotateY: [0, 15, 0],
+            }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-40 left-10 w-20 h-20 bg-gradient-to-br from-violet-500/20 to-cyan-500/20 rounded-2xl backdrop-blur-sm border border-white/10"
+            style={{ transform: "translate3d(0, 0, 50px)" }}
+          />
+          <motion.div
+            animate={{
+              y: [0, 40, 0],
+              rotateX: [0, -20, 0],
+              rotateZ: [0, 180, 360],
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute top-60 right-20 w-16 h-16 bg-gradient-to-br from-cyan-500/20 to-violet-500/20 rounded-full backdrop-blur-sm border border-white/10"
+            style={{ transform: "translate3d(0, 0, 100px)" }}
+          />
+          <motion.div
+            animate={{
+              y: [0, -20, 0],
+              x: [0, 20, 0],
+              rotateY: [0, 360, 720],
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            className="absolute bottom-40 left-1/3 w-12 h-12 bg-gradient-to-br from-violet-400/20 to-cyan-400/20 rounded-lg backdrop-blur-sm border border-white/10"
+            style={{ transform: "translate3d(0, 0, 75px)" }}
+          />
+          
+          {/* Grid overlay with parallax */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
           <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
           <div className="absolute top-20 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl" />
@@ -212,30 +250,121 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="font-display font-bold text-4xl mb-4">How CineGen works</h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-            From idea to delivered content — in three steps.
-          </p>
+      {/* How It Works — 3D Zig-Zag Scroll Animation */}
+      <section className="py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        {/* 3D Background elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div
+            animate={{
+              rotate: [0, 360],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="absolute top-20 left-10 w-40 h-40 bg-violet-500/5 rounded-full blur-2xl"
+          />
+          <motion.div
+            animate={{
+              rotate: [360, 0],
+              scale: [1.1, 1, 1.1],
+            }}
+            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+            className="absolute bottom-20 right-10 w-60 h-60 bg-cyan-500/5 rounded-full blur-3xl"
+          />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <div className="text-center mb-16">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-display font-bold text-4xl mb-4"
+          >
+            How CineGen works
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-muted-foreground text-lg max-w-xl mx-auto"
+          >
+            From idea to delivered content — in three steps.
+          </motion.p>
+        </div>
+        
+        {/* 3D Zig-Zag Layout with parallax */}
+        <div className="relative">
           {HOW_IT_WORKS.map((step, i) => (
             <motion.div
               key={step.step}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 * i }}
-              className="glass rounded-2xl p-6 border border-white/5 hover:border-violet-500/20 transition-all group"
+              initial={{ opacity: 0, x: i % 2 === 0 ? -100 : 100, rotateY: i % 2 === 0 ? -15 : 15 }}
+              whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ 
+                delay: 0.2 * i,
+                duration: 0.8,
+                type: "spring",
+                stiffness: 100
+              }}
+              style={{
+                transformStyle: "preserve-3d",
+                perspective: "1000px"
+              }}
+              className={`mb-12 last:mb-0 ${i % 2 === 0 ? 'md:mr-auto md:ml-0' : 'md:ml-auto md:mr-0'} md:w-[70%]`}
             >
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                <step.icon className="w-6 h-6 text-white" />
-              </div>
-              <div className="text-4xl font-display font-bold text-white/10 mb-2">{step.step}</div>
-              <h3 className="font-display font-semibold text-xl mb-3">{step.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
+              <motion.div
+                whileHover={{ 
+                  scale: 1.02,
+                  rotateY: i % 2 === 0 ? 2 : -2,
+                  z: 50
+                }}
+                transition={{ type: "spring", stiffness: 300 }}
+                className="glass rounded-2xl p-8 border border-white/5 hover:border-violet-500/30 transition-all group relative"
+                style={{
+                  transformStyle: "preserve-3d",
+                  boxShadow: "0 25px 50px -12px rgba(139, 92, 246, 0.15)"
+                }}
+              >
+                {/* 3D floating icon */}
+                <motion.div
+                  animate={{
+                    y: [0, -10, 0],
+                    rotateZ: [0, 5, 0, -5, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className={`absolute -top-6 ${i % 2 === 0 ? 'left-8' : 'right-8'} w-14 h-14 rounded-xl bg-gradient-to-br ${step.color} flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform`}
+                  style={{ transform: "translateZ(30px)" }}
+                >
+                  <step.icon className="w-7 h-7 text-white" />
+                </motion.div>
+
+                <div className="pt-6">
+                  <div className={`text-6xl font-display font-bold bg-gradient-to-br ${step.color} bg-clip-text text-transparent opacity-20 mb-2`}>
+                    {step.step}
+                  </div>
+                  <h3 className="font-display font-semibold text-2xl mb-3 group-hover:text-violet-300 transition-colors">
+                    {step.title}
+                  </h3>
+                  <p className="text-base text-muted-foreground leading-relaxed">
+                    {step.desc}
+                  </p>
+                </div>
+
+                {/* Connecting line for zig-zag */}
+                {i < HOW_IT_WORKS.length - 1 && (
+                  <motion.div
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.5 + i * 0.2, duration: 0.6 }}
+                    className={`hidden md:block absolute top-full left-1/2 w-px h-12 bg-gradient-to-b from-violet-500/50 to-transparent ${i % 2 === 0 ? 'origin-left' : 'origin-right'}`}
+                  />
+                )}
+              </motion.div>
             </motion.div>
           ))}
         </div>

@@ -40,6 +40,7 @@ export function Navbar() {
 
   const toolLinks = [
     { href: "/estimator", label: "Budget Estimator", icon: Calculator, desc: "Instant AI cost estimate" },
+    { href: "/copyright-scan", label: "Copyright Scan", icon: Shield, desc: "AI originality verification", badge: "New" },
     { href: "/risk-scanner", label: "Risk Scanner", icon: Shield, desc: "IP & licensing check" },
     { href: "/compare", label: "Compare Creators", icon: Search, desc: "Side-by-side analysis" },
     { href: "/leaderboard", label: "Leaderboard", icon: Trophy, desc: "Top-ranked creators" },
@@ -100,10 +101,17 @@ export function Navbar() {
                     {toolLinks.map((tool) => (
                       <Link key={tool.href} href={tool.href}
                         onClick={() => setToolsOpen(false)}
-                        className="flex items-start gap-3 px-4 py-3 hover:bg-white/5 transition-colors group">
+                        className="flex items-start gap-3 px-4 py-3 hover:bg-white/5 transition-colors group relative">
                         <tool.icon className="w-4 h-4 text-violet-400 mt-0.5 flex-shrink-0" />
-                        <div>
-                          <div className="text-sm font-medium group-hover:text-violet-300 transition-colors">{tool.label}</div>
+                        <div className="flex-1">
+                          <div className="text-sm font-medium group-hover:text-violet-300 transition-colors flex items-center gap-2">
+                            {tool.label}
+                            {tool.badge && (
+                              <span className="text-xs px-1.5 py-0.5 bg-violet-500 text-white rounded-full font-semibold">
+                                {tool.badge}
+                              </span>
+                            )}
+                          </div>
                           <div className="text-xs text-muted-foreground">{tool.desc}</div>
                         </div>
                       </Link>
