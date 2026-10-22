@@ -154,7 +154,7 @@ export function Navbar() {
                 </div>
 
                 {/* Notification Bell */}
-                <div className="relative">
+                <Link href="/notifications" className="relative">
                   <button
                     className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all relative"
                     title="Notifications"
@@ -163,7 +163,7 @@ export function Navbar() {
                     {/* Notification badge */}
                     <span className="absolute top-1 right-1 w-2 h-2 bg-violet-500 rounded-full animate-pulse" />
                   </button>
-                </div>
+                </Link>
 
                 {/* User info */}
                 <div className="flex items-center gap-2.5">
