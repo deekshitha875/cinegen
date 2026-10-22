@@ -160,7 +160,8 @@ export default function ProjectPage() {
         {isBrand && project.status === "active" && (
           <div className="space-y-3">
             {/* Payment Button */}
-            <Link href="/payment"
+            <Link
+              href={`/payment?projectId=${params.id}&creator=${encodeURIComponent(project.creatorName)}&title=${encodeURIComponent(project.briefTitle)}&amount=12500`}
               className="block w-full text-center py-4 bg-gradient-to-r from-violet-600 to-cyan-600 text-white rounded-2xl font-semibold hover:opacity-90 transition-all shadow-xl shadow-violet-500/30">
               💳 Pay Milestone 1 — ₹13,750
             </Link>

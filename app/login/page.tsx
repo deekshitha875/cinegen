@@ -202,37 +202,27 @@ export default function LoginPage() {
                 <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
               </Link>
 
-              {/* Google Login - REAL OAuth */}
+              {/* Google Login - Real Supabase OAuth */}
               <button
                 onClick={async () => {
+                  setLoading(true);
                   try {
-                    const { data, error } = await supabase.auth.signInWithOAuth({
-                      provider: 'google',
+                    const { error } = await supabase.auth.signInWithOAuth({
+                      provider: "google",
                       options: {
                         redirectTo: `${window.location.origin}/auth/callback`,
-                        queryParams: {
-                          access_type: 'offline',
-                          prompt: 'consent',
-                        },
                       },
                     });
-                    if (error) {
-                      console.error('Google OAuth error:', error);
-                      // Fallback to demo for hackathon
-                      loginAsRole("brand");
-                      toast.success("Demo mode: Signed in as Arjun Mehta");
-                      window.location.href = "/dashboard";
-                    }
-                  } catch (err) {
-                    // Fallback to demo for hackathon
-                    loginAsRole("brand");
-                    toast.success("Demo mode: Signed in as Arjun Mehta");
-                    window.location.href = "/dashboard";
+                    if (error) throw error;
+                    // Page will redirect to Google — no further code runs here
+                  } catch (err: any) {
+                    toast.error("Google sign-in failed: " + err.message);
+                    setLoading(false);
                   }
                 }}
                 className="w-full flex items-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all group"
               >
-                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center flex-shrink-0">
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -242,7 +232,7 @@ export default function LoginPage() {
                 </div>
                 <div className="flex-1 text-left">
                   <div className="text-sm font-medium">Continue with Google</div>
-                  <div className="text-xs text-muted-foreground">Real OAuth • Create your account</div>
+                  <div className="text-xs text-muted-foreground">Sign in with your Google account</div>
                 </div>
                 <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
               </button>
