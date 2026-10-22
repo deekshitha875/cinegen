@@ -158,10 +158,18 @@ export default function ProjectPage() {
 
         {/* Actions */}
         {isBrand && project.status === "active" && (
-          <button onClick={markComplete} disabled={completing}
-            className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-2xl font-semibold hover:from-green-500 hover:to-green-400 transition-all disabled:opacity-50">
-            {completing ? <><Loader2 className="w-5 h-5 animate-spin" /> Marking complete...</> : <><CheckCircle className="w-5 h-5" /> Mark Project as Complete</>}
-          </button>
+          <div className="space-y-3">
+            {/* Payment Button */}
+            <Link href="/payment"
+              className="block w-full text-center py-4 bg-gradient-to-r from-violet-600 to-cyan-600 text-white rounded-2xl font-semibold hover:opacity-90 transition-all shadow-xl shadow-violet-500/30">
+              💳 Pay Milestone 1 — ₹13,750
+            </Link>
+            
+            <button onClick={markComplete} disabled={completing}
+              className="w-full flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-2xl font-semibold hover:from-green-500 hover:to-green-400 transition-all disabled:opacity-50">
+              {completing ? <><Loader2 className="w-5 h-5 animate-spin" /> Marking complete...</> : <><CheckCircle className="w-5 h-5" /> Mark Project as Complete</>}
+            </button>
+          </div>
         )}
 
         {/* Review */}

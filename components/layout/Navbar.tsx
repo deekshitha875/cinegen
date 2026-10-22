@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Film, Menu, X, LogOut, LayoutDashboard, FileText, Search, Zap, Plus, ChevronDown, Trophy, Shield, Calculator, MessageSquare } from "lucide-react";
+import { Film, Menu, X, LogOut, LayoutDashboard, FileText, Search, Zap, Plus, ChevronDown, Trophy, Shield, Calculator, MessageSquare, Bell } from "lucide-react";
 import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
 
@@ -150,6 +150,18 @@ export function Navbar() {
                         : "text-muted-foreground hover:text-foreground"
                     }`}>
                     Creator
+                  </button>
+                </div>
+
+                {/* Notification Bell */}
+                <div className="relative">
+                  <button
+                    className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all relative"
+                    title="Notifications"
+                  >
+                    <Bell className="w-5 h-5" />
+                    {/* Notification badge */}
+                    <span className="absolute top-1 right-1 w-2 h-2 bg-violet-500 rounded-full animate-pulse" />
                   </button>
                 </div>
 

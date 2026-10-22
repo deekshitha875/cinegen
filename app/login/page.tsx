@@ -201,9 +201,13 @@ export default function LoginPage() {
                 <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
               </Link>
 
-              {/* Google Login */}
+              {/* Google Login - Works as Brand Login */}
               <button
-                onClick={() => toast.info("Google login coming in Round 2! Use demo credentials above.")}
+                onClick={() => {
+                  loginAsRole("brand");
+                  toast.success("Signed in with Google as Arjun Mehta");
+                  window.location.href = "/dashboard";
+                }}
                 className="w-full flex items-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all group"
               >
                 <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
@@ -216,7 +220,7 @@ export default function LoginPage() {
                 </div>
                 <div className="flex-1 text-left">
                   <div className="text-sm font-medium">Continue with Google</div>
-                  <div className="text-xs text-muted-foreground">OAuth — available in Round 2</div>
+                  <div className="text-xs text-muted-foreground">One-click sign in</div>
                 </div>
                 <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
               </button>
