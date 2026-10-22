@@ -445,9 +445,9 @@ export default function CreatorProfilePage({ params }: { params: { id: string } 
           {/* Skills */}
           <div className="glass rounded-2xl border border-white/5 p-5">
             <h3 className="font-semibold text-sm mb-3">Skills</h3>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {creator.skills.map((s) => (
-                <span key={s} className="text-xs px-2 py-1 bg-white/5 border border-white/10 rounded-lg text-muted-foreground">
+                <span key={s} className="text-xs px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-muted-foreground text-center">
                   {s}
                 </span>
               ))}
