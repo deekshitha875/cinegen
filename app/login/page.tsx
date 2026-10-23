@@ -225,12 +225,8 @@ export default function LoginPage() {
                     const { error } = await supabase.auth.signInWithOAuth({
                       provider: "google",
                       options: {
-                        // Point directly to our client-side exchange page
-                        redirectTo: `${window.location.origin}/auth/exchange`,
-                        queryParams: {
-                          // Use implicit flow — no PKCE, no code verifier needed
-                          response_type: "token",
-                        },
+                        redirectTo: `${window.location.origin}/auth/callback`,
+                        skipBrowserRedirect: false,
                       },
                     });
                     if (error) throw error;
