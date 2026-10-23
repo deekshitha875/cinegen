@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { CreditCard, Shield, Check, Lock, ArrowLeft, Sparkles, Calendar, Building2, AlertCircle } from "lucide-react";
+import { CreditCard, Shield, Check, Lock, ArrowLeft, Sparkles, Calendar, Building2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -26,7 +26,7 @@ const PAYMENT_METHODS = [
   { id: "netbanking", name: "Net Banking", icon: Building2, desc: "All major banks", recommended: false },
 ];
 
-export default function PaymentPage() {
+function PaymentContent() {
   const searchParams = useSearchParams();
   const projectId = searchParams.get("projectId") ?? "proj-001";
   const creatorName = searchParams.get("creator") ?? "Aryan Kapoor";
@@ -361,5 +361,17 @@ export default function PaymentPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function PaymentPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <PaymentContent />
+    </Suspense>
   );
 }
