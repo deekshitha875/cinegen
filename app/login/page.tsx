@@ -225,11 +225,15 @@ export default function LoginPage() {
                     const { error } = await supabase.auth.signInWithOAuth({
                       provider: "google",
                       options: {
-                        redirectTo: `${window.location.origin}/auth/callback`,
+                        // Point directly to our client-side exchange page
+                        redirectTo: `${window.location.origin}/auth/exchange`,
+                        queryParams: {
+                          // Use implicit flow — no PKCE, no code verifier needed
+                          response_type: "token",
+                        },
                       },
                     });
                     if (error) throw error;
-                    // Page will redirect to Google — no further code runs here
                   } catch (err: any) {
                     toast.error("Google sign-in failed: " + err.message);
                     setLoading(false);
