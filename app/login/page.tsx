@@ -8,6 +8,15 @@ import { useSession } from "@/hooks/useSession";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 
+function useOAuthError() {
+  if (typeof window === "undefined") return null;
+  const params = new URLSearchParams(window.location.search);
+  const err = params.get("error");
+  const msg = params.get("msg");
+  if (err) return msg || err;
+  return null;
+}
+
 const CREDS = [
   { role: "Brand", email: "brand@cinegen.demo", password: "Demo@123", desc: "Post briefs, discover creators, manage campaigns", color: "violet" },
   { role: "Creator (Aryan)", email: "creator@cinegen.demo", password: "Demo@123", desc: "Browse briefs, submit proposals, manage profile", color: "cyan" },
@@ -36,6 +45,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const { login, loginAsRole, session, loading: sessionLoading } = useSession();
   const router = useRouter();
+  const oauthError = useOAuthError();
 
   // If already logged in, redirect immediately
   useEffect(() => {
@@ -106,6 +116,11 @@ export default function LoginPage() {
           {/* Login Form */}
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="glass rounded-2xl border border-white/10 p-6">
             <h2 className="font-semibold text-lg mb-6">Sign In</h2>
+            {oauthError && (
+              <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-300 break-all">
+                <strong>OAuth error:</strong> {oauthError}
+              </div>
+            )}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1.5">Email</label>
