@@ -9,15 +9,17 @@ import { toast } from "sonner";
 function OnboardingContent() {
   const [selected, setSelected] = useState<"brand" | "creator" | null>(null);
   const [loading, setLoading] = useState(false);
-  const { loginAsRole } = useSession();
+  const { loginWithGoogle } = useSession();
   const searchParams = useSearchParams();
 
   const name = searchParams.get("name") ?? "User";
+  const email = searchParams.get("email") ?? "";
 
   const handleContinue = async () => {
     if (!selected) return;
     setLoading(true);
-    loginAsRole(selected);
+    // Use real Google name and email
+    loginWithGoogle(selected, name, email);
     toast.success(`Welcome to CineGen, ${name.split(" ")[0]}!`);
     window.location.href = "/dashboard";
   };

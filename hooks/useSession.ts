@@ -83,6 +83,19 @@ export function useSession() {
     notifyAll();
   };
 
+  // Login with real Google user data
+  const loginWithGoogle = useCallback((role: "brand" | "creator", name: string, email: string) => {
+    const sess: Session = {
+      userId: `google_${email.replace(/[^a-z0-9]/gi, "_")}`,
+      email,
+      role,
+      name,
+      ...(role === "brand" ? { brandId: `brand_google_${Date.now()}` } : { creatorId: `creator_google_${Date.now()}` }),
+      loginAt: new Date().toISOString(),
+    };
+    writeSession(sess);
+  }, []);
+
   const login = useCallback((email: string, password: string): boolean => {
     // Check demo credentials first
     const cred = DEMO_CREDENTIALS.find(
@@ -128,5 +141,5 @@ export function useSession() {
     }
   }, []);
 
-  return { session, loading, login, loginAsRole, logout, switchRole };
+  return { session, loading, login, loginAsRole, loginWithGoogle, logout, switchRole };
 }

@@ -5,7 +5,6 @@ import { useSession } from "@/hooks/useSession";
 import { Film } from "lucide-react";
 
 export default function CallbackPage() {
-  const { loginAsRole } = useSession();
   const [status, setStatus] = useState("Completing sign in...");
 
   useEffect(() => {
@@ -15,7 +14,6 @@ export default function CallbackPage() {
       if (event === "SIGNED_IN" && session?.user) {
         const name = session.user.user_metadata?.full_name ?? session.user.email ?? "User";
         setStatus(`Welcome, ${name.split(" ")[0]}!`);
-        loginAsRole("brand");
         setTimeout(() => {
           window.location.href = `/onboarding?name=${encodeURIComponent(name)}&email=${encodeURIComponent(session.user.email ?? "")}`;
         }, 500);
@@ -27,7 +25,6 @@ export default function CallbackPage() {
       if (data.session?.user) {
         const name = data.session.user.user_metadata?.full_name ?? data.session.user.email ?? "User";
         setStatus(`Welcome, ${name.split(" ")[0]}!`);
-        loginAsRole("brand");
         setTimeout(() => {
           window.location.href = `/onboarding?name=${encodeURIComponent(name)}&email=${encodeURIComponent(data.session!.user.email ?? "")}`;
         }, 500);
