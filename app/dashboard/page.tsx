@@ -10,6 +10,7 @@ import { useCreators } from "@/hooks/useCreators";
 import { EngagementStage } from "@/types";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { toast } from "sonner";
+import { pushNotification } from "@/lib/notifications";
 
 const STAGES: EngagementStage[] = ["Discovery", "Brief", "Proposals", "Hired", "Delivered"];
 
@@ -44,6 +45,7 @@ function BrandDashboard() {
   const { proposals } = useProposals();
   const creators = useCreators();
   const [delivered, setDelivered] = useState<string[]>([]);
+  const [accepted, setAccepted] = useState<string[]>([]);
 
   const myBriefs = briefs.filter((b) => b.brandId === "brand-001");
   const totalProposals = proposals.filter((p) => myBriefs.some((b) => b.id === p.briefId));
@@ -106,8 +108,9 @@ function BrandDashboard() {
             const creator = creators.find((c) => c.id === proposal.creatorId);
             if (!brief || !creator) return null;
             const isDelivered = delivered.includes(proposal.id);
+            const isAccepted = accepted.includes(proposal.id) || proposal.status === "Accepted";
             const stage = isDelivered ? "Delivered" :
-                          proposal.status === "Accepted" ? "Hired" :
+                          isAccepted ? "Hired" :
                           proposal.status === "Shortlisted" ? "Proposals" : "Proposals";
             return (
               <motion.div key={proposal.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
@@ -125,12 +128,35 @@ function BrandDashboard() {
                       <div className="text-sm font-bold text-green-400">{formatCurrency(proposal.price)}</div>
                       <div className={`text-xs px-2 py-0.5 rounded-full mt-1 ${
                         isDelivered ? "bg-green-500/20 text-green-300" :
-                        proposal.status === "Accepted" ? "bg-green-500/10 text-green-400" :
+                        isAccepted ? "bg-green-500/10 text-green-400" :
                         proposal.status === "Shortlisted" ? "bg-blue-500/10 text-blue-400" :
                         "bg-amber-500/10 text-amber-400"
-                      }`}>{isDelivered ? "✅ Delivered" : proposal.status}</div>
+                      }`}>{isDelivered ? "✅ Delivered" : isAccepted ? "Accepted" : proposal.status}</div>
                     </div>
-                    {proposal.status === "Accepted" && !isDelivered && (
+
+                    {/* Shortlisted → Accept button */}
+                    {!isAccepted && !isDelivered && proposal.status === "Shortlisted" && (
+                      <button
+                        onClick={() => {
+                          setAccepted((prev) => [...prev, proposal.id]);
+                          // Notify the creator
+                          pushNotification(proposal.creatorId, {
+                            type: "proposal_accepted",
+                            title: "Your Proposal Was Accepted! 🎉",
+                            message: `${session?.name ?? "A brand"} accepted your proposal for "${brief.campaignTitle}"`,
+                            link: "/inbox",
+                            fromName: session?.name,
+                          });
+                          toast.success(`${creator.name} hired! They've been notified.`);
+                        }}
+                        className="px-3 py-1.5 bg-violet-500/20 border border-violet-500/30 text-violet-300 rounded-lg text-xs font-semibold hover:bg-violet-500/30 transition-all whitespace-nowrap"
+                      >
+                        ✓ Hire Creator
+                      </button>
+                    )}
+
+                    {/* Accepted → Pay + Mark Delivered */}
+                    {isAccepted && !isDelivered && (
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/payment?projectId=${proposal.id}&creator=${encodeURIComponent(creator.name)}&title=${encodeURIComponent(brief.campaignTitle)}&amount=${Math.round(proposal.price * 0.33)}`}
@@ -141,6 +167,14 @@ function BrandDashboard() {
                         <button
                           onClick={() => {
                             setDelivered((prev) => [...prev, proposal.id]);
+                            // Notify creator that payment/delivery is confirmed
+                            pushNotification(proposal.creatorId, {
+                              type: "payment_received",
+                              title: "Project Marked as Delivered ✅",
+                              message: `${session?.name ?? "The brand"} confirmed delivery for "${brief.campaignTitle}"`,
+                              link: "/dashboard",
+                              fromName: session?.name,
+                            });
                             toast.success(`${creator.name} marked delivery complete!`);
                           }}
                           className="px-3 py-1.5 bg-green-500/20 border border-green-500/30 text-green-300 rounded-lg text-xs font-medium hover:bg-green-500/30 transition-all whitespace-nowrap"
