@@ -11,6 +11,7 @@ import { useSession } from "@/hooks/useSession";
 import { PortfolioItem, WorkflowStep } from "@/types";
 import { toast } from "sonner";
 import { StyleDNA } from "@/components/creators/StyleDNA";
+import { pushNotification } from "@/lib/notifications";
 
 const BADGE_CONFIG = {
   Studio: { color: "from-violet-500 to-violet-600", text: "Studio Verified", icon: "★" },
@@ -56,7 +57,35 @@ function WorkflowTimeline({ steps }: { steps: WorkflowStep[] }) {
   );
 }
 
-function PortfolioModal({ item, onClose }: { item: PortfolioItem; onClose: () => void }) {
+function PortfolioModal({
+  item,
+  onClose,
+  creatorId,
+  creatorName,
+  session,
+}: {
+  item: PortfolioItem;
+  onClose: () => void;
+  creatorId: string;
+  creatorName: string;
+  session: any;
+}) {
+  const [requested, setRequested] = useState(false);
+
+  const handleRequest = () => {
+    if (!session) return;
+    // Push real notification to the creator
+    pushNotification(creatorId, {
+      type: "workflow_request",
+      title: "Workflow Request Received",
+      message: `${session.name} (${session.role === "brand" ? "Brand" : "Creator"}) wants to use your "${item.title}" workflow`,
+      link: `/inbox`,
+      fromName: session.name,
+    });
+    setRequested(true);
+    toast.success(`Request sent! ${creatorName} has been notified.`);
+    setTimeout(onClose, 1200);
+  };
   return (
     <AnimatePresence>
       <motion.div
@@ -193,10 +222,11 @@ function PortfolioModal({ item, onClose }: { item: PortfolioItem; onClose: () =>
 
             {/* Request this workflow */}
             <button
-              onClick={() => { toast.success("Request sent! The creator will be notified."); onClose(); }}
-              className="w-full py-3 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl font-semibold hover:from-violet-500 hover:to-violet-400 transition-all"
+              onClick={handleRequest}
+              disabled={requested || !session}
+              className="w-full py-3 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl font-semibold hover:from-violet-500 hover:to-violet-400 transition-all disabled:opacity-60"
             >
-              Request This Workflow
+              {requested ? "✅ Request Sent — Creator Notified!" : session ? "Request This Workflow" : "Sign in to Request"}
             </button>
           </div>
         </motion.div>
@@ -473,7 +503,13 @@ export default function CreatorProfilePage({ params }: { params: { id: string } 
 
       {/* Portfolio Modal */}
       {selectedItem && (
-        <PortfolioModal item={selectedItem} onClose={() => setSelectedItem(null)} />
+        <PortfolioModal
+          item={selectedItem}
+          onClose={() => setSelectedItem(null)}
+          creatorId={creator.id}
+          creatorName={creator.name}
+          session={session}
+        />
       )}
     </div>
   );

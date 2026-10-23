@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Film, Menu, X, LogOut, LayoutDashboard, FileText, Search, Zap, Plus, ChevronDown, Trophy, Shield, Calculator, MessageSquare, Bell } from "lucide-react";
 import { useSession } from "@/hooks/useSession";
+import { unreadCount } from "@/lib/notifications";
 import { toast } from "sonner";
 
 export function Navbar() {
@@ -14,10 +15,27 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
+  const [bellCount, setBellCount] = useState(0);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Live unread count — refresh on any notification event or storage change
+  useEffect(() => {
+    if (!session?.userId) return;
+    const refresh = () => setBellCount(unreadCount(session.userId));
+    refresh();
+    window.addEventListener("cinegen:notification", refresh);
+    window.addEventListener("storage", refresh);
+    // Poll every 3s so cross-tab actions reflect quickly
+    const timer = setInterval(refresh, 3000);
+    return () => {
+      window.removeEventListener("cinegen:notification", refresh);
+      window.removeEventListener("storage", refresh);
+      clearInterval(timer);
+    };
+  }, [session?.userId]);
 
   const handleLogout = () => {
     logout();
@@ -153,16 +171,14 @@ export function Navbar() {
                   </button>
                 </div>
 
-                {/* Notification Bell */}
-                <Link href="/notifications" className="relative">
-                  <button
-                    className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all relative"
-                    title="Notifications"
-                  >
-                    <Bell className="w-5 h-5" />
-                    {/* Notification badge */}
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-violet-500 rounded-full animate-pulse" />
-                  </button>
+                {/* Notification Bell — real unread count */}
+                <Link href="/notifications" className="relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all" title="Notifications">
+                  <Bell className="w-5 h-5" />
+                  {bellCount > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-violet-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 animate-pulse">
+                      {bellCount > 9 ? "9+" : bellCount}
+                    </span>
+                  )}
                 </Link>
 
                 {/* User info */}
