@@ -8,11 +8,12 @@ export async function GET(request: NextRequest) {
   const error = searchParams.get("error");
 
   if (error) {
-    return NextResponse.redirect(`${origin}/login?error=${error}`);
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(error)}`);
   }
 
   if (code) {
-    const cookieStore = await cookies();
+    // Next.js 14 — cookies() is synchronous
+    const cookieStore = cookies();
 
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,24 +24,36 @@ export async function GET(request: NextRequest) {
             return cookieStore.getAll();
           },
           setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options);
-            });
+            try {
+              cookiesToSet.forEach(({ name, value, options }) =>
+                cookieStore.set(name, value, options)
+              );
+            } catch {
+              // Route Handler — cookies can be read but setting may fail
+              // This is fine for our use case
+            }
           },
         },
       }
     );
 
-    const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error: exchError } = await supabase.auth.exchangeCodeForSession(code);
 
-    if (!exchangeError && data.user) {
-      const name = encodeURIComponent(data.user.user_metadata?.full_name ?? data.user.email ?? "User");
-      const email = encodeURIComponent(data.user.email ?? "");
-      return NextResponse.redirect(`${origin}/onboarding?name=${name}&email=${email}`);
+    if (exchError) {
+      console.error("Exchange error:", exchError.message);
+      return NextResponse.redirect(
+        `${origin}/login?error=${encodeURIComponent(exchError.message)}`
+      );
     }
 
-    if (exchangeError) {
-      return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(exchangeError.message)}`);
+    if (data?.user) {
+      const name = encodeURIComponent(
+        data.user.user_metadata?.full_name ?? data.user.email ?? "User"
+      );
+      const email = encodeURIComponent(data.user.email ?? "");
+      return NextResponse.redirect(
+        `${origin}/onboarding?name=${name}&email=${email}`
+      );
     }
   }
 
