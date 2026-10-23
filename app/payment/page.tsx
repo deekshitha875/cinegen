@@ -194,10 +194,8 @@ function PaymentContent() {
                       : "bg-white/5 border-white/10 hover:bg-white/10"
                   }`}
                 >
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-base ${method === pm.id ? "bg-violet-500/20" : "bg-white/10"}`}>
-                    {typeof pm.icon === "function" && pm.icon !== CreditCard && pm.icon !== Building2
-                      ? <pm.icon />
-                      : <pm.icon className="w-5 h-5" />}
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${method === pm.id ? "bg-violet-500/20" : "bg-white/10"}`}>
+                    <pm.icon className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
