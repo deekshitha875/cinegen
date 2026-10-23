@@ -2,7 +2,7 @@
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { CreditCard, Shield, Check, Lock, ArrowLeft, Sparkles, Calendar, Building2 } from "lucide-react";
+import { CreditCard, Shield, Check, Lock, ArrowLeft, Sparkles, Calendar } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -22,8 +22,6 @@ function getStripe() {
 
 const PAYMENT_METHODS = [
   { id: "card", name: "Credit / Debit Card", icon: CreditCard, desc: "Visa, Mastercard, Amex", recommended: true },
-  { id: "upi", name: "UPI", icon: () => <span className="text-base">₹</span>, desc: "PhonePe, GPay, Paytm", recommended: false },
-  { id: "netbanking", name: "Net Banking", icon: Building2, desc: "All major banks", recommended: false },
 ];
 
 function PaymentContent() {
