@@ -1,41 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { createClient } from "@supabase/supabase-js";
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
-  const next = requestUrl.searchParams.get("next") ?? "/dashboard";
 
   if (code) {
-    const cookieStore = cookies();
-    const supabase = createServerClient(
+    const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() { return cookieStore.getAll(); },
-          setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            );
-          },
-        },
-      }
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
 
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-    
-    if (!error && data.user) {
-      // User is now authenticated in Supabase — redirect to onboarding to pick role
-      const isNewUser = data.user.created_at === data.user.updated_at;
-      if (isNewUser) {
-        return NextResponse.redirect(new URL("/onboarding", requestUrl.origin));
-      }
-      return NextResponse.redirect(new URL(next, requestUrl.origin));
+
+    if (!error && data?.user) {
+      // Build redirect — new users go to onboarding, returning to dashboard
+      const isNew = data.user.created_at === data.user.updated_at;
+      const destination = isNew ? "/onboarding" : "/dashboard";
+
+      // Pass the user info as query params so the client can set the local session
+      const url = new URL(destination, requestUrl.origin);
+      url.searchParams.set("name", data.user.user_metadata?.full_name ?? data.user.email ?? "User");
+      url.searchParams.set("email", data.user.email ?? "");
+      url.searchParams.set("uid", data.user.id);
+
+      return NextResponse.redirect(url);
     }
   }
 
-  // OAuth failed — go back to login with error
+  // Failed — back to login
   return NextResponse.redirect(new URL("/login?error=oauth_failed", requestUrl.origin));
 }

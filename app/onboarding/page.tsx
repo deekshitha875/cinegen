@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Briefcase, Palette, ArrowRight, Film } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
 
@@ -10,30 +10,18 @@ export default function OnboardingPage() {
   const [selected, setSelected] = useState<"brand" | "creator" | null>(null);
   const [loading, setLoading] = useState(false);
   const { loginAsRole } = useSession();
+  const searchParams = useSearchParams();
+
+  const name = searchParams.get("name") ?? "User";
+  const email = searchParams.get("email") ?? "";
 
   const handleContinue = async () => {
     if (!selected) return;
     setLoading(true);
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        // Store role preference in Supabase user metadata
-        await supabase.auth.updateUser({
-          data: { role: selected, onboarded: true }
-        });
-        // Also set local session so the UI responds immediately
-        loginAsRole(selected);
-        toast.success(`Welcome to CineGen as ${selected === "brand" ? "a Brand" : "a Creator"}!`);
-        window.location.href = "/dashboard";
-      } else {
-        // Fallback: just set role locally
-        loginAsRole(selected);
-        window.location.href = "/dashboard";
-      }
-    } catch {
-      loginAsRole(selected);
-      window.location.href = "/dashboard";
-    }
+    // Set the local session with real Google user info
+    loginAsRole(selected);
+    toast.success(`Welcome to CineGen, ${name.split(" ")[0]}!`);
+    window.location.href = "/dashboard";
     setLoading(false);
   };
 
