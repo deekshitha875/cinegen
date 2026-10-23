@@ -131,15 +131,23 @@ function BrandDashboard() {
                       }`}>{isDelivered ? "✅ Delivered" : proposal.status}</div>
                     </div>
                     {proposal.status === "Accepted" && !isDelivered && (
-                      <button
-                        onClick={() => {
-                          setDelivered((prev) => [...prev, proposal.id]);
-                          toast.success(`${creator.name} marked delivery complete!`);
-                        }}
-                        className="px-3 py-1.5 bg-green-500/20 border border-green-500/30 text-green-300 rounded-lg text-xs font-medium hover:bg-green-500/30 transition-all whitespace-nowrap"
-                      >
-                        ✓ Mark Delivered
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={`/payment?projectId=${proposal.id}&creator=${encodeURIComponent(creator.name)}&title=${encodeURIComponent(brief.campaignTitle)}&amount=${Math.round(proposal.price * 0.33)}`}
+                          className="px-3 py-1.5 bg-gradient-to-r from-violet-600 to-cyan-600 text-white rounded-lg text-xs font-semibold hover:opacity-90 transition-all whitespace-nowrap shadow-lg shadow-violet-500/20"
+                        >
+                          💳 Pay Milestone
+                        </Link>
+                        <button
+                          onClick={() => {
+                            setDelivered((prev) => [...prev, proposal.id]);
+                            toast.success(`${creator.name} marked delivery complete!`);
+                          }}
+                          className="px-3 py-1.5 bg-green-500/20 border border-green-500/30 text-green-300 rounded-lg text-xs font-medium hover:bg-green-500/30 transition-all whitespace-nowrap"
+                        >
+                          ✓ Mark Delivered
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
