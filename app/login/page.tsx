@@ -254,15 +254,15 @@ export default function LoginPage() {
             </div>
           </motion.div>
 
-          {/* Credentials Card */}
+          {/* Quick Access */}
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-            {/* Judge callout */}
+            {/* Quick login */}
             <div className="bg-gradient-to-br from-violet-500/10 to-cyan-500/5 border border-violet-500/20 rounded-2xl p-5 mb-4">
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-6 h-6 rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center">
                   <Users className="w-3 h-3 text-white" />
                 </div>
-                <span className="font-semibold text-sm text-violet-300">For Judges & Evaluators</span>
+                <span className="font-semibold text-sm text-violet-300">Quick Access</span>
               </div>
               <p className="text-xs text-muted-foreground mb-4">
                 Use the 1-click buttons or credentials below. No email verification, no OTP — instant access.

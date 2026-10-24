@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { GoogleGenAI } from "@google/genai";
 import { generateFallbackBrief } from "@/lib/briefFallback";
 
 export async function POST(req: NextRequest) {
@@ -42,28 +43,19 @@ Given a plain-language campaign idea, extract and return ONLY a valid JSON objec
 
 Be specific and creative. Infer the best options from the idea. Today's date: ${new Date().toISOString().split("T")[0]}`;
 
-        const res = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              contents: [
-                { role: "user", parts: [{ text: `${systemPrompt}\n\nCampaign idea: ${idea}` }] }
-              ],
-              generationConfig: {
-                temperature: 0.7,
-                maxOutputTokens: 1024,
-                responseMimeType: "application/json",
-              },
-            }),
-          }
-        );
+        // Use the new @google/genai SDK — supports AQ. key format
+        const ai = new GoogleGenAI({ apiKey });
+        const response = await ai.models.generateContent({
+          model: "gemini-2.0-flash",
+          contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nCampaign idea: ${idea}` }] }],
+          config: {
+            temperature: 0.7,
+            maxOutputTokens: 1024,
+            responseMimeType: "application/json",
+          },
+        });
 
-        if (!res.ok) throw new Error(`Gemini API error: ${res.status}`);
-
-        const data = await res.json();
-        const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+        const rawText = response.text ?? "";
 
         // Strip code fences if present
         const cleaned = rawText.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
@@ -72,7 +64,7 @@ Be specific and creative. Infer the best options from the idea. Today's date: ${
         return NextResponse.json({ brief: { ...parsed, generatedByAI: true, rawIdea: idea }, source: "gemini" });
       } catch (geminiError) {
         console.error("Gemini error, falling back:", geminiError);
-        // Fall through to fallback
+        // Fall through to rule-based fallback
       }
     }
 
@@ -80,6 +72,7 @@ Be specific and creative. Infer the best options from the idea. Today's date: ${
     const fallback = generateFallbackBrief(idea);
     return NextResponse.json({ brief: fallback, source: "fallback" });
   } catch (err) {
+    console.error("Brief API error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

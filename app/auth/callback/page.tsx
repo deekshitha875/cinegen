@@ -13,20 +13,21 @@ export default function CallbackPage() {
     supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN" && session?.user) {
         const name = session.user.user_metadata?.full_name ?? session.user.email ?? "User";
+        const avatar = session.user.user_metadata?.avatar_url ?? "";
         setStatus(`Welcome, ${name.split(" ")[0]}!`);
         setTimeout(() => {
-          window.location.href = `/onboarding?name=${encodeURIComponent(name)}&email=${encodeURIComponent(session.user.email ?? "")}`;
+          window.location.href = `/onboarding?name=${encodeURIComponent(name)}&email=${encodeURIComponent(session.user.email ?? "")}&avatar=${encodeURIComponent(avatar)}`;
         }, 500);
       }
     });
 
-    // Also try exchanging immediately in case onAuthStateChange already fired
     supabase.auth.getSession().then(({ data }) => {
       if (data.session?.user) {
         const name = data.session.user.user_metadata?.full_name ?? data.session.user.email ?? "User";
+        const avatar = data.session.user.user_metadata?.avatar_url ?? "";
         setStatus(`Welcome, ${name.split(" ")[0]}!`);
         setTimeout(() => {
-          window.location.href = `/onboarding?name=${encodeURIComponent(name)}&email=${encodeURIComponent(data.session!.user.email ?? "")}`;
+          window.location.href = `/onboarding?name=${encodeURIComponent(name)}&email=${encodeURIComponent(data.session!.user.email ?? "")}&avatar=${encodeURIComponent(avatar)}`;
         }, 500);
       }
     });

@@ -14,14 +14,24 @@ function OnboardingContent() {
 
   const name = searchParams.get("name") ?? "User";
   const email = searchParams.get("email") ?? "";
+  const avatar = searchParams.get("avatar") ?? "";
 
   const handleContinue = async () => {
     if (!selected) return;
     setLoading(true);
-    // Use real Google name and email
     loginWithGoogle(selected, name, email);
+
+    // Write real profile to Supabase — visible in dashboard
+    const { upsertProfile } = await import("@/lib/db");
+    const userId = `google_${email.replace(/[^a-z0-9]/gi, "_")}`;
+    await upsertProfile({ id: userId, email, name, role: selected, avatar_url: avatar });
+
     toast.success(`Welcome to CineGen, ${name.split(" ")[0]}!`);
-    window.location.href = "/dashboard";
+    if (selected === "creator") {
+      window.location.href = "/creator-setup";
+    } else {
+      window.location.href = "/dashboard";
+    }
   };
 
   return (

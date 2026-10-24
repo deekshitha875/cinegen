@@ -59,6 +59,7 @@ export function Navbar() {
   const toolLinks = [
     { href: "/estimator", label: "Budget Estimator", icon: Calculator, desc: "Instant AI cost estimate" },
     { href: "/copyright-scan", label: "Copyright Scan", icon: Shield, desc: "AI originality verification", badge: "New" },
+    { href: "/pricing", label: "Pricing", icon: Trophy, desc: "Plans & monetisation model" },
     { href: "/risk-scanner", label: "Risk Scanner", icon: Shield, desc: "IP & licensing check" },
     { href: "/compare", label: "Compare Creators", icon: Search, desc: "Side-by-side analysis" },
     { href: "/leaderboard", label: "Leaderboard", icon: Trophy, desc: "Top-ranked creators" },
@@ -147,8 +148,8 @@ export function Navbar() {
               <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
             ) : session ? (
               <>
-                {/* Demo Role Switcher */}
-                <div className="flex items-center gap-1 bg-violet-500/10 border border-violet-500/20 rounded-lg px-2 py-1">
+                {/* Demo Role Switcher — desktop only */}
+                <div className="hidden lg:flex items-center gap-1 bg-violet-500/10 border border-violet-500/20 rounded-lg px-2 py-1">
                   <Zap className="w-3 h-3 text-violet-400" />
                   <span className="text-xs text-violet-400 font-medium mr-1">Demo</span>
                   <button

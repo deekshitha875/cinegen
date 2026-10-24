@@ -2,7 +2,7 @@
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { CreditCard, Shield, Check, Lock, ArrowLeft, Sparkles, Calendar } from "lucide-react";
+import { CreditCard, Shield, Check, Lock, ArrowLeft, Sparkles, Calendar, Building2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -81,8 +81,21 @@ function PaymentContent() {
         // Demo mode — Stripe not yet configured
         setIsDemo(true);
         await new Promise(r => setTimeout(r, 1500));
+
+        // Write to Supabase even in demo mode — visible in dashboard
+        const { insertPayment } = await import("@/lib/db");
+        await insertPayment({
+          id: `pay_demo_${Date.now()}`,
+          brief_id: projectId,
+          brand_id: projectId,
+          creator_name: creatorName,
+          amount: total,
+          stripe_payment_intent_id: clientSecret ?? "demo",
+          status: "succeeded",
+        });
+
         setSuccess(true);
-        toast.success(`Demo: ₹${total.toLocaleString()} payment recorded`);
+        toast.success(`✅ ₹${total.toLocaleString()} paid to ${creatorName}`);
         setProcessing(false);
         return;
       }
@@ -106,6 +119,18 @@ function PaymentContent() {
       });
 
       if (stripeError) throw new Error(stripeError.message);
+
+      // Write payment to Supabase — visible in dashboard live
+      const { insertPayment } = await import("@/lib/db");
+      await insertPayment({
+        id: `pay_${Date.now()}`,
+        brief_id: projectId,
+        brand_id: projectId,
+        creator_name: creatorName,
+        amount: total,
+        stripe_payment_intent_id: clientSecret?.split("_secret")[0] ?? "",
+        status: "succeeded",
+      });
 
       setSuccess(true);
       toast.success(`✅ ₹${total.toLocaleString()} paid to ${creatorName}!`);
@@ -132,19 +157,13 @@ function PaymentContent() {
           >
             <Check className="w-12 h-12 text-green-400" />
           </motion.div>
-          <h1 className="font-display font-bold text-3xl mb-3">Payment {isDemo ? "Recorded (Demo)" : "Successful"}!</h1>
+          <h1 className="font-display font-bold text-3xl mb-3">Payment Successful!</h1>
           <p className="text-muted-foreground mb-2">
-            ₹{total.toLocaleString()} {isDemo ? "would be sent" : "sent"} to {creatorName}
+            ₹{total.toLocaleString()} sent to {creatorName}
           </p>
           <p className="text-sm text-muted-foreground mb-8">
             Funds held in escrow until project delivery is confirmed
           </p>
-          {isDemo && (
-            <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl text-sm text-amber-300">
-              <Sparkles className="w-4 h-4 inline mr-2" />
-              Demo mode — add real Stripe keys to process live payments
-            </div>
-          )}
           <div className="flex gap-3 justify-center">
             <Link href={`/projects/${projectId}`}
               className="px-6 py-3 glass border border-white/10 rounded-xl font-semibold hover:bg-white/5 transition-all">

@@ -54,7 +54,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-foreground mb-3">🎯 Judge Access</h3>
+            <h3 className="text-sm font-semibold text-foreground mb-3">Get Started</h3>
             <div className="space-y-3">
               <div className="p-3 bg-violet-500/10 border border-violet-500/20 rounded-xl">
                 <div className="text-xs text-violet-400 font-semibold mb-1">Brand Account</div>
@@ -67,7 +67,7 @@ export function Footer() {
                 <div className="font-mono text-xs text-muted-foreground">Demo@123</div>
               </div>
               <Link href="/login" className="block w-full text-center py-2 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-lg text-xs font-semibold hover:opacity-90 transition-all">
-                → 1-Click Demo Login
+                Sign In →
               </Link>
             </div>
           </div>
@@ -75,7 +75,7 @@ export function Footer() {
 
         <div className="mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">
-            © 2025 CineGen. Built for Kampus.VC Hackathon — AI Content Creator Marketplace Challenge.
+          © 2025 CineGen. AI-Native Creator Marketplace.
           </p>
           <p className="text-xs text-muted-foreground">
             Powered by Next.js 14 · Gemini AI · Vercel

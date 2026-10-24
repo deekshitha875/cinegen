@@ -220,3 +220,48 @@ export interface FilterState {
   verifiedOnly: boolean;
   sortBy: "relevance" | "rating" | "rate_asc" | "rate_desc" | "projects";
 }
+
+// ─── Voice Director Types ─────────────────────────────────────────────────────
+
+export interface ConversationMessage {
+  role: "user" | "assistant";
+  text: string;
+  timestamp: number;
+  source?: "voice" | "text";
+}
+
+export type DirectorAction =
+  | "open_discovery"
+  | "prepare_brief"
+  | "clear_draft"
+  | "none";
+
+export interface CampaignDraft {
+  campaignTitle?: string;
+  objective?: string;
+  contentType?: string;
+  style?: string;
+  aspectRatios?: string[];
+  durationSeconds?: number;
+  resolution?: string;
+  quantity?: number;
+  toolsPreferred?: string[];
+  budgetMin?: number;
+  budgetMax?: number;
+  originalCurrency?: string;
+  deadline?: string;
+  commercialUse?: boolean;
+  negativeKeywords?: string[];
+  userStated?: string[];
+  assistantSuggestions?: string[];
+  unansweredQuestions?: string[];
+}
+
+export interface DirectorResponse {
+  reply: string;
+  action?: DirectorAction;
+  campaignDraft?: CampaignDraft;
+  error?: boolean;
+  retryAfterMs?: number;
+  conversationId?: string;
+}

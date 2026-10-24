@@ -152,6 +152,19 @@ export default function NewBriefPage() {
       updatedAt: new Date().toISOString(),
     };
     saveBrief(brief);
+
+    // Write to real Supabase database — visible in dashboard
+    import("@/lib/db").then(({ insertBrief }) => {
+      insertBrief({
+        id: brief.id,
+        brand_id: session.userId,
+        brand_name: session.name,
+        title: brief.campaignTitle,
+        description: brief.objective ?? "",
+        budget: brief.budgetMax ?? 0,
+        status: brief.status,
+      });
+    });
     if (status === "Open") {
       setPublished(brief.id);
       toast.success("Brief published! Finding top creator matches...");

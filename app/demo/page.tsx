@@ -1,289 +1,198 @@
 "use client";
-import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { Sparkles, Zap, Users, ArrowRight, Play, CheckCircle } from "lucide-react";
+import { useSession } from "@/hooks/useSession";
+import { toast } from "sonner";
 import Link from "next/link";
-import { CheckCircle, ArrowRight, Star, ChevronRight } from "lucide-react";
-import { seedCreators } from "@/lib/seed/creators";
-import { computeMatchScore } from "@/lib/matchScore";
 
-const CONTENT_TYPES = ["AI Filmmaking", "Brand Film", "Animation", "Social Media Pack", "Product Visualization", "Fashion Editorial"];
-const PLATFORMS = ["Instagram", "YouTube", "TikTok", "TV / OTT", "All Platforms"];
-const BUDGETS = ["Under $500", "$500–$1,500", "$1,500–$5,000", "$5,000+"];
-
-type Step = 1 | 2 | 3 | 4;
+const FEATURES = [
+  "18 verified AI creator profiles with Style DNA",
+  "Gemini-powered AI Brief Builder",
+  "Explainable match scores (6 weighted factors)",
+  "Brief Intelligence real-time audit",
+  "Budget Estimator & IP Risk Scanner",
+  "Full project + messaging workflow",
+];
 
 export default function DemoPage() {
-  const [step, setStep] = useState<Step>(1);
-  const [title, setTitle] = useState("Launch film for a new café");
-  const [contentType, setContentType] = useState("Brand Film");
-  const [platform, setPlatform] = useState("Instagram");
-  const [budget, setBudget] = useState("$500–$1,500");
-  const [shortlisted, setShortlisted] = useState<string | null>(null);
+  const { loginAsRole } = useSession();
+  const router = useRouter();
+  const [loading, setLoading] = useState<"brand" | "creator" | null>(null);
 
-  const matches = useMemo(() => {
-    return seedCreators
-      .map((c) => ({
-        creator: c,
-        score: Math.floor(Math.random() * 40 + 60), // demo scores
-        reasons: [`${contentType} specialist`, `${platform} platform`, "Available now"],
-      }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 6);
-  }, [contentType, platform]);
-
-  const steps = [
-    { num: 1, label: "Brief" },
-    { num: 2, label: `${matches.length} creator matches` },
-    { num: 3, label: "Choose a creator" },
-    { num: 4, label: "Preview inquiry" },
-  ];
+  const handleDemo = (role: "brand" | "creator") => {
+    setLoading(role);
+    loginAsRole(role);
+    toast.success(
+      role === "brand"
+        ? "✨ Logged in as Brand — Arjun Mehta"
+        : "✨ Logged in as Creator — Aryan Kapoor",
+      { duration: 3000 }
+    );
+    setTimeout(() => {
+      router.push(role === "brand" ? "/briefs/new" : "/briefs");
+    }, 800);
+  };
 
   return (
-    <div className="min-h-screen" style={{ background: "var(--cream)" }}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="min-h-screen flex items-center justify-center px-4 py-16 relative overflow-hidden">
+      {/* Background orbs */}
+      <div className="absolute inset-0 pointer-events-none">
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 8, repeat: Infinity }}
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 10, repeat: Infinity, delay: 1 }}
+          className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-cyan-500/15 rounded-full blur-3xl"
+        />
+      </div>
 
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <div className="section-label mb-3">INTERACTIVE PRODUCT WALKTHROUGH / NO SIGN-IN</div>
-          <h1 className="heading-editorial text-5xl mb-3" style={{ color: "var(--text-primary)" }}>
-            Try the whole idea.
+      <div className="relative w-full max-w-3xl">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-10"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm font-medium mb-6">
+            <Sparkles className="w-3.5 h-3.5" />
+            Live Interactive Demo — No signup needed
+          </div>
+          <h1 className="font-display font-bold text-4xl sm:text-5xl mb-4">
+            Try <span className="gradient-text">CineGen</span> Right Now
           </h1>
-          <p className="text-lg mb-4" style={{ color: "var(--text-secondary)" }}>
-            Edit a brief, inspect explainable matches, shortlist a creator, and preview an inquiry.
+          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+            Jump into a fully loaded demo with real data, AI features, and creator profiles — instantly.
           </p>
-          <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-[var(--cream-dark)] bg-white text-sm" style={{ color: "var(--text-secondary)" }}>
-            <span className="w-2 h-2 rounded-full" style={{ background: "var(--lime)" }} />
-            Public demonstration — nothing is published, sent, or saved.
+        </motion.div>
+
+        {/* Two demo cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
+          {/* Brand demo */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="glass rounded-2xl border border-violet-500/20 p-6 hover:border-violet-500/40 transition-all group"
+          >
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center mb-4 shadow-lg shadow-violet-500/30">
+              <Sparkles className="w-6 h-6 text-white" />
+            </div>
+            <h2 className="font-display font-bold text-xl mb-2">I'm a Brand</h2>
+            <p className="text-muted-foreground text-sm mb-5 leading-relaxed">
+              Post a brief with Gemini AI, see explainable creator matches, hire in one click.
+            </p>
+            <ul className="space-y-2 mb-6">
+              {["AI Brief Builder", "Creator matching", "Brief Intelligence audit"].map((f) => (
+                <li key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CheckCircle className="w-3.5 h-3.5 text-violet-400 flex-shrink-0" />
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={() => handleDemo("brand")}
+              disabled={loading !== null}
+              className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl font-semibold hover:from-violet-500 hover:to-violet-400 transition-all shadow-lg shadow-violet-500/25 disabled:opacity-60"
+            >
+              {loading === "brand" ? (
+                <>
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                  />
+                  Loading brand demo...
+                </>
+              ) : (
+                <>
+                  <Play className="w-4 h-4" />
+                  Start as Brand
+                  <ArrowRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
+            </button>
+            <p className="text-xs text-center text-muted-foreground mt-2">brand@cinegen.demo</p>
+          </motion.div>
+
+          {/* Creator demo */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="glass rounded-2xl border border-cyan-500/20 p-6 hover:border-cyan-500/40 transition-all group"
+          >
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center mb-4 shadow-lg shadow-cyan-500/30">
+              <Zap className="w-6 h-6 text-white" />
+            </div>
+            <h2 className="font-display font-bold text-xl mb-2">I'm a Creator</h2>
+            <p className="text-muted-foreground text-sm mb-5 leading-relaxed">
+              Browse live briefs, see your match scores, submit proposals, manage projects.
+            </p>
+            <ul className="space-y-2 mb-6">
+              {["Browse open briefs", "Submit proposals", "Project management"].map((f) => (
+                <li key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CheckCircle className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={() => handleDemo("creator")}
+              disabled={loading !== null}
+              className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-cyan-600 to-cyan-500 text-white rounded-xl font-semibold hover:from-cyan-500 hover:to-cyan-400 transition-all shadow-lg shadow-cyan-500/25 disabled:opacity-60"
+            >
+              {loading === "creator" ? (
+                <>
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                  />
+                  Loading creator demo...
+                </>
+              ) : (
+                <>
+                  <Users className="w-4 h-4" />
+                  Start as Creator
+                  <ArrowRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
+            </button>
+            <p className="text-xs text-center text-muted-foreground mt-2">creator@cinegen.demo</p>
+          </motion.div>
+        </div>
+
+        {/* Features strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="glass rounded-2xl border border-white/5 p-5"
+        >
+          <p className="text-xs text-muted-foreground text-center uppercase tracking-widest mb-4 font-medium">
+            What you'll experience
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {FEATURES.map((f) => (
+              <div key={f} className="flex items-start gap-2">
+                <CheckCircle className="w-3.5 h-3.5 text-violet-400 mt-0.5 flex-shrink-0" />
+                <span className="text-xs text-muted-foreground leading-relaxed">{f}</span>
+              </div>
+            ))}
           </div>
         </motion.div>
 
-        {/* Step indicators */}
-        <div className="flex items-center gap-2 mb-10 overflow-x-auto pb-2">
-          {steps.map((s, i) => (
-            <div key={s.num} className="flex items-center gap-2 flex-shrink-0">
-              <button onClick={() => step > s.num && setStep(s.num as Step)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all border ${
-                  step === s.num
-                    ? "border-[var(--text-primary)] bg-[var(--text-primary)] text-white"
-                    : step > s.num
-                    ? "border-[var(--lime)] bg-[var(--lime)]/10 text-[var(--text-primary)] cursor-pointer"
-                    : "border-[var(--cream-dark)] bg-white text-[var(--text-secondary)]"
-                }`}>
-                {step > s.num && <CheckCircle className="w-3.5 h-3.5 text-[var(--lime)]" />}
-                <span>0{s.num}</span>
-                <span>{s.label}</span>
-                {step > s.num && <CheckCircle className="w-3.5 h-3.5" />}
-              </button>
-              {i < steps.length - 1 && <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: "var(--text-secondary)" }} />}
-            </div>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-          {/* Step 1 — Brief */}
-          <AnimatePresence mode="wait">
-            {step === 1 && (
-              <motion.div key="brief" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
-                className="bg-white border border-[var(--cream-dark)] rounded-2xl p-6">
-                <div className="section-label mb-4">01 / YOUR CAMPAIGN</div>
-                <h2 className="heading-editorial text-3xl mb-6" style={{ color: "var(--text-primary)" }}>
-                  Shape the brief.
-                </h2>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium mb-1.5 block" style={{ color: "var(--text-primary)" }}>Project title</label>
-                    <input value={title} onChange={(e) => setTitle(e.target.value)}
-                      className="input-editorial w-full" />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-2 block" style={{ color: "var(--text-primary)" }}>Content type</label>
-                    <div className="flex flex-wrap gap-2">
-                      {CONTENT_TYPES.map((ct) => (
-                        <button key={ct} onClick={() => setContentType(ct)}
-                          className={`px-3 py-1.5 rounded-full text-sm border transition-all ${contentType === ct ? "border-[var(--text-primary)] bg-[var(--text-primary)] text-white" : "border-[var(--cream-dark)] bg-white hover:border-[var(--text-primary)]"}`}
-                          style={{ color: contentType === ct ? "white" : "var(--text-secondary)" }}>
-                          {ct}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-2 block" style={{ color: "var(--text-primary)" }}>Platform</label>
-                    <div className="flex flex-wrap gap-2">
-                      {PLATFORMS.map((p) => (
-                        <button key={p} onClick={() => setPlatform(p)}
-                          className={`px-3 py-1.5 rounded-full text-sm border transition-all ${platform === p ? "border-[var(--lime)] bg-[var(--lime)]/10 text-[var(--text-primary)]" : "border-[var(--cream-dark)] bg-white"}`}
-                          style={{ color: platform === p ? "var(--text-primary)" : "var(--text-secondary)" }}>
-                          {p}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-2 block" style={{ color: "var(--text-primary)" }}>Budget</label>
-                    <div className="flex flex-wrap gap-2">
-                      {BUDGETS.map((b) => (
-                        <button key={b} onClick={() => setBudget(b)}
-                          className={`px-3 py-1.5 rounded-full text-sm border transition-all ${budget === b ? "border-[var(--text-primary)] bg-[var(--text-primary)] text-white" : "border-[var(--cream-dark)] bg-white"}`}
-                          style={{ color: budget === b ? "white" : "var(--text-secondary)" }}>
-                          {b}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <button onClick={() => setStep(2)}
-                  className="btn-dark flex items-center gap-2 px-6 py-3 text-sm mt-6">
-                  See creator matches <ArrowRight className="w-4 h-4" />
-                </button>
-              </motion.div>
-            )}
-
-            {/* Step 2 — Matches */}
-            {step === 2 && (
-              <motion.div key="matches" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
-                className="bg-white border border-[var(--cream-dark)] rounded-2xl p-6">
-                <div className="section-label mb-4">02 / EXPLAINABLE MATCHES</div>
-                <h2 className="heading-editorial text-3xl mb-2" style={{ color: "var(--text-primary)" }}>
-                  See the fit.
-                </h2>
-                <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>
-                  Scores show overlap with category, skills, platform, and budget.
-                </p>
-
-                <div className="space-y-3">
-                  {matches.slice(0, 5).map((match, i) => (
-                    <div key={match.creator.id}
-                      className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all hover:border-[var(--text-primary)] ${shortlisted === match.creator.id ? "border-[var(--lime)] bg-[var(--lime)]/5" : "border-[var(--cream-dark)]"}`}
-                      onClick={() => { setShortlisted(match.creator.id); setStep(3); }}>
-                      <img src={match.creator.avatarUrl} alt={match.creator.name} className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <div className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>{match.creator.name}</div>
-                        <div className="text-xs" style={{ color: "var(--text-secondary)" }}>{match.creator.headline}</div>
-                        <div className="flex gap-1 mt-1">
-                          {match.reasons.slice(0, 2).map((r) => (
-                            <span key={r} className="text-xs px-1.5 py-0.5 rounded-full bg-[var(--cream)] border border-[var(--cream-dark)]" style={{ color: "var(--text-secondary)" }}>{r}</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="text-right flex-shrink-0">
-                        <div className="text-xl font-bold" style={{ color: match.score >= 80 ? "var(--lime)" : "var(--text-primary)" }}>{match.score}</div>
-                        <div className="text-xs" style={{ color: "var(--text-secondary)" }}>/100</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            {/* Step 3 — Choose creator */}
-            {step === 3 && (
-              <motion.div key="choose" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
-                className="bg-white border border-[var(--cream-dark)] rounded-2xl p-6">
-                <div className="section-label mb-4">03 / INQUIRY PREVIEW</div>
-                <h2 className="heading-editorial text-3xl mb-2" style={{ color: "var(--text-primary)" }}>
-                  Choose a creator above.
-                </h2>
-                <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>
-                  This is a private drafting preview. It does not contact the creator.
-                </p>
-
-                {shortlisted && (() => {
-                  const creator = seedCreators.find((c) => c.id === shortlisted);
-                  if (!creator) return null;
-                  return (
-                    <div>
-                      <div className="flex items-center gap-3 p-4 rounded-xl border border-[var(--cream-dark)] mb-4">
-                        <img src={creator.avatarUrl} alt={creator.name} className="w-12 h-12 rounded-full object-cover" />
-                        <div>
-                          <div className="font-semibold" style={{ color: "var(--text-primary)" }}>{creator.name}</div>
-                          <div className="text-sm" style={{ color: "var(--text-secondary)" }}>{creator.headline}</div>
-                        </div>
-                      </div>
-                      <button onClick={() => setStep(4)} className="btn-lime flex items-center gap-2 px-6 py-3 text-sm w-full justify-center">
-                        Preview inquiry <ArrowRight className="w-4 h-4" />
-                      </button>
-                      <Link href={`/creators/${creator.id}`}
-                        className="flex items-center justify-center gap-1 mt-3 text-sm hover:underline" style={{ color: "var(--text-secondary)" }}>
-                        View public profile →
-                      </Link>
-                    </div>
-                  );
-                })()}
-              </motion.div>
-            )}
-
-            {/* Step 4 — Inquiry */}
-            {step === 4 && (
-              <motion.div key="inquiry" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
-                className="bg-white border border-[var(--cream-dark)] rounded-2xl p-6">
-                <div className="section-label mb-4">04 / CREATOR INQUIRY</div>
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="heading-editorial text-2xl" style={{ color: "var(--text-primary)" }}>Message draft</h2>
-                  <span className="text-xs px-2 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-200">DEMO ONLY</span>
-                </div>
-                <textarea
-                  defaultValue={`Hi, I like your work. Would you be interested in working on "${title}"? We're looking for ${contentType} content for ${platform}, budget ${budget}.`}
-                  rows={6}
-                  className="input-editorial w-full resize-none mb-4"
-                />
-                <p className="text-xs mb-4" style={{ color: "var(--text-secondary)" }}>
-                  In a real account, this message would be sent via the CineGen inbox. Nothing is sent in demo mode.
-                </p>
-                <div className="flex gap-3">
-                  <button className="btn-dark flex items-center gap-2 px-6 py-3 text-sm flex-1 justify-center opacity-50 cursor-not-allowed">
-                    Send inquiry (demo only)
-                  </button>
-                </div>
-                <div className="mt-6 pt-4 border-t border-[var(--cream-dark)] text-center">
-                  <p className="text-sm mb-3" style={{ color: "var(--text-secondary)" }}>Ready to try for real?</p>
-                  <Link href="/register" className="btn-lime px-6 py-2.5 text-sm inline-block">
-                    Create a free account
-                  </Link>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Right panel — always show brief summary */}
-          <div className="space-y-4">
-            <div className="bg-white border border-[var(--cream-dark)] rounded-2xl p-6">
-              <div className="section-label mb-3">YOUR BRIEF SUMMARY</div>
-              <div className="space-y-3">
-                {[
-                  { label: "Title", value: title },
-                  { label: "Content Type", value: contentType },
-                  { label: "Platform", value: platform },
-                  { label: "Budget", value: budget },
-                ].map((item) => (
-                  <div key={item.label} className="flex justify-between items-center py-2 border-b border-[var(--cream-dark)] last:border-0">
-                    <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{item.label}</span>
-                    <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{item.value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-white border border-[var(--cream-dark)] rounded-2xl p-6">
-              <div className="section-label mb-3">WANT THE FULL EXPERIENCE?</div>
-              <h3 className="heading-editorial text-xl mb-3" style={{ color: "var(--text-primary)" }}>
-                Post a real brief.
-              </h3>
-              <p className="text-sm mb-4" style={{ color: "var(--text-secondary)" }}>
-                Create an account to publish a live brief, receive real proposals, and hire a creator.
-              </p>
-              <Link href="/register" className="btn-dark flex items-center gap-2 px-5 py-2.5 text-sm w-full justify-center">
-                Get started free <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link href="/login" className="flex items-center justify-center gap-1 mt-3 text-sm hover:underline" style={{ color: "var(--text-secondary)" }}>
-                Already a member? Log in
-              </Link>
-            </div>
-          </div>
-        </div>
+        <p className="text-center text-xs text-muted-foreground mt-6">
+          Or{" "}
+          <Link href="/creators" className="text-violet-400 hover:text-violet-300 transition-colors">
+            browse creators as a guest
+          </Link>{" "}
+          without signing in.
+        </p>
       </div>
     </div>
   );

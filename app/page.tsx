@@ -1,11 +1,11 @@
 "use client";
-import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   ArrowRight, Sparkles, Play, Search, FileText, Handshake,
-  Star, CheckCircle2, Zap, TrendingUp, Users, Briefcase, Film, X
+  Star, Zap, TrendingUp, Users, Briefcase,
 } from "lucide-react";
+import { DirectorPanel } from "@/components/DirectorPanel";
 
 const STATS = [
   { label: "Verified AI Creators", value: "18", icon: Users },
@@ -61,171 +61,74 @@ const AVAIL_COLOR: Record<string, string> = {
 };
 
 export default function HomePage() {
-  const [bannerDismissed, setBannerDismissed] = useState(false);
-
   return (
     <div className="min-h-screen">
 
-      {/* Judge Welcome Banner */}
-      {!bannerDismissed && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-violet-600/90 to-cyan-600/90 text-white px-4 py-2.5 text-center text-sm font-medium relative z-50"
-        >
-          <span>🎯 Hackathon Demo — </span>
-          <Link href="/login" className="underline underline-offset-2 hover:no-underline font-semibold">
-            Click here for instant 1-click access
-          </Link>
-          <span> · Brand & Creator accounts ready · No signup needed</span>
-          <button
-            onClick={() => setBannerDismissed(true)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-white/20 rounded transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </motion.div>
-      )}
-
-      {/* Hero */}
-      <section className="relative overflow-hidden pt-32 pb-40">
-        {/* Premium 3D animated background */}
+      {/* Hero — two-column layout */}
+      <section className="relative overflow-hidden pt-24 pb-32">
+        {/* Background blobs */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Animated gradient orbs with 3D effect */}
-          <motion.div
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3],
-              rotateZ: [0, 10, 0],
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-0 left-1/4 w-96 h-96 bg-violet-500/30 rounded-full blur-3xl"
-            style={{ transform: "translate3d(0, 0, 0)" }}
-          />
-          <motion.div
-            animate={{
-              scale: [1.2, 1, 1.2],
-              opacity: [0.4, 0.6, 0.4],
-              rotateZ: [0, -15, 0],
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute top-20 right-1/4 w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-3xl"
-            style={{ transform: "translate3d(0, 0, 0)" }}
-          />
-          <motion.div
-            animate={{
-              scale: [1, 1.3, 1],
-              opacity: [0.2, 0.4, 0.2],
-              x: [0, 50, 0],
-            }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="absolute bottom-0 left-1/2 w-[600px] h-[600px] bg-violet-600/20 rounded-full blur-3xl"
-            style={{ transform: "translate3d(0, 0, 0)" }}
-          />
-          
-          {/* Floating 3D shapes */}
-          <motion.div
-            animate={{
-              y: [0, -30, 0],
-              rotateX: [0, 15, 0],
-              rotateY: [0, 15, 0],
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-40 left-10 w-20 h-20 bg-gradient-to-br from-violet-500/20 to-cyan-500/20 rounded-2xl backdrop-blur-sm border border-white/10"
-            style={{ transform: "translate3d(0, 0, 50px)" }}
-          />
-          <motion.div
-            animate={{
-              y: [0, 40, 0],
-              rotateX: [0, -20, 0],
-              rotateZ: [0, 180, 360],
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute top-60 right-20 w-16 h-16 bg-gradient-to-br from-cyan-500/20 to-violet-500/20 rounded-full backdrop-blur-sm border border-white/10"
-            style={{ transform: "translate3d(0, 0, 100px)" }}
-          />
-          <motion.div
-            animate={{
-              y: [0, -20, 0],
-              x: [0, 20, 0],
-              rotateY: [0, 360, 720],
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="absolute bottom-40 left-1/3 w-12 h-12 bg-gradient-to-br from-violet-400/20 to-cyan-400/20 rounded-lg backdrop-blur-sm border border-white/10"
-            style={{ transform: "translate3d(0, 0, 75px)" }}
-          />
-          
-          {/* Grid overlay with parallax */}
+          <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }} transition={{ duration: 8, repeat: Infinity }} className="absolute top-0 left-1/4 w-96 h-96 bg-violet-500/30 rounded-full blur-3xl" />
+          <motion.div animate={{ scale: [1.2, 1, 1.2], opacity: [0.4, 0.6, 0.4] }} transition={{ duration: 10, repeat: Infinity, delay: 1 }} className="absolute top-20 right-1/4 w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-3xl" />
           <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
           <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
-          <div className="absolute top-20 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl" />
-          <div className="absolute top-40 right-1/4 w-64 h-64 bg-cyan-500/15 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-32 bg-gradient-to-t from-background to-transparent" />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm font-medium mb-8">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>AI-Native Creative Marketplace · Kampus.VC Hackathon</span>
-          </motion.div>
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
 
-          {/* Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-display font-bold text-5xl sm:text-6xl lg:text-7xl leading-tight mb-6">
-            Hire the world&apos;s best{" "}
-            <span className="gradient-text">AI creators</span>
-            <br />
-            for your brand
-          </motion.h1>
+            {/* Left — headline + CTAs */}
+            <div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm font-medium mb-6">
+                <Sparkles className="w-3.5 h-3.5" />
+                AI-Native Creative Marketplace
+              </motion.div>
 
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            CineGen connects brands with verified AI filmmakers, animators, and generative artists. Discover talent, build briefs with AI, get explainable match scores — all in one place.
-          </motion.p>
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
+                className="font-display font-bold text-5xl sm:text-6xl leading-tight mb-6">
+                Hire the world&apos;s best{" "}
+                <span className="gradient-text">AI creators</span>
+                {" "}for your brand
+              </motion.h1>
 
-          {/* CTAs — max 2 */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-            <Link
-              href="/login"
-              className="flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl font-semibold text-base hover:from-violet-500 hover:to-violet-400 transition-all shadow-lg shadow-violet-500/30 hover:-translate-y-0.5"
-            >
-              <Play className="w-4 h-4" />
-              Try Demo — Instant Access
-            </Link>
-            <Link
-              href="/creators"
-              className="flex items-center gap-2 px-8 py-4 glass border border-white/10 text-foreground rounded-xl font-semibold text-base hover:bg-white/5 transition-all hover:-translate-y-0.5"
-            >
-              <Search className="w-4 h-4" />
-              Browse Creators
-            </Link>
-          </div>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }}
+                className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                CineGen connects brands with verified AI filmmakers, animators, and generative artists. Discover talent, build briefs with AI, get explainable match scores — all in one place.
+              </motion.p>
 
-          {/* Creator avatars — no fake claim */}
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <div className="flex -space-x-2">
-              {FEATURED_CREATORS.slice(0, 5).map((c) => (
-                <img
-                  key={c.id}
-                  src={c.avatar}
-                  alt={c.name}
-                  className="w-7 h-7 rounded-full border-2 border-background object-cover"
-                />
-              ))}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.5 }}
+                className="flex flex-col sm:flex-row gap-4 mb-8">
+                <Link href="/login" className="flex items-center justify-center gap-2 px-7 py-3.5 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl font-semibold hover:from-violet-500 hover:to-violet-400 transition-all shadow-lg shadow-violet-500/30">
+                  <Play className="w-4 h-4" /> Get Started Free
+                </Link>
+                <Link href="/creators" className="flex items-center justify-center gap-2 px-7 py-3.5 glass border border-white/10 rounded-xl font-semibold hover:bg-white/5 transition-all">
+                  <Search className="w-4 h-4" /> Browse Creators
+                </Link>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}
+                className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="flex -space-x-2">
+                  {FEATURED_CREATORS.slice(0, 5).map((c) => (
+                    <img key={c.id} src={c.avatar} alt={c.name} className="w-7 h-7 rounded-full border-2 border-background object-cover" />
+                  ))}
+                </div>
+                <span>18 verified AI creators ready to hire</span>
+              </motion.div>
             </div>
-            <span>18 verified AI creators ready to hire</span>
+
+            {/* Right — Director Panel */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.3 }}>
+              <DirectorPanel />
+            </motion.div>
+
           </div>
         </div>
       </section>

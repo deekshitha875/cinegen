@@ -1,5 +1,6 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
+import { useEffect, useState } from "react";
 import { CreatorProfile } from "@/types";
 
 type StyleAxis = {
@@ -10,18 +11,17 @@ type StyleAxis = {
 
 const AXES: StyleAxis[] = [
   { label: "Cinematic", key: "cinematic", color: "#8b5cf6" },
-  { label: "Bold", key: "bold", color: "#06b6d4" },
-  { label: "Minimal", key: "minimal", color: "#10b981" },
+  { label: "Bold",      key: "bold",      color: "#06b6d4" },
+  { label: "Minimal",   key: "minimal",   color: "#10b981" },
   { label: "Experimental", key: "experimental", color: "#f59e0b" },
   { label: "Commercial", key: "commercial", color: "#ef4444" },
-  { label: "Artistic", key: "artistic", color: "#ec4899" },
+  { label: "Artistic",  key: "artistic",  color: "#ec4899" },
 ];
 
 function getStyleScore(creator: CreatorProfile, key: string): number {
   const tools = creator.verifiedTools.map((t) => t.name.toLowerCase());
   const specs = creator.specializations.map((s) => s.toLowerCase());
   const bio = creator.bio.toLowerCase();
-  const skills = creator.skills.map((s) => s.toLowerCase());
 
   switch (key) {
     case "cinematic":
@@ -70,106 +70,222 @@ function getStyleScore(creator: CreatorProfile, key: string): number {
   }
 }
 
-function RadarChart({ scores }: { scores: Record<string, number> }) {
-  const size = 160;
+function AnimatedRadarChart({ scores }: { scores: Record<string, number> }) {
+  const [progress, setProgress] = useState(0);
+  const size = 220;
   const center = size / 2;
-  const radius = 60;
+  const radius = 78;
   const n = AXES.length;
+
+  useEffect(() => {
+    // Animate the radar polygon drawing in
+    let start: number | null = null;
+    const duration = 1200;
+    function step(timestamp: number) {
+      if (!start) start = timestamp;
+      const elapsed = timestamp - start;
+      const p = Math.min(elapsed / duration, 1);
+      // ease-out cubic
+      setProgress(1 - Math.pow(1 - p, 3));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    const raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   const getPoint = (i: number, r: number) => {
     const angle = (i * 2 * Math.PI) / n - Math.PI / 2;
-    return {
-      x: center + r * Math.cos(angle),
-      y: center + r * Math.sin(angle),
-    };
+    return { x: center + r * Math.cos(angle), y: center + r * Math.sin(angle) };
   };
 
   const scorePoints = AXES.map((axis, i) => {
-    const score = scores[axis.key] / 100;
-    return getPoint(i, radius * score);
+    const animatedScore = (scores[axis.key] / 100) * progress;
+    return getPoint(i, radius * animatedScore);
+  });
+
+  const fullScorePoints = AXES.map((axis, i) => {
+    return getPoint(i, radius * (scores[axis.key] / 100));
   });
 
   const polygonPoints = scorePoints.map((p) => `${p.x},${p.y}`).join(" ");
-
   const gridLevels = [0.25, 0.5, 0.75, 1.0];
 
   return (
-    <svg width={size} height={size} className="mx-auto">
-      {/* Grid */}
-      {gridLevels.map((level) => {
-        const points = AXES.map((_, i) => {
-          const p = getPoint(i, radius * level);
-          return `${p.x},${p.y}`;
-        }).join(" ");
-        return <polygon key={level} points={points} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />;
-      })}
+    <div className="relative flex items-center justify-center">
+      {/* Glow effect behind the chart */}
+      <div
+        className="absolute rounded-full blur-2xl opacity-30"
+        style={{
+          width: size * 0.7,
+          height: size * 0.7,
+          background: "radial-gradient(circle, rgba(139,92,246,0.6) 0%, rgba(6,182,212,0.3) 50%, transparent 100%)",
+        }}
+      />
 
-      {/* Axis lines */}
-      {AXES.map((_, i) => {
-        const outer = getPoint(i, radius);
-        return <line key={i} x1={center} y1={center} x2={outer.x} y2={outer.y} stroke="rgba(255,255,255,0.08)" strokeWidth="1" />;
-      })}
+      <svg width={size} height={size} className="relative z-10">
+        <defs>
+          <radialGradient id="radarFill" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.15" />
+          </radialGradient>
+          <filter id="radarGlow">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
 
-      {/* Score polygon */}
-      <polygon points={polygonPoints} fill="rgba(139,92,246,0.2)" stroke="#8b5cf6" strokeWidth="1.5" />
+        {/* Grid rings */}
+        {gridLevels.map((level) => {
+          const pts = AXES.map((_, i) => {
+            const p = getPoint(i, radius * level);
+            return `${p.x},${p.y}`;
+          }).join(" ");
+          return (
+            <polygon
+              key={level}
+              points={pts}
+              fill="none"
+              stroke={level === 1.0 ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.06)"}
+              strokeWidth={level === 1.0 ? "1.5" : "1"}
+            />
+          );
+        })}
 
-      {/* Score dots */}
-      {scorePoints.map((p, i) => (
-        <circle key={i} cx={p.x} cy={p.y} r="3" fill={AXES[i].color} />
-      ))}
+        {/* Axis lines */}
+        {AXES.map((axis, i) => {
+          const outer = getPoint(i, radius);
+          const dot = getPoint(i, radius * (scores[axis.key] / 100));
+          return (
+            <g key={axis.key}>
+              <line
+                x1={center} y1={center}
+                x2={outer.x} y2={outer.y}
+                stroke="rgba(255,255,255,0.06)"
+                strokeWidth="1"
+              />
+              {/* Animated outer tick dot */}
+              <motion.circle
+                cx={dot.x}
+                cy={dot.y}
+                r="3"
+                fill={axis.color}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: progress, scale: progress }}
+              />
+            </g>
+          );
+        })}
 
-      {/* Labels */}
-      {AXES.map((axis, i) => {
-        const labelPoint = getPoint(i, radius + 14);
-        return (
-          <text key={axis.key} x={labelPoint.x} y={labelPoint.y}
-            textAnchor="middle" dominantBaseline="middle"
-            className="fill-muted-foreground text-[9px]" fontSize="9" fill="rgba(255,255,255,0.5)">
-            {axis.label}
-          </text>
-        );
-      })}
-    </svg>
+        {/* Filled score polygon */}
+        <polygon
+          points={polygonPoints}
+          fill="url(#radarFill)"
+          stroke="rgba(139,92,246,0.8)"
+          strokeWidth="1.5"
+          filter="url(#radarGlow)"
+        />
+
+        {/* Glowing score polygon outline */}
+        <polygon
+          points={AXES.map((axis, i) => {
+            const s = (scores[axis.key] / 100) * progress;
+            const p = getPoint(i, radius * s);
+            return `${p.x},${p.y}`;
+          }).join(" ")}
+          fill="none"
+          stroke="rgba(139,92,246,0.9)"
+          strokeWidth="2"
+          strokeLinejoin="round"
+        />
+
+        {/* Axis labels with scores */}
+        {AXES.map((axis, i) => {
+          const labelPoint = getPoint(i, radius + 20);
+          const score = scores[axis.key];
+          return (
+            <g key={axis.key}>
+              <text
+                x={labelPoint.x}
+                y={labelPoint.y - 5}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize="9"
+                fill="rgba(255,255,255,0.55)"
+                fontWeight="600"
+              >
+                {axis.label}
+              </text>
+              <text
+                x={labelPoint.x}
+                y={labelPoint.y + 7}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize="8"
+                fill={axis.color}
+                fontWeight="700"
+              >
+                {Math.round(score * progress)}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* Center dot */}
+        <circle cx={center} cy={center} r="3" fill="rgba(139,92,246,0.8)" />
+      </svg>
+    </div>
   );
 }
 
 export function StyleDNA({ creator }: { creator: CreatorProfile }) {
   const scores: Record<string, number> = {};
-  AXES.forEach((axis) => {
-    scores[axis.key] = getStyleScore(creator, axis.key);
-  });
+  AXES.forEach((axis) => { scores[axis.key] = getStyleScore(creator, axis.key); });
 
-  const dominant = AXES.reduce((a, b) => scores[a.key] > scores[b.key] ? a : b);
+  const sorted = [...AXES].sort((a, b) => scores[b.key] - scores[a.key]);
+  const dominant = sorted[0];
+  const top3 = sorted.slice(0, 3);
 
   return (
     <div className="glass rounded-2xl border border-white/5 p-5">
-      <h3 className="font-semibold text-sm mb-4 flex items-center gap-2">
+      <h3 className="font-semibold text-sm mb-1 flex items-center gap-2">
         <span className="text-lg">🧬</span> Style DNA
       </h3>
+      <p className="text-xs text-muted-foreground mb-4">AI-computed creative profile</p>
 
-      <RadarChart scores={scores} />
+      <AnimatedRadarChart scores={scores} />
 
-      <div className="mt-3 text-center">
-        <div className="text-xs text-muted-foreground mb-2">Dominant Style</div>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-500/20 border border-violet-500/30 text-violet-300 text-sm font-semibold">
+      {/* Dominant style badge */}
+      <div className="mt-4 text-center">
+        <div className="text-xs text-muted-foreground mb-1.5">Dominant Style</div>
+        <div
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold border"
+          style={{
+            background: `${dominant.color}20`,
+            borderColor: `${dominant.color}40`,
+            color: dominant.color,
+          }}
+        >
           {dominant.label}
         </div>
       </div>
 
-      <div className="mt-4 space-y-2">
-        {AXES.sort((a, b) => scores[b.key] - scores[a.key]).slice(0, 3).map((axis) => (
+      {/* Top 3 bars */}
+      <div className="mt-5 space-y-2.5">
+        {top3.map((axis, idx) => (
           <div key={axis.key} className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground w-20">{axis.label}</span>
+            <span className="text-xs text-muted-foreground w-24 flex-shrink-0">{axis.label}</span>
             <div className="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden">
               <motion.div
                 className="h-full rounded-full"
                 style={{ background: axis.color }}
                 initial={{ width: 0 }}
                 animate={{ width: `${scores[axis.key]}%` }}
-                transition={{ duration: 0.6, delay: 0.1 }}
+                transition={{ duration: 0.8, delay: 0.3 + idx * 0.1, ease: "easeOut" }}
               />
             </div>
-            <span className="text-xs text-muted-foreground w-8 text-right">{scores[axis.key]}</span>
+            <span className="text-xs w-7 text-right flex-shrink-0" style={{ color: axis.color }}>
+              {scores[axis.key]}
+            </span>
           </div>
         ))}
       </div>

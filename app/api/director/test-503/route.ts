@@ -1,0 +1,8 @@
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  return NextResponse.json(
+    { error: "Service temporarily unavailable", code: "TEST_503" },
+    { status: 503 }
+  );
+}
